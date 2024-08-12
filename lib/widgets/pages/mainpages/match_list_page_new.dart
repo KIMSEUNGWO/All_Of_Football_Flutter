@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class MatchListPageWidget extends ConsumerStatefulWidget {
   const MatchListPageWidget({super.key});
@@ -27,6 +28,7 @@ class _MatchListPageWidgetState extends ConsumerState<MatchListPageWidget> with 
 
   final _dateRange = 14;
   int _currentDateIndex = 0;
+  bool _loading = false;
   
   final List<MatchView> _items = [
     MatchView(1, MatchStatus.OPEN, '안양대학교 SKY 풋살파크 C구장', DateTime.now(), MatchData(null, Region.BUNKYO, 5, 3)),
@@ -93,28 +95,31 @@ class _MatchListPageWidgetState extends ConsumerState<MatchListPageWidget> with 
           SearchData(search: search, dateRange: _dateRange, selectedDateIndex: _currentDateIndex),
 
           Expanded(
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 20),
-              child: CustomScrollView(
-                physics: const AlwaysScrollableScrollPhysics(
-                  parent: BouncingScrollPhysics(),
-                ),
-                slivers: [
-                  CustomScrollRefresh(onRefresh: () {
-                  },),
-
-                  const SliverPadding(padding: EdgeInsets.only(top: 32)),
-
-                  SliverList.separated(
-                    separatorBuilder: (context, index) {
-                      return const SizedBox(height: 16,);
-                    },
-                    itemCount: _items.length,
-                    itemBuilder: (context, index) {
-                      return _MatchListWidget(match: _items[index]);
-                    },
+            child: Skeletonizer(
+              enabled: _loading,
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                child: CustomScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(
+                    parent: BouncingScrollPhysics(),
                   ),
-                ],
+                  slivers: [
+                    CustomScrollRefresh(onRefresh: () {
+                    },),
+
+                    const SliverPadding(padding: EdgeInsets.only(top: 32)),
+
+                    SliverList.separated(
+                      separatorBuilder: (context, index) {
+                        return const SizedBox(height: 16,);
+                      },
+                      itemCount: _items.length,
+                      itemBuilder: (context, index) {
+                        return _MatchListWidget(match: _items[index]);
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -192,7 +197,9 @@ class _MatchListWidgetState extends State<_MatchListWidget> {
               ],
             ),
             const SizedBox(height: 8,),
-            MatchExtraDataWidget(matchData: widget.match.matchData),
+            Skeleton.ignore(
+              child: MatchExtraDataWidget(matchData: widget.match.matchData),
+            ),
           ],
         ),
       ),

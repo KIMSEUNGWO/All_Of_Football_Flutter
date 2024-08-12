@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import 'package:skeletonizer/skeletonizer.dart';
+
 class SvgIcon extends StatelessWidget {
 
-  final SvgPicture svgPicture;
+  final Skeleton svgPicture;
 
-  const SvgIcon({super.key, required this.svgPicture});
+  SvgIcon({super.key, required SvgPicture svgPicture}):
+      svgPicture = Skeleton.shade(child: svgPicture);
 
-  static SvgIcon asset({
-    required SIcon sIcon,
-    SvgIconStyle? style,
-  }) {
+  static SvgIcon asset({required SIcon sIcon, SvgIconStyle? style,}) {
     return _SvgIconBuilder(sIcon: sIcon).build(style);
   }
 

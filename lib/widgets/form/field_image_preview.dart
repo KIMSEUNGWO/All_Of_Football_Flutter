@@ -4,6 +4,8 @@ import 'package:all_of_football/widgets/component/image_detail_view.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
+import 'package:skeletonizer/skeletonizer.dart';
+
 class FieldImages extends StatefulWidget {
 
   final List<FieldImage> images;
@@ -67,24 +69,26 @@ class _FieldImagesState extends State<FieldImages> {
                   borderRadius: BorderRadius.circular(20),
                   color: const Color(0xFF252525).withOpacity(0.7)
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('$_currentImageIndex',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+              child: Skeleton.ignore(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('$_currentImageIndex',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                      ),
                     ),
-                  ),
-                  Text(' / ${widget.images.length}',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                      fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-                    ),
-                  )
-                ],
+                    Text(' / ${widget.images.length}',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                        fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),

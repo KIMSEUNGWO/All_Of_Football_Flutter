@@ -4,6 +4,8 @@ import 'package:all_of_football/widgets/component/custom_container.dart';
 import 'package:all_of_football/widgets/component/user_profile_wiget.dart';
 import 'package:flutter/material.dart';
 
+import 'package:skeletonizer/skeletonizer.dart';
+
 class MyPageWidget extends StatefulWidget {
   const MyPageWidget({super.key});
 
@@ -12,6 +14,9 @@ class MyPageWidget extends StatefulWidget {
 }
 
 class _MyPageWidgetState extends State<MyPageWidget> with AutomaticKeepAliveClientMixin {
+
+  bool _loading = false;
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -27,213 +32,220 @@ class _MyPageWidgetState extends State<MyPageWidget> with AutomaticKeepAliveClie
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              // 유저 정보
-              CustomContainer(
-                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            // NavigatorHelper.push(context, const ProfileEditPage());
-                          },
-                          child: Stack(
-                            children: [
-                              const UserProfileWidget(diameter: 60),
-                              Positioned(
-                                bottom: 0, right: 0,
-                                child: SvgIcon.asset(sIcon: SIcon.pen,
-                                ),
-                              ),
-                            ]
-                          ),
-                        ),
-                        const SizedBox(width: 15,),
-                        Text('닉네임닉네임',
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontWeight: FontWeight.w600,
-                            fontSize: Theme.of(context).textTheme.displaySmall!.fontSize
-                          ),
-                        )
-                      ],
-                    ),
-                    const SizedBox(height: 20,),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 40),
-                      child: LayoutBuilder(
-                        builder: (context, constraints) {
-                          double containerWidth = constraints.maxWidth / 3;
-                          return Row(
-                            children: [
-                              SizedBox(
-                                width: containerWidth,
-                                child: Column(
-                                  children: [
-                                    Text('5',
-                                      style: TextStyle(
-                                        color: Theme.of(context).colorScheme.primary,
-                                        fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
-                                        fontWeight: FontWeight.w600
-                                      ),
+      body: Skeletonizer(
+        enabled: _loading,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                // 유저 정보
+                CustomContainer(
+                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              // NavigatorHelper.push(context, const ProfileEditPage());
+                            },
+                            child: Stack(
+                              children: [
+                                const UserProfileWidget(diameter: 60),
+                                Positioned(
+                                  bottom: 0, right: 0,
+                                  child: Skeleton.ignore(
+                                    child: SvgIcon.asset(sIcon: SIcon.pen,
                                     ),
-                                    const SizedBox(height: 4,),
-                                    const Text('즐겨찾기',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w400
-                                      ),
-                                    )
-                                  ],
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: containerWidth,
-                                child: Column(
-                                  children: [
-                                    Text('5',
-                                      style: TextStyle(
+                              ]
+                            ),
+                          ),
+                          const SizedBox(width: 15,),
+                          Text('닉네임닉네임',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontWeight: FontWeight.w600,
+                              fontSize: Theme.of(context).textTheme.displaySmall!.fontSize
+                            ),
+                          )
+                        ],
+                      ),
+                      const SizedBox(height: 20,),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 40),
+                        child: LayoutBuilder(
+                          builder: (context, constraints) {
+                            double containerWidth = constraints.maxWidth / 3;
+                            return Row(
+                              children: [
+                                SizedBox(
+                                  width: containerWidth,
+                                  child: Column(
+                                    children: [
+                                      Text('5',
+                                        style: TextStyle(
                                           color: Theme.of(context).colorScheme.primary,
                                           fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
                                           fontWeight: FontWeight.w600
+                                        ),
                                       ),
-                                    ),
-                                    const SizedBox(height: 4,),
-                                    const Text('어떤무언가',
-                                      style: TextStyle(
+                                      const SizedBox(height: 4,),
+                                      const Text('즐겨찾기',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w400
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: containerWidth,
+                                  child: Column(
+                                    children: [
+                                      Text('5',
+                                        style: TextStyle(
+                                            color: Theme.of(context).colorScheme.primary,
+                                            fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
+                                            fontWeight: FontWeight.w600
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4,),
+                                      const Text('어떤무언가',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w400
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: containerWidth,
+                                  child: Column(
+                                    children: [
+                                      Text('5',
+                                        style: TextStyle(
+                                          color: Theme.of(context).colorScheme.primary,
+                                          fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
+                                          fontWeight: FontWeight.w600
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4,),
+                                      const Text('쿠폰',
+                                        style: TextStyle(
                                           fontWeight: FontWeight.w400
-                                      ),
-                                    )
-                                  ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: containerWidth,
-                                child: Column(
-                                  children: [
-                                    Text('5',
-                                      style: TextStyle(
-                                        color: Theme.of(context).colorScheme.primary,
-                                        fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
-                                        fontWeight: FontWeight.w600
-                                      ),
-                                    ),
-                                    const SizedBox(height: 4,),
-                                    const Text('쿠폰',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w400
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ],
-                          );
-                        },
+                              ],
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 15,),
-
-              // 캐시
-              CustomContainer(
-                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Text('잔액',
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
-                          ),
-                        ),
-                        Expanded(
-                          child: Text('999,999,999원',
-                            textAlign: TextAlign.right,
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,
-                              fontWeight: FontWeight.w500
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 15,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text('충전',
-                          style: TextStyle(
-                            fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
-                          ),
-                        ),
-                        const SizedBox(width: 15,),
-                        Text('내역',
-                          style: TextStyle(
-                            fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 15,),
-
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 25),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: const Color(0xFF6663E8)
-                ),
-                child: Text('함께하고 싶은 친구에게 공유해보세요',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                    fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize
+                    ],
                   ),
                 ),
-              ),
-              const SizedBox(height: 15,),
+                const SizedBox(height: 15,),
 
-              CustomContainer(
-                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-                child: Column(
-                  children: [
-                    _Menu(
-                      svgIcon: SvgIcon.asset(sIcon: SIcon.clipboard,
-                        style: SvgIconStyle(
-                          width: 20, height: 20, color: Theme.of(context).colorScheme.primary
-                        )
+                // 캐시
+                CustomContainer(
+                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Text('잔액',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
+                            ),
+                          ),
+                          Expanded(
+                            child: Text('999,999,999원',
+                              textAlign: TextAlign.right,
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,
+                                fontWeight: FontWeight.w500
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      title: '경기내역',
-                      onPressed: (){
-
-                      },
-                    ),
-                    const SizedBox(height: 10,),
-                    _Menu(
-                      svgIcon: SvgIcon.asset(sIcon: SIcon.coupon),
-                      title: '쿠폰',
-                      onPressed: (){
-
-                      },
-                    ),
-                  ],
+                      const SizedBox(height: 15,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text('충전',
+                            style: TextStyle(
+                              fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
+                            ),
+                          ),
+                          const SizedBox(width: 15,),
+                          Text('내역',
+                            style: TextStyle(
+                              fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 15,),
-            ],
+                const SizedBox(height: 15,),
+
+                Skeleton.keep(
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 25),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      color: const Color(0xFF6663E8)
+                    ),
+                    child: Text('함께하고 싶은 친구에게 공유해보세요',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15,),
+
+                CustomContainer(
+                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                  child: Column(
+                    children: [
+                      _Menu(
+                        svgIcon: SvgIcon.asset(sIcon: SIcon.clipboard,
+                          style: SvgIconStyle(
+                            width: 20, height: 20, color: Theme.of(context).colorScheme.primary
+                          )
+                        ),
+                        title: '경기내역',
+                        onPressed: (){
+
+                        },
+                      ),
+                      const SizedBox(height: 10,),
+                      _Menu(
+                        svgIcon: SvgIcon.asset(sIcon: SIcon.coupon),
+                        title: '쿠폰',
+                        onPressed: (){
+
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 15,),
+              ],
+            ),
           ),
         ),
       ),
@@ -257,9 +269,11 @@ class _Menu extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        SizedBox(
-          width: 30,
-          child: svgIcon,
+        Skeleton.ignore(
+          child: SizedBox(
+            width: 30,
+            child: svgIcon,
+          ),
         ),
         const SizedBox(width: 10,),
         Expanded(

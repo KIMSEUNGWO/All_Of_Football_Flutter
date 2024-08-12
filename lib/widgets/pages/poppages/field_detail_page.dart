@@ -11,12 +11,14 @@ import 'package:all_of_football/widgets/form/field_image_preview.dart';
 import 'package:all_of_football/widgets/form/field_match_form.dart';
 import 'package:flutter/material.dart';
 
+import 'package:skeletonizer/skeletonizer.dart';
+
 class FieldDetailWidget extends StatefulWidget {
 
   final int fieldId;
-  Field? field;
+  final Field? field;
 
-  FieldDetailWidget({super.key, required this.fieldId, this.field});
+  const FieldDetailWidget({super.key, required this.fieldId, this.field});
 
   @override
   State<FieldDetailWidget> createState() => _FieldDetailWidgetState();
@@ -25,6 +27,7 @@ class FieldDetailWidget extends StatefulWidget {
 class _FieldDetailWidgetState extends State<FieldDetailWidget> {
 
   late Field field;
+  bool _loading = true;
 
   fetchField() async {
     field = widget.field ??
@@ -52,54 +55,63 @@ class _FieldDetailWidgetState extends State<FieldDetailWidget> {
       appBar: AppBar(
         scrolledUnderElevation: 0,
         centerTitle: false,
-        title: Text(field.title),
+        title: Skeletonizer(
+          enabled: _loading,
+          child: Text(field.title),
+        ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 20),
-            child: SvgIcon.asset(
-              sIcon: SIcon.bookmarkFill,
+          Skeletonizer(
+            enabled: _loading,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 20),
+              child: SvgIcon.asset(
+                sIcon: SIcon.bookmarkFill,
+              ),
             ),
           )
         ],
       ),
-      body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: SingleChildScrollView(
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                FieldImages(images: field.images),
-                const SizedBox(height: 19,),
-                Text(field.title,
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.w600,
-                      fontSize: Theme.of(context).textTheme.displayMedium!.fontSize
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    OpenApp().openMaps(lat: field.address.lat, lng: field.address.lng);
-                  },
-                  child: Text(field.address.address,
+      body: Skeletonizer(
+        enabled: _loading,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: SingleChildScrollView(
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  FieldImages(images: field.images),
+                  const SizedBox(height: 19,),
+                  Text(field.title,
                     style: TextStyle(
-                        color: const Color(0xFF686868),
-                        fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
+                        color: Theme.of(context).colorScheme.primary,
                         fontWeight: FontWeight.w600,
-                        decoration: TextDecoration.underline
+                        fontSize: Theme.of(context).textTheme.displayMedium!.fontSize
                     ),
                   ),
-                ),
+                  GestureDetector(
+                    onTap: () {
+                      OpenApp().openMaps(lat: field.address.lat, lng: field.address.lng);
+                    },
+                    child: Text(field.address.address,
+                      style: TextStyle(
+                          color: const Color(0xFF686868),
+                          fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
+                          fontWeight: FontWeight.w600,
+                          decoration: TextDecoration.underline
+                      ),
+                    ),
+                  ),
 
 
-                const SizedBox(height: 35,),
-                FieldDetailFormWidget(field: field),
-                const SizedBox(height: 30,),
-                FieldMatchFormWidget(fieldId: field.fieldId),
-                const SizedBox(height: 40,),
+                  const SizedBox(height: 35,),
+                  FieldDetailFormWidget(field: field),
+                  const SizedBox(height: 30,),
+                  FieldMatchFormWidget(fieldId: field.fieldId),
+                  const SizedBox(height: 40,),
 
 
-              ]
+                ]
+            ),
           ),
         ),
       ),
