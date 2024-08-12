@@ -4,7 +4,7 @@ import 'package:all_of_football/domain/enums/language_enum.dart';
 
 enum RegionParent {
 
-  ALL("전체", "All", "全国"),
+  ALL("전국", "All", "全国"),
 
   // 홋카이도 지방
   HOKKAIDO("홋카이도", "Hokkaido", "北海道"),
@@ -154,8 +154,7 @@ enum Region {
         .toList();
   }
 
-  int compareTo(Region o2, Locale locale) {
-    LanguageType langType = LanguageType.getType(locale);
+  int compareTo(Region o2, LanguageType langType) {
 
     int parentCompareResult = parent.compareTo(o2.parent, langType);
     return (parentCompareResult == 0)

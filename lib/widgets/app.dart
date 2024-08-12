@@ -6,7 +6,6 @@ import 'package:all_of_football/widgets/pages/mainpages/home_page.dart';
 import 'package:all_of_football/widgets/pages/mainpages/match_list_page_new.dart';
 import 'package:all_of_football/widgets/pages/mainpages/search_page.dart';
 import 'package:all_of_football/widgets/pages/mainpages/mypage_page.dart';
-import 'package:all_of_football/widgets/pages/poppages/login_page.dart';
 import 'package:flutter/material.dart';
 
 
@@ -43,7 +42,6 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    final paddingBottom = MediaQuery.of(context).padding.bottom;
     return Scaffold(
       body: PageView(
         controller: _pageController,
@@ -106,7 +104,7 @@ class BottomIcon extends StatelessWidget {
       onTap: callback,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        decoration: BoxDecoration(),
+        decoration: const BoxDecoration(),
         child: SvgIcon.asset(
           sIcon: sIcon,
           style: isPressed

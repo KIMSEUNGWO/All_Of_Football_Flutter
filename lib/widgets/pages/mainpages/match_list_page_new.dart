@@ -1,25 +1,29 @@
 
 import 'package:all_of_football/component/region_data.dart';
+import 'package:all_of_football/component/snack_bar.dart';
 import 'package:all_of_football/domain/enums/match_enums.dart';
 import 'package:all_of_football/domain/match/match_search_view.dart';
 import 'package:all_of_football/domain/search_condition.dart';
+import 'package:all_of_football/notifier/region_notifier.dart';
 import 'package:all_of_football/widgets/component/custom_container.dart';
 import 'package:all_of_football/widgets/component/custom_scroll_refresh.dart';
 import 'package:all_of_football/widgets/component/match_extra_data.dart';
 import 'package:all_of_football/widgets/component/search_data.dart';
 import 'package:all_of_football/widgets/pages/poppages/match_detail_page.dart';
+import 'package:all_of_football/widgets/pages/poppages/region_select_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MatchListPageWidget extends StatefulWidget {
+class MatchListPageWidget extends ConsumerStatefulWidget {
   const MatchListPageWidget({super.key});
 
   @override
-  State<MatchListPageWidget> createState() => _MatchListPageWidgetState();
+  ConsumerState<MatchListPageWidget> createState() => _MatchListPageWidgetState();
 }
 
-class _MatchListPageWidgetState extends State<MatchListPageWidget> with AutomaticKeepAliveClientMixin {
+class _MatchListPageWidgetState extends ConsumerState<MatchListPageWidget> with AutomaticKeepAliveClientMixin {
 
   final _dateRange = 14;
   int _currentDateIndex = 0;
@@ -47,6 +51,10 @@ class _MatchListPageWidgetState extends State<MatchListPageWidget> with Automati
   final int _pageSize = 10;
   bool _hasMoreData = true;
 
+  selectRegion(Region region) {
+    ref.watch(regionProvider.notifier).setRegion(context, region);
+  }
+
   search(SearchCondition condition) {
 
   }
@@ -59,14 +67,23 @@ class _MatchListPageWidgetState extends State<MatchListPageWidget> with Automati
       appBar: AppBar(
         scrolledUnderElevation: 0,
         backgroundColor: Colors.white,
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text('도쿄구',
-              style: Theme.of(context).textTheme.displayLarge,
-            ),
-            const Icon(Icons.keyboard_arrow_down_rounded)
-          ]
+        title: GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+              return RegionSelectWidget(
+                onPressed: selectRegion,
+              );
+            },));
+          },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(ref.watch(regionProvider).getLocaleName(const Locale('ko', 'KR')),
+                style: Theme.of(context).textTheme.displayLarge,
+              ),
+              const Icon(Icons.keyboard_arrow_down_rounded)
+            ]
+          ),
         ),
 
       ),

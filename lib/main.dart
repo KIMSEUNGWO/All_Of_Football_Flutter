@@ -1,8 +1,9 @@
 import 'package:all_of_football/widgets/app.dart';
+import 'package:all_of_football/widgets/init.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_line_sdk/flutter_line_sdk.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
@@ -11,11 +12,11 @@ void main() async {
   // LINE Login API 연동
   LineSDK.instance.setup(channelId).then((_) => print('LineSDK Prepared'));
 
-  // 로케일 데이터를 초기화합니다.
+  // 로케일 데이터 를 초기화 합니다.
   await initializeDateFormatting();
 
 
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -27,8 +28,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: themeData(),
-      color: Color(0xFFF1F3F5),
-      home: const App(),
+      color: const Color(0xFFF1F3F5),
+      home: const InitApp(),
     );
   }
 }
