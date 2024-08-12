@@ -2,9 +2,12 @@
 import 'package:all_of_football/component/svg_icon.dart';
 import 'package:all_of_football/domain/enums/match_enums.dart';
 import 'package:all_of_football/domain/search_condition.dart';
+import 'package:all_of_football/notifier/region_notifier.dart';
 import 'package:flutter/material.dart';
 
-class SearchData extends StatefulWidget {
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class SearchData extends ConsumerStatefulWidget {
   final Function(SearchCondition condition) search;
   final int dateRange;
   final int selectedDateIndex;
@@ -12,10 +15,10 @@ class SearchData extends StatefulWidget {
   const SearchData({super.key, required this.search, required this.dateRange, required this.selectedDateIndex});
 
   @override
-  State<SearchData> createState() => _SearchDataState();
+  ConsumerState<SearchData> createState() => _SearchDataState();
 }
 
-class _SearchDataState extends State<SearchData> {
+class _SearchDataState extends ConsumerState<SearchData> {
 
   late List<DateTime> dateList;
   late int _selectedDateIndex;
@@ -24,18 +27,22 @@ class _SearchDataState extends State<SearchData> {
   _changeDate(int index) {
     if (_selectedDateIndex == index) return;
     setState(() => _selectedDateIndex = index);
+    _search();
   }
 
-  _search() {
+  _search() async {
     SearchCondition condition = SearchCondition(
       dateTime: dateList[_selectedDateIndex],
       sexType: _selectedSexType,
-      region: null,
+      region: await ref.read(regionProvider.notifier).get(),
     );
     widget.search(condition);
   }
-  _changeSex(SexType? sexType) => setState(() => _selectedSexType = sexType);
-
+  _changeSex(SexType? sexType) {
+    if (_selectedSexType == sexType) return;
+    setState(() => _selectedSexType = sexType);
+    _search();
+  }
   double? _containerHeight = 114;
   bool _hasOpen = false;
   _containerExpand() {
@@ -53,7 +60,14 @@ class _SearchDataState extends State<SearchData> {
   @override
   void initState() {
     DateTime now = DateTime.now();
-    dateList = List.generate(widget.dateRange, (index) => now.add(Duration(days: index)),);
+    // 오늘 기준은 현재 시간까지 고려
+    DateTime today = DateTime(now.year, now.month, now.day, now.hour);
+    // 다음날부터는 시간 고려 없이 0시 0분 기준
+    DateTime notToday = DateTime(now.year, now.month, now.day, 0,0,0);
+    dateList = List.generate(widget.dateRange, (index) {
+      if (index == 0) return today;
+      return notToday.add(Duration(days: index));
+    });
     _selectedDateIndex = widget.selectedDateIndex;
     super.initState();
     _search();
@@ -124,7 +138,7 @@ class _SelectDate extends StatelessWidget {
   final Function(int index) changeDate;
   final List<DateTime> dateList;
   
-  _SelectDate({super.key, required this.selectedDateIndex, required this.changeDate, required this.dateList});
+  _SelectDate({required this.selectedDateIndex, required this.changeDate, required this.dateList});
 
   final List<String> daysOfWeek = ['월', '화', '수', '목', '금', '토', '일'];
   String _formatDayOfWeek(DateTime date) {
@@ -143,7 +157,7 @@ class _SelectDate extends StatelessWidget {
 
             return ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: 14,
+              itemCount: dateList.length,
               itemBuilder: (context, i) {
                 return GestureDetector(
                   onTap: () {
@@ -160,12 +174,14 @@ class _SelectDate extends StatelessWidget {
                       children: [
                         Text(_formatDayOfWeek(dateList[i]),
                           style: TextStyle(
-                              color: selectedDateIndex == i
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Theme.of(context).colorScheme.secondary,
-                              fontWeight: selectedDateIndex == i
-                                  ? FontWeight.w600
-                                  : FontWeight.w400,
+                              color: dateList[i].weekday == 7 ? Colors.red
+                              : selectedDateIndex == i
+                                ? Theme.of(context).colorScheme.primary
+                                : Theme.of(context).colorScheme.secondary,
+                              fontWeight:
+                              selectedDateIndex == i
+                                ? FontWeight.w600
+                                : FontWeight.w400,
                               fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize
                           ),
                         ),
@@ -199,7 +215,7 @@ class _SelectSex extends StatelessWidget {
   final SexType? selectedSexType;
   final Function(SexType?) changeSex;
 
-  _SelectSex({super.key, required this.selectedSexType, required this.changeSex});
+  _SelectSex({required this.selectedSexType, required this.changeSex});
 
   final List<String> titles = ['전체', '남자', '여자'];
   final List<SexType?> types = [null, SexType.MALE, SexType.FEMALE];

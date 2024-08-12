@@ -1,6 +1,5 @@
 
 import 'package:all_of_football/component/region_data.dart';
-import 'package:all_of_football/component/snack_bar.dart';
 import 'package:all_of_football/domain/enums/match_enums.dart';
 import 'package:all_of_football/domain/match/match_search_view.dart';
 import 'package:all_of_football/domain/search_condition.dart';
@@ -26,7 +25,7 @@ class MatchListPageWidget extends ConsumerStatefulWidget {
 
 class _MatchListPageWidgetState extends ConsumerState<MatchListPageWidget> with AutomaticKeepAliveClientMixin {
 
-  final _dateRange = 14;
+  final _dateRange = 30;
   int _currentDateIndex = 0;
   bool _loading = false;
   
@@ -53,12 +52,27 @@ class _MatchListPageWidgetState extends ConsumerState<MatchListPageWidget> with 
   final int _pageSize = 10;
   bool _hasMoreData = true;
 
-  selectRegion(Region region) {
-    ref.watch(regionProvider.notifier).setRegion(context, region);
+  late SearchCondition _condition;
+
+  _selectRegion(Region region) async {
+    ref.read(regionProvider.notifier).setRegion(context, region);
+    Region newRegion = await ref.read(regionProvider.notifier).get();
+    if (_condition.region == newRegion) return;
+    _search(
+      SearchCondition(
+        dateTime: _condition.dateTime,
+        sexType: _condition.sexType,
+        region: newRegion
+      )
+    );
   }
 
-  search(SearchCondition condition) {
-
+  _search(SearchCondition condition) {
+    print('_MatchListPageWidgetState.search');
+    print(condition.dateTime);
+    print(condition.sexType);
+    print(condition.region);
+    _condition = condition;
   }
   
 
@@ -73,7 +87,7 @@ class _MatchListPageWidgetState extends ConsumerState<MatchListPageWidget> with 
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(builder: (context) {
               return RegionSelectWidget(
-                onPressed: selectRegion,
+                onPressed: _selectRegion,
               );
             },));
           },
@@ -92,34 +106,42 @@ class _MatchListPageWidgetState extends ConsumerState<MatchListPageWidget> with 
 
       body: Column(
         children: [
-          SearchData(search: search, dateRange: _dateRange, selectedDateIndex: _currentDateIndex),
+          SearchData(search: _search, dateRange: _dateRange, selectedDateIndex: _currentDateIndex),
 
           Expanded(
             child: Skeletonizer(
               enabled: _loading,
               child: Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20),
-                child: CustomScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(
-                    parent: BouncingScrollPhysics(),
-                  ),
-                  slivers: [
-                    CustomScrollRefresh(onRefresh: () {
-                    },),
-
-                    const SliverPadding(padding: EdgeInsets.only(top: 32)),
-
-                    SliverList.separated(
-                      separatorBuilder: (context, index) {
-                        return const SizedBox(height: 16,);
-                      },
-                      itemCount: _items.length,
-                      itemBuilder: (context, index) {
-                        return _MatchListWidget(match: _items[index]);
-                      },
+                child: _items.isEmpty
+                ? Center(
+                 child: Text('매치가 없어요',
+                   style: TextStyle(
+                     fontSize: Theme.of(context).textTheme.displayMedium!.fontSize
+                   ),
+                 ),
+                )
+                : CustomScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(
+                      parent: BouncingScrollPhysics(),
                     ),
-                  ],
-                ),
+                    slivers: [
+                      CustomScrollRefresh(onRefresh: () {
+                      },),
+
+                      const SliverPadding(padding: EdgeInsets.only(top: 32)),
+
+                      SliverList.separated(
+                        separatorBuilder: (context, index) {
+                          return const SizedBox(height: 16,);
+                        },
+                        itemCount: _items.length,
+                        itemBuilder: (context, index) {
+                          return _MatchListWidget(match: _items[index]);
+                        },
+                      ),
+                    ],
+                  ),
               ),
             ),
           ),
@@ -134,7 +156,7 @@ class _MatchListPageWidgetState extends ConsumerState<MatchListPageWidget> with 
 
 class _MatchListWidget extends StatefulWidget {
   final MatchView match;
-  const _MatchListWidget({super.key, required this.match,});
+  const _MatchListWidget({required this.match,});
 
   @override
   State<_MatchListWidget> createState() => _MatchListWidgetState();
