@@ -52,6 +52,7 @@ class _MatchListPageWidgetState extends ConsumerState<MatchListPageWidget> with 
   final int _pageSize = 10;
   bool _hasMoreData = true;
 
+
   late SearchCondition _condition;
 
   _selectRegion(Region region) async {
