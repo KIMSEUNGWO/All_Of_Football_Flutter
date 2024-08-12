@@ -67,6 +67,10 @@ class SIcon {
   static SIcon lineLogo = SIcon(picture: 'assets/icons/line_logo.svg');
   static SIcon kakaoLogo = SIcon(picture: 'assets/icons/kakao_logo.svg');
 
+  static SIcon kakaoPay = SIcon(picture: 'assets/icons/kakao_pay.svg');
+  static SIcon linePay = SIcon(picture: 'assets/icons/line_pay.svg');
+  static SIcon applePay = SIcon(picture: 'assets/icons/apple_pay.svg');
+
 
 }
 

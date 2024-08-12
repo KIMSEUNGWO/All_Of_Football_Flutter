@@ -26,7 +26,7 @@ class LoginWidget extends StatelessWidget {
                 _SocialBtn(
                   title: '라인으로 계속하기',
                   fontColor: Colors.white,
-                  color: const Color(0xFF06C755),
+                  color: const Color(0xFF08BF5B),
                   sIcon: SIcon.lineLogo,
                   onPressed: () {},
                 ),
@@ -92,7 +92,7 @@ class _SocialBtn extends StatelessWidget {
   final SIcon sIcon;
   final Function() onPressed;
 
-  const _SocialBtn({super.key, required this.title, required this.color, required this.fontColor, required this.sIcon, required this.onPressed});
+  const _SocialBtn({required this.title, required this.color, required this.fontColor, required this.sIcon, required this.onPressed});
 
 
   @override
@@ -131,7 +131,7 @@ class _SmallSocialBtn extends StatelessWidget {
   final Icon icon;
   final Color color;
 
-  const _SmallSocialBtn({super.key, required this.icon, required this.color});
+  const _SmallSocialBtn({required this.icon, required this.color});
 
   @override
   Widget build(BuildContext context) {
