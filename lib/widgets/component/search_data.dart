@@ -6,6 +6,7 @@ import 'package:all_of_football/notifier/region_notifier.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 class SearchData extends ConsumerStatefulWidget {
   final Function(SearchCondition condition) search;
@@ -138,13 +139,7 @@ class _SelectDate extends StatelessWidget {
   final Function(int index) changeDate;
   final List<DateTime> dateList;
   
-  _SelectDate({required this.selectedDateIndex, required this.changeDate, required this.dateList});
-
-  final List<String> daysOfWeek = ['월', '화', '수', '목', '금', '토', '일'];
-  String _formatDayOfWeek(DateTime date) {
-    // 요일을 한글로 매핑
-    return daysOfWeek[date.weekday - 1];
-  }
+  const _SelectDate({required this.selectedDateIndex, required this.changeDate, required this.dateList});
 
   @override
   Widget build(BuildContext context) {
@@ -172,7 +167,7 @@ class _SelectDate extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(_formatDayOfWeek(dateList[i]),
+                        Text(DateFormat('E', 'ko_KR').format(dateList[i]),
                           style: TextStyle(
                               color: dateList[i].weekday == 7 ? Colors.red
                               : selectedDateIndex == i

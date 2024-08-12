@@ -2,6 +2,7 @@
 import 'package:all_of_football/component/svg_icon.dart';
 import 'package:all_of_football/widgets/component/custom_container.dart';
 import 'package:all_of_football/widgets/component/user_profile_wiget.dart';
+import 'package:all_of_football/widgets/pages/poppages/match_history_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:skeletonizer/skeletonizer.dart';
@@ -229,7 +230,9 @@ class _MyPageWidgetState extends State<MyPageWidget> with AutomaticKeepAliveClie
                         ),
                         title: '경기내역',
                         onPressed: (){
-
+                          Navigator.push(context, MaterialPageRoute(builder: (context) {
+                            return MatchHistoryWidget();
+                          },));
                         },
                       ),
                       const SizedBox(height: 10,),
@@ -266,31 +269,34 @@ class _Menu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Skeleton.ignore(
-          child: SizedBox(
-            width: 30,
-            child: svgIcon,
-          ),
-        ),
-        const SizedBox(width: 10,),
-        Expanded(
-          child: Text(title,
-            style: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
-                fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
-                fontWeight: FontWeight.w500
+    return GestureDetector(
+      onTap: onPressed,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Skeleton.ignore(
+            child: SizedBox(
+              width: 30,
+              child: svgIcon,
             ),
           ),
-        ),
-        Icon(Icons.arrow_forward_ios_rounded,
-          color: Theme.of(context).colorScheme.primary,
-          size: 12,
-        )
+          const SizedBox(width: 10,),
+          Expanded(
+            child: Text(title,
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
+                  fontWeight: FontWeight.w500
+              ),
+            ),
+          ),
+          Icon(Icons.arrow_forward_ios_rounded,
+            color: Theme.of(context).colorScheme.primary,
+            size: 12,
+          )
 
-      ],
+        ],
+      ),
     );
   }
 }

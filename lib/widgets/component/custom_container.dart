@@ -7,11 +7,11 @@ class CustomContainer extends StatelessWidget {
   final double? width;
   final double? height;
   final EdgeInsets? margin;
-  BoxConstraints? constraints;
-  EdgeInsets? padding;
-  BorderRadius? radius;
+  final BoxConstraints? constraints;
+  final EdgeInsets? padding;
+  final BorderRadius? radius;
 
-  CustomContainer({super.key, this.width, this.height, this.margin, this.radius, this.child, this.padding, this.constraints});
+  const CustomContainer({super.key, this.width, this.height, this.margin, this.radius, this.child, this.padding, this.constraints});
 
   @override
   Widget build(BuildContext context) {
