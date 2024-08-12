@@ -22,6 +22,7 @@ dependencies:
   flutter_secure_storage: ^9.2.2 # Flutter Secure Storage
   flutter_riverpod: ^2.5.1 # 전역 저장소
   go_router: ^14.2.1 # 라우터
+  skeletonizer: ^1.4.2 # 스켈레톤, 로딩화면
 
 dev_dependencies:
   flutter_test:

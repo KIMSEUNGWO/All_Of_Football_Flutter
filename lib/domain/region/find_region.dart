@@ -7,8 +7,9 @@ class FindRegion {
 
   static List<Region> search(String word) {
     LanguageType langType = LanguageType.getLangType(word);
-
     List<Region> result = [];
+
+    word = word.toLowerCase();
 
     Region.values
         .where((region) => region != Region.ALL && region.isStartWith(langType, word))
@@ -16,8 +17,8 @@ class FindRegion {
 
     if (result.isEmpty) {
       RegionParent.values
-          .where((region) => region != RegionParent.ALL && region.isStartWith(langType, word))
-          .forEach((region) => result.addAll(region.getRegionChildList()));
+          .where((regionParent) => regionParent != RegionParent.ALL && regionParent.isStartWith(langType, word))
+          .forEach((regionParent) => result.addAll(regionParent.getRegionChildList()));
     }
 
     result.sort((a, b) => a.compareTo(b, langType));

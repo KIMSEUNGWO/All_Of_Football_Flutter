@@ -14,7 +14,7 @@ class CustomSnackBar {
         ), // 컨텐츠 표시내용
         duration: const Duration(seconds: 3), // 지속시간
         behavior: SnackBarBehavior.floating, // 화면 하단
-        backgroundColor: const Color(0xFF797979).withOpacity(0.85),
+        backgroundColor: const Color(0xFF414650),
         elevation: 0, // 그림자 없애기
         shape: RoundedRectangleBorder( // 모서리를 둥글게 변경
           borderRadius: BorderRadius.circular(10.0),

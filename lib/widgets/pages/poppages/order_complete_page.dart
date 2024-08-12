@@ -201,6 +201,30 @@ class _OrderCompleteWidgetState extends State<OrderCompleteWidget> with SingleTi
             ],
           ),
         ),
+        bottomNavigationBar: SafeArea(
+          child: GestureDetector(
+            onTap: () {
+
+            },
+            child: Container(
+              height: 50,
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.onPrimary,
+                borderRadius: BorderRadius.circular(10)
+              ),
+              child: Center(
+                child: Text('홈으로',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: Theme.of(context).textTheme.displaySmall!.fontSize
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

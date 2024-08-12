@@ -155,7 +155,6 @@ enum Region {
   }
 
   int compareTo(Region o2, LanguageType langType) {
-
     int parentCompareResult = parent.compareTo(o2.parent, langType);
     return (parentCompareResult == 0)
         ? _getRegion(langType).compareTo(o2._getRegion(langType))

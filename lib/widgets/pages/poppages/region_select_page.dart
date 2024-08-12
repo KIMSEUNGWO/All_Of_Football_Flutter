@@ -65,6 +65,7 @@ class _RegionSettingsWidgetState extends ConsumerState<RegionSelectWidget> {
                       color: Color(0xFF908E9B),
                     ),
                   ),
+                  autofocus: true,
                 ),
               ),
               const SizedBox(width: 10,),
@@ -73,26 +74,32 @@ class _RegionSettingsWidgetState extends ConsumerState<RegionSelectWidget> {
           ),
         ),
       ),
-      body: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white
-        ),
-        child: ListView.separated(
-          separatorBuilder: (context, index) => Container(
-            margin: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
-            height: 0.2,
-            decoration: const BoxDecoration(
-              color: Color(0xFF959595),
-            ),
+      body: GestureDetector(
+        onTap: () {
+          // TextField 외에 다른 부분 터치 시 unfocus
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
+        child: Container(
+          decoration: const BoxDecoration(
+            color: Colors.white
           ),
-          itemCount: _find.length,
-          itemBuilder: (context, index) {
-            return Container(
-              margin: const EdgeInsets.symmetric(horizontal: 20),
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: _FindResultRegionWidget(locale: const Locale('ko', 'KR'), region: _find[index], setRegion: widget.onPressed,),
-            );
-          },
+          child: ListView.separated(
+            separatorBuilder: (context, index) => Container(
+              margin: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
+              height: 0.2,
+              decoration: const BoxDecoration(
+                color: Color(0xFF959595),
+              ),
+            ),
+            itemCount: _find.length,
+            itemBuilder: (context, index) {
+              return Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: _FindResultRegionWidget(locale: const Locale('ko', 'KR'), region: _find[index], setRegion: widget.onPressed,),
+              );
+            },
+          ),
         ),
       )
     );
