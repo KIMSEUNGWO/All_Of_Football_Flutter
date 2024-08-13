@@ -1,4 +1,5 @@
 
+import 'package:all_of_football/component/date_range.dart';
 import 'package:all_of_football/widgets/component/calender.dart';
 import 'package:flutter/material.dart';
 
@@ -28,6 +29,10 @@ class _MatchHistoryWidgetState extends State<MatchHistoryWidget> {
               const SizedBox(height: 20,),
               CalenderWidget(
                 onChanged: _selectDate,
+                monthRange: MonthRange(
+                  min: DateTime(2024, 7),
+                  max: DateTime(2024, 10),
+                ),
               ),
             ],
           ),

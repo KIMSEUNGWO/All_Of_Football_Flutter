@@ -12,8 +12,8 @@ class CalendarDateTimeHelper {
     return width * 7;
   }
 
-  int monthCount(DateTime date) {
-    return date.year + (date.month * 12);
+  static int monthCount(DateTime date) {
+    return date.year * 12 + date.month;
   }
 
   DateTime safeMoveDate(DateTime before, DateTime after) {
@@ -60,18 +60,5 @@ class CalendarDateTimeHelper {
     return result;
 
   }
-
-
-
-}
-
-class CalendarData {
-
-  final DateTime today;
-  final DateTime currentMonth;
-
-  CalendarData({required DateTime now}):
-    today = DateTime(now.year, now.month, now.day),
-    currentMonth = DateTime(now.year, now.month, 1);
 
 }

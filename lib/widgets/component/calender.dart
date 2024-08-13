@@ -7,9 +7,10 @@ import 'package:intl/intl.dart';
 
 class CalenderWidget extends StatefulWidget {
   final Function(DateTime date) onChanged;
-  final MonthRange? monthRange;
+  final MonthRange monthRange;
 
-  const CalenderWidget({super.key, this.monthRange, required this.onChanged});
+  CalenderWidget({super.key, MonthRange? monthRange, required this.onChanged}):
+    monthRange = monthRange ?? MonthRange();
 
   @override
   State<CalenderWidget> createState() => _CalenderWidgetState();
@@ -18,38 +19,41 @@ class CalenderWidget extends StatefulWidget {
 class _CalenderWidgetState extends State<CalenderWidget> {
 
   late PageController _pageController;
+  late CalendarController _calendarController;
   late DateTime _today;
   late DateTime _selectDate;
   late DateTime _currentMonth;
   final CalendarDateTimeHelper calendarHelper = CalendarDateTimeHelper();
   late int _previousPage;
 
-  // void _preDate() {
-  //   // DateTime safeDateTime = calendarHelper.safeMoveDate(_selectDate, DateTime(_currentMonth.year, _currentMonth.month - 1));
-  //   // _select(safeDateTime);
-  // }
-  // void _nextDate() {
-  //   // DateTime safeDateTime = calendarHelper.safeMoveDate(_selectDate, DateTime(_currentMonth.year, _currentMonth.month + 1));
-  //   // _select(safeDateTime);
-  // }
-
   void _preDate() {
-    _pageController.previousPage(duration: Duration(seconds: 1), curve: Curves.easeInOut);
+    if (_calendarController.prevDisabled) return;
+    _pageController.previousPage(duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
   }
   void _nextDate() {
-    _pageController.nextPage(duration: Duration(seconds: 1), curve: Curves.easeInOut);
+    if (_calendarController.nextDisabled) return;
+    _pageController.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
   }
 
   void _select(DateTime date) {
     if (_selectDate.compareTo(date) == 0) return;
+    if (!_calendarController.hasRange(date)) return;
     setState(() {
       _selectDate = date;
-      _currentMonth = DateTime(_selectDate.year, _selectDate.month);
     });
+    int currentMonthCount = CalendarDateTimeHelper.monthCount(_currentMonth);
+    int nextMonthCount = CalendarDateTimeHelper.monthCount(date);
+    if (currentMonthCount > nextMonthCount) {
+      _preDate();
+    } else if (currentMonthCount < nextMonthCount) {
+      _nextDate();
+    }
     widget.onChanged(date);
   }
 
   void _onPageChanged(int page) {
+    _calendarController.pageChange(page);
+
     if (_previousPage < page) {
       setState(() {
         _currentMonth = DateTime(_currentMonth.year, _currentMonth.month + 1, 1);
@@ -65,6 +69,7 @@ class _CalenderWidgetState extends State<CalenderWidget> {
     });
   }
 
+  // Calendar 에 표시할 DateTime 를 page 로 조회 하는 메소드
   DateTime _onChange(int page) {
     if (_previousPage < page) {
       return DateTime(_currentMonth.year, _currentMonth.month + 1, 1);
@@ -81,12 +86,11 @@ class _CalenderWidgetState extends State<CalenderWidget> {
     _currentMonth = DateTime(now.year, now.month, 1);
     _selectDate = DateTime(now.year, now.month, now.day);
     _pageController = PageController(
-      initialPage: widget.monthRange?.min == null
-        ? calendarHelper.monthCount(now) - calendarHelper.monthCount(DateTime(1900, 1, 1))
-        : widget.monthRange!.min!,
+      initialPage: CalendarDateTimeHelper.monthCount(now),
       keepPage: true,
     );
     _previousPage = _pageController.initialPage;
+    _calendarController = CalendarController(range: widget.monthRange);
     super.initState();
   }
 
@@ -117,7 +121,9 @@ class _CalenderWidgetState extends State<CalenderWidget> {
                     onTap: _preDate,
                     child: Icon(Icons.arrow_back_ios_new_rounded,
                       size: 15,
-                      color: Color(0xFF292929),
+                      color: _calendarController.prevDisabled
+                        ? Color(0xFF999999)
+                        : Color(0xFF292929),
                     ),
                   ),
                   const SizedBox(width: 15,),
@@ -125,8 +131,9 @@ class _CalenderWidgetState extends State<CalenderWidget> {
                     onTap: _nextDate,
                     child: Icon(Icons.arrow_forward_ios_rounded,
                       size: 15,
-                      // color: Color(0xFF999999),
-                      color: Color(0xFF292929),
+                      color: _calendarController.nextDisabled
+                        ? Color(0xFF999999)
+                        : Color(0xFF292929),
                     ),
                   ),
                 ],
@@ -146,7 +153,7 @@ class _CalenderWidgetState extends State<CalenderWidget> {
                   currentMonth: _onChange(index),
                   today: _today,
                   selectDate: _selectDate,
-                  select: _select
+                  select: _select,
                 );
               },
             ),
@@ -174,16 +181,6 @@ class _CalendarState extends State<_Calendar> with AutomaticKeepAliveClientMixin
   final List<String> _weeks = ['일', '월', '화', '수', '목', '금', '토'];
   final CalendarDateTimeHelper calendarHelper = CalendarDateTimeHelper();
 
-  @override
-  void initState() {
-    print('_CalendarState.initState');
-    super.initState();
-  }
-  @override
-  void dispose() {
-    print('_CalendarState.dispose');
-    super.dispose();
-  }
   @override
   Widget build(BuildContext context) {
     super.build(context);
