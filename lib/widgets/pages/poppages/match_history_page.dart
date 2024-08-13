@@ -30,7 +30,7 @@ class _MatchHistoryWidgetState extends State<MatchHistoryWidget> {
               CalenderWidget(
                 onChanged: _selectDate,
                 monthRange: MonthRange(
-                  min: DateTime(2024, 7),
+                  min: DateTime(2024, 6),
                   max: DateTime(2024, 10),
                 ),
               ),

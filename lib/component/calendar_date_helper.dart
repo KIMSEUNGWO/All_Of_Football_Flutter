@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-class CalendarDateTimeHelper {
+class DateTimeHelper {
 
 
   double calculateHeight(BuildContext context) {

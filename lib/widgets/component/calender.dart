@@ -22,7 +22,7 @@ class _CalenderWidgetState extends State<CalenderWidget> {
   late DateTime _today;
   late DateTime _selectDate;
   late DateTime _currentMonth;
-  final CalendarDateTimeHelper calendarHelper = CalendarDateTimeHelper();
+  final DateTimeHelper calendarHelper = DateTimeHelper();
   late int _previousPage;
 
   void _preDate() {
@@ -38,30 +38,21 @@ class _CalenderWidgetState extends State<CalenderWidget> {
     setState(() {
       _selectDate = date;
     });
-    int currentMonthCount = CalendarDateTimeHelper.monthCount(_currentMonth);
-    int nextMonthCount = CalendarDateTimeHelper.monthCount(date);
+    int currentMonthCount = DateTimeHelper.monthCount(_currentMonth);
+    int nextMonthCount = DateTimeHelper.monthCount(date);
     if (currentMonthCount > nextMonthCount) {
       _preDate();
     } else if (currentMonthCount < nextMonthCount) {
       _nextDate();
     }
-    widget.onChanged(date);
+    widget.onChanged(_selectDate);
   }
 
   void _onPageChanged(int page) {
     _calendarController.pageChange(page);
 
-    if (_previousPage < page) {
-      setState(() {
-        _currentMonth = DateTime(_currentMonth.year, _currentMonth.month + 1, 1);
-      });
-    } else if (_previousPage > page) {
-      setState(() {
-        _currentMonth = DateTime(_currentMonth.year, _currentMonth.month - 1, 1);
-      });
-    }
-
     setState(() {
+      _currentMonth = _onChange(page);
       _previousPage = page;
     });
   }
@@ -84,10 +75,6 @@ class _CalenderWidgetState extends State<CalenderWidget> {
     _selectDate = DateTime(now.year, now.month, now.day);
     _calendarController = CalendarController(
       range: widget.monthRange,
-      pageController: PageController(
-        initialPage: CalendarDateTimeHelper.monthCount(now),
-        keepPage: true,
-      ),
     );
     _previousPage = _calendarController.pageController.initialPage;
 
@@ -148,6 +135,7 @@ class _CalenderWidgetState extends State<CalenderWidget> {
             child: PageView.builder(
               controller: _calendarController.pageController,
               onPageChanged: _onPageChanged,
+              itemCount: _calendarController.range.maxPage,
               itemBuilder: (context, index) {
                 return _Calendar(
                   currentMonth: _onChange(index),
@@ -179,7 +167,7 @@ class _Calendar extends StatefulWidget {
 
 class _CalendarState extends State<_Calendar> with AutomaticKeepAliveClientMixin {
   final List<String> _weeks = ['일', '월', '화', '수', '목', '금', '토'];
-  final CalendarDateTimeHelper calendarHelper = CalendarDateTimeHelper();
+  final DateTimeHelper calendarHelper = DateTimeHelper();
 
   @override
   Widget build(BuildContext context) {

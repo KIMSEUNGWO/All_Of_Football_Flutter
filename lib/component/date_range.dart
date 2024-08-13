@@ -3,16 +3,6 @@ import 'package:all_of_football/component/calendar_date_helper.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/src/widgets/page_view.dart';
 
-class MonthRange {
-
-  final int min;
-  final int max;
-
-  MonthRange({DateTime? min, DateTime? max}):
-    min = CalendarDateTimeHelper.monthCount(min ?? DateTime(1900, 1, 1)),
-    max = CalendarDateTimeHelper.monthCount(max ?? DateTime(2999, 12, 1));
-}
-
 class CalendarController {
 
   final PageController pageController;
@@ -24,16 +14,21 @@ class CalendarController {
   final Duration _duration = const Duration(milliseconds: 500);
   final Cubic curves = Curves.easeInOut;
 
-  CalendarController({required this.range, required this.pageController});
+  CalendarController({required this.range}):
+    pageController = PageController(
+      initialPage: range.initPage,
+      keepPage: true,
+    );
+
 
   void pageChange(int page) {
-    prevDisabled = range.min >= page;
-    nextDisabled = range.max <= page;
+    prevDisabled = 0 >= page;
+    nextDisabled = range.maxPage - 1 <= page;
   }
 
   bool hasRange(DateTime date) {
-    int monthCount = CalendarDateTimeHelper.monthCount(date);
-    return !(range.min > monthCount || range.max < monthCount);
+    int monthCount = DateTimeHelper.monthCount(date);
+    return !(DateTimeHelper.monthCount(range.min) > monthCount || DateTimeHelper.monthCount(range.max) < monthCount);
   }
 
   void previousPage() {
@@ -44,4 +39,22 @@ class CalendarController {
     if (nextDisabled) return;
     pageController.nextPage(duration: _duration, curve: curves);
   }
+}
+
+class MonthRange {
+
+  final DateTime min;
+  final DateTime max;
+  final int initPage;
+  final int maxPage;
+
+  MonthRange({DateTime? min, DateTime? max}):
+    min = min ?? DateTime(1900, 1, 1),
+    max = max ?? DateTime(2999, 12, 1),
+    initPage = DateTimeHelper.monthCount(DateTime.now()) - DateTimeHelper.monthCount(min ?? DateTime(1900, 1, 1)),
+    maxPage = DateTimeHelper.monthCount(DateTime.now()) - DateTimeHelper.monthCount(min ?? DateTime(1900, 1, 1))
+        + DateTimeHelper.monthCount(max ?? DateTime(2999, 12, 1)) - DateTimeHelper.monthCount(DateTime.now())
+        + 1;
+
+
 }
