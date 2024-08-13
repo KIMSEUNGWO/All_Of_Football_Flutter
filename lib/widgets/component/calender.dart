@@ -18,7 +18,6 @@ class CalenderWidget extends StatefulWidget {
 
 class _CalenderWidgetState extends State<CalenderWidget> {
 
-  late PageController _pageController;
   late CalendarController _calendarController;
   late DateTime _today;
   late DateTime _selectDate;
@@ -27,12 +26,10 @@ class _CalenderWidgetState extends State<CalenderWidget> {
   late int _previousPage;
 
   void _preDate() {
-    if (_calendarController.prevDisabled) return;
-    _pageController.previousPage(duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+    _calendarController.previousPage();
   }
   void _nextDate() {
-    if (_calendarController.nextDisabled) return;
-    _pageController.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+    _calendarController.nextPage();
   }
 
   void _select(DateTime date) {
@@ -85,18 +82,21 @@ class _CalenderWidgetState extends State<CalenderWidget> {
     _today = DateTime(now.year, now.month, now.day);
     _currentMonth = DateTime(now.year, now.month, 1);
     _selectDate = DateTime(now.year, now.month, now.day);
-    _pageController = PageController(
-      initialPage: CalendarDateTimeHelper.monthCount(now),
-      keepPage: true,
+    _calendarController = CalendarController(
+      range: widget.monthRange,
+      pageController: PageController(
+        initialPage: CalendarDateTimeHelper.monthCount(now),
+        keepPage: true,
+      ),
     );
-    _previousPage = _pageController.initialPage;
-    _calendarController = CalendarController(range: widget.monthRange);
+    _previousPage = _calendarController.pageController.initialPage;
+
     super.initState();
   }
 
   @override
   void dispose() {
-    _pageController.dispose();
+    _calendarController.pageController.dispose();
     super.dispose();
   }
   @override
@@ -146,7 +146,7 @@ class _CalenderWidgetState extends State<CalenderWidget> {
               maxHeight: calendarHelper.calculateHeight(context)
             ),
             child: PageView.builder(
-              controller: _pageController,
+              controller: _calendarController.pageController,
               onPageChanged: _onPageChanged,
               itemBuilder: (context, index) {
                 return _Calendar(
