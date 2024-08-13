@@ -1,7 +1,20 @@
 
 
+import 'package:flutter/material.dart';
+
 class CalendarDateTimeHelper {
 
+
+  double calculateHeight(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    // (width - 전체 padding - 내부 padding) / 요일 수
+    double width = (size.width - 40 - 20) / 7;
+    return width * 7;
+  }
+
+  int monthCount(DateTime date) {
+    return date.year + (date.month * 12);
+  }
 
   DateTime safeMoveDate(DateTime before, DateTime after) {
     // 8월 31일 -> 9월 30일로 마지막 달로 안전하게 이동하도록 하는 메소드
@@ -14,7 +27,7 @@ class CalendarDateTimeHelper {
     if (beforeDaysInMonth < afterDaysInMonth) {
       return DateTime(after.year, after.month, beforeDaysInMonth);
     }
-    return DateTime(after.year, after.month, afterDaysInMonth);
+    return DateTime(after.year, after.month, before.day);
   }
 
   List<DateTime> generate(DateTime date) {
@@ -31,7 +44,7 @@ class CalendarDateTimeHelper {
       }
     }
 
-    int daysInMonth = DateTime(date.year, date.month, 0).day; // 해당 월의 일수
+    int daysInMonth = DateTime(date.year, date.month + 1, 0).day; // 해당 월의 일수
     for (int i=0;i<daysInMonth;i++) {
       result.add(firstDayOfMonth.add(Duration(days: i)));
     }
@@ -49,5 +62,16 @@ class CalendarDateTimeHelper {
   }
 
 
+
+}
+
+class CalendarData {
+
+  final DateTime today;
+  final DateTime currentMonth;
+
+  CalendarData({required DateTime now}):
+    today = DateTime(now.year, now.month, now.day),
+    currentMonth = DateTime(now.year, now.month, 1);
 
 }

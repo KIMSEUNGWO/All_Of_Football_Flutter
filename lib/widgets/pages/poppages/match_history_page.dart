@@ -10,6 +10,10 @@ class MatchHistoryWidget extends StatefulWidget {
 }
 
 class _MatchHistoryWidgetState extends State<MatchHistoryWidget> {
+
+  void _selectDate(DateTime date) {
+    print('날짜 변경감지 : $date');
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +26,9 @@ class _MatchHistoryWidgetState extends State<MatchHistoryWidget> {
           child: Column(
             children: [
               const SizedBox(height: 20,),
-              CalenderWidget(),
+              CalenderWidget(
+                onChanged: _selectDate,
+              ),
             ],
           ),
         ),

@@ -1,11 +1,15 @@
 
 import 'package:all_of_football/component/calendar_date_helper.dart';
+import 'package:all_of_football/component/date_range.dart';
 import 'package:all_of_football/widgets/component/custom_container.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class CalenderWidget extends StatefulWidget {
-  const CalenderWidget({super.key});
+  final Function(DateTime date) onChanged;
+  final MonthRange? monthRange;
+
+  const CalenderWidget({super.key, this.monthRange, required this.onChanged});
 
   @override
   State<CalenderWidget> createState() => _CalenderWidgetState();
@@ -18,25 +22,56 @@ class _CalenderWidgetState extends State<CalenderWidget> {
   late DateTime _selectDate;
   late DateTime _currentMonth;
   final CalendarDateTimeHelper calendarHelper = CalendarDateTimeHelper();
+  late int _previousPage;
+
+  // void _preDate() {
+  //   // DateTime safeDateTime = calendarHelper.safeMoveDate(_selectDate, DateTime(_currentMonth.year, _currentMonth.month - 1));
+  //   // _select(safeDateTime);
+  // }
+  // void _nextDate() {
+  //   // DateTime safeDateTime = calendarHelper.safeMoveDate(_selectDate, DateTime(_currentMonth.year, _currentMonth.month + 1));
+  //   // _select(safeDateTime);
+  // }
 
   void _preDate() {
-    DateTime safeDateTime = calendarHelper.safeMoveDate(_currentMonth, DateTime(_currentMonth.year, _currentMonth.month - 1));
-    _select(safeDateTime);
+    _pageController.previousPage(duration: Duration(seconds: 1), curve: Curves.easeInOut);
   }
   void _nextDate() {
-    DateTime safeDateTime = calendarHelper.safeMoveDate(_currentMonth, DateTime(_currentMonth.year, _currentMonth.month + 1));
-    _select(safeDateTime);
+    _pageController.nextPage(duration: Duration(seconds: 1), curve: Curves.easeInOut);
   }
 
   void _select(DateTime date) {
+    if (_selectDate.compareTo(date) == 0) return;
     setState(() {
       _selectDate = date;
       _currentMonth = DateTime(_selectDate.year, _selectDate.month);
     });
+    widget.onChanged(date);
   }
 
-  int _monthCount(DateTime date) {
-    return date.year + (date.month * 12);
+  void _onPageChanged(int page) {
+    if (_previousPage < page) {
+      setState(() {
+        _currentMonth = DateTime(_currentMonth.year, _currentMonth.month + 1, 1);
+      });
+    } else if (_previousPage > page) {
+      setState(() {
+        _currentMonth = DateTime(_currentMonth.year, _currentMonth.month - 1, 1);
+      });
+    }
+
+    setState(() {
+      _previousPage = page;
+    });
+  }
+
+  DateTime _onChange(int page) {
+    if (_previousPage < page) {
+      return DateTime(_currentMonth.year, _currentMonth.month + 1, 1);
+    } else if (_previousPage > page) {
+      return DateTime(_currentMonth.year, _currentMonth.month - 1, 1);
+    }
+    return _currentMonth;
   }
 
   @override
@@ -45,7 +80,13 @@ class _CalenderWidgetState extends State<CalenderWidget> {
     _today = DateTime(now.year, now.month, now.day);
     _currentMonth = DateTime(now.year, now.month, 1);
     _selectDate = DateTime(now.year, now.month, now.day);
-    _pageController = PageController();
+    _pageController = PageController(
+      initialPage: widget.monthRange?.min == null
+        ? calendarHelper.monthCount(now) - calendarHelper.monthCount(DateTime(1900, 1, 1))
+        : widget.monthRange!.min!,
+      keepPage: true,
+    );
+    _previousPage = _pageController.initialPage;
     super.initState();
   }
 
@@ -62,7 +103,7 @@ class _CalenderWidgetState extends State<CalenderWidget> {
         children: [
           Row(
             children: [
-              Text(DateFormat('yyyy년 M월').format(_currentMonth),
+              Text(DateFormat('yyyy년 MM월').format(_currentMonth),
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.primary,
                   fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,
@@ -93,11 +134,22 @@ class _CalenderWidgetState extends State<CalenderWidget> {
             ],
           ),
           const SizedBox(height: 15,),
-          _Calendar(
-            currentMonth: _currentMonth,
-            today: _today,
-            selectDate: _selectDate,
-            select: _select
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: calendarHelper.calculateHeight(context)
+            ),
+            child: PageView.builder(
+              controller: _pageController,
+              onPageChanged: _onPageChanged,
+              itemBuilder: (context, index) {
+                return _Calendar(
+                  currentMonth: _onChange(index),
+                  today: _today,
+                  selectDate: _selectDate,
+                  select: _select
+                );
+              },
+            ),
           ),
         ],
       ),
@@ -118,12 +170,23 @@ class _Calendar extends StatefulWidget {
   State<_Calendar> createState() => _CalendarState();
 }
 
-class _CalendarState extends State<_Calendar> {
+class _CalendarState extends State<_Calendar> with AutomaticKeepAliveClientMixin {
   final List<String> _weeks = ['일', '월', '화', '수', '목', '금', '토'];
   final CalendarDateTimeHelper calendarHelper = CalendarDateTimeHelper();
 
   @override
+  void initState() {
+    print('_CalendarState.initState');
+    super.initState();
+  }
+  @override
+  void dispose() {
+    print('_CalendarState.dispose');
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     List<DateTime> calendar = calendarHelper.generate(widget.currentMonth);
     return Column(
       children: [
@@ -203,6 +266,9 @@ class _CalendarState extends State<_Calendar> {
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 
