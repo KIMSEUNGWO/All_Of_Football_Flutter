@@ -1,7 +1,9 @@
 
 import 'package:all_of_football/component/account_format.dart';
+import 'package:all_of_football/component/coupon_calculator.dart';
 import 'package:all_of_football/component/open_app.dart';
 import 'package:all_of_football/component/region_data.dart';
+import 'package:all_of_football/component/snack_bar.dart';
 import 'package:all_of_football/domain/coupon/coupon.dart';
 import 'package:all_of_football/domain/coupon/coupon_result.dart';
 import 'package:all_of_football/domain/field/address.dart';
@@ -9,6 +11,7 @@ import 'package:all_of_football/domain/order/order_result.dart';
 import 'package:all_of_football/domain/order/order_simp.dart';
 import 'package:all_of_football/widgets/component/custom_container.dart';
 import 'package:all_of_football/widgets/form/detail_default_form.dart';
+import 'package:all_of_football/widgets/pages/poppages/coupon_list_page.dart';
 import 'package:all_of_football/widgets/pages/poppages/order_complete_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -28,6 +31,7 @@ class OrderWidget extends StatefulWidget {
 class _OrderWidgetState extends State<OrderWidget> {
 
   late OrderSimp orderSimp;
+  Coupon? _coupon;
   bool _loading = false;
   bool _policy1 = false;
   bool _policy2 = false;
@@ -40,6 +44,13 @@ class _OrderWidgetState extends State<OrderWidget> {
   void _policy2Toggle() {
     setState(() {
       _policy2 = !_policy2;
+    });
+  }
+  void _setCoupon(Coupon? coupon) {
+    print('쿠폰 선택함 : ${coupon?.title}');
+    CustomSnackBar.message(context, '쿠폰이 적용되었습니다.');
+    setState(() {
+      _coupon = coupon;
     });
   }
 
@@ -58,10 +69,7 @@ class _OrderWidgetState extends State<OrderWidget> {
       address: Address('서울 마포구 독막로 2', Region.BUNKYO, 0, 0),
       dateTime: DateTime.now(),
       cash: 100000, 
-      couponList: [
-        Coupon(1, '신규회원 50% 쿠폰', 50, DateTime(2024, 08, 31, 23, 55)),
-        Coupon(2, '첫 결제 30% 쿠폰', 30, DateTime(2024, 08, 31, 23, 55)),
-      ],
+      couponCount: 2,
     );
     super.initState();
   }
@@ -163,22 +171,31 @@ class _OrderWidgetState extends State<OrderWidget> {
                                           color: Theme.of(context).colorScheme.primary
                                       ),
                                     ),
-                                    Row(
-                                      children: [
-                                        Text('${orderSimp.couponList.length}개 보유',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,
-                                              color: Theme.of(context).colorScheme.primary
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                          return CouponListWidget(
+                                            readOnly: false, onPressed: _setCoupon,
+                                          );
+                                        },));
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Text(_coupon == null ? '${orderSimp.couponCount}개 보유' : _coupon!.title,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,
+                                                color: Theme.of(context).colorScheme.primary
+                                            ),
                                           ),
-                                        ),
-                                        Skeleton.ignore(
-                                          child: Icon(Icons.arrow_forward_ios_rounded,
-                                            color: Theme.of(context).colorScheme.primary,
-                                            size: 14,
-                                          ),
-                                        )
-                                      ],
+                                          Skeleton.ignore(
+                                            child: Icon(Icons.arrow_forward_ios_rounded,
+                                              color: Theme.of(context).colorScheme.primary,
+                                              size: 14,
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     )
                                   ],
                                 ),
@@ -394,6 +411,29 @@ class _OrderWidgetState extends State<OrderWidget> {
                               )
                             ],
                           ),
+                          if (_coupon != null)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(_coupon!.title,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,
+                                        color: Theme.of(context).colorScheme.primary
+                                    ),
+                                  ),
+                                  Text(AccountFormatter.format(-1 * CouponCalculator.discount(orderSimp.totalPrice, (_coupon!.per / 100))),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,
+                                      color: Theme.of(context).colorScheme.primary
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
                           Container(
                             margin: const EdgeInsets.only(top: 25, bottom: 15),
                             width: double.infinity,
@@ -412,7 +452,9 @@ class _OrderWidgetState extends State<OrderWidget> {
                                     color: Theme.of(context).colorScheme.primary
                                 ),
                               ),
-                              Text(AccountFormatter.format(orderSimp.totalPrice),
+                              Text(_coupon == null
+                                ? AccountFormatter.format(orderSimp.totalPrice)
+                                : AccountFormatter.format(CouponCalculator.total(orderSimp.totalPrice, (_coupon!.per / 100))),
                                 style: TextStyle(
                                     fontWeight: FontWeight.w700,
                                     fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,

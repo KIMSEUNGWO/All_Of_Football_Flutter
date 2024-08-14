@@ -46,7 +46,7 @@ themeData() {
         fontSize: 20,
         fontWeight: FontWeight.w600,
         height: 1.4,
-      )
+      ),
     ),
 
     colorScheme: const ColorScheme.light(

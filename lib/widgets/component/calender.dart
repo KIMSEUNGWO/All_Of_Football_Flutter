@@ -238,7 +238,7 @@ class _CalendarState extends State<_Calendar> with AutomaticKeepAliveClientMixin
                       ),
 
                       // 일정이나 이벤트가 있는 날짜는 이렇게 표시
-                      if (date.day == 6)
+                      if (date.day == 6 && date.month == 8)
                         Container(
                           width: 8, height: 8,
                           decoration: BoxDecoration(

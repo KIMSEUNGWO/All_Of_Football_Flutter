@@ -12,7 +12,7 @@ class OrderSimp {
   final DateTime dateTime;
 
   final int cash;
-  final List<Coupon> couponList;
+  final int couponCount;
 
   OrderSimp.fromJson(Map<String, dynamic> json):
     title = json['title'],
@@ -21,11 +21,9 @@ class OrderSimp {
     address = Address.fromJson(json['address']),
     dateTime = DateTime.parse(json['dateTime']),
     cash = json['cash'],
-    couponList = json['couponList'] != null
-      ? List<Coupon>.from(json['couponList'].map((coupon) => Coupon.fromJson(coupon)))
-      : [];
+    couponCount = json['couponCount'];
 
-  OrderSimp({required this.title, required this.matchHour, required this.totalPrice, required this.address, required this.dateTime, required this.cash, required this.couponList});
+  OrderSimp({required this.title, required this.matchHour, required this.totalPrice, required this.address, required this.dateTime, required this.cash, required this.couponCount});
 
 
 }

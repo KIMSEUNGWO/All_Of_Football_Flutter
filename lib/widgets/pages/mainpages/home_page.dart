@@ -1,4 +1,5 @@
 
+import 'package:all_of_football/widgets/pages/poppages/login_page.dart';
 import 'package:flutter/material.dart';
 
 class HomeWidget extends StatefulWidget {
@@ -12,7 +13,26 @@ class _HomePageState extends State<HomeWidget> with AutomaticKeepAliveClientMixi
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(),
+      body: Column(
+        children: [
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return LoginWidget();
+              }, fullscreenDialog: true));
+            },
+            child: Text('로그인 페이지 이동',
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.black
+              ),
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   @override

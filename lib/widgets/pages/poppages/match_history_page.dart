@@ -42,7 +42,7 @@ class _MatchHistoryWidgetState extends State<MatchHistoryWidget> {
       MatchView(4, MatchStatus.FINISHED, '어딘가의 구장', DateTime(2024, 01, 1, 1,1), MatchData(null, Region.BUNKYO, 6, 2)),
 
     ];
-    if (DateTime(2024, 8, 13).compareTo(date) == 0) {
+    if (DateTime(2024, 8, 6).compareTo(date) == 0) {
       map.putIfAbsent(date, () => result,);
     } else {
       map.putIfAbsent(date, () => [],);
