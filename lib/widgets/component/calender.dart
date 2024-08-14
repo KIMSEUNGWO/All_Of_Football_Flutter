@@ -77,7 +77,6 @@ class _CalenderWidgetState extends State<CalenderWidget> {
       range: widget.monthRange,
     );
     _previousPage = _calendarController.pageController.initialPage;
-
     super.initState();
   }
 
@@ -94,11 +93,15 @@ class _CalenderWidgetState extends State<CalenderWidget> {
         children: [
           Row(
             children: [
-              Text(DateFormat('yyyy년 MM월').format(_currentMonth),
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,
-                  fontWeight: FontWeight.w600
+              GestureDetector(
+                onTap: () {
+                },
+                child: Text(DateFormat('yyyy년 MM월').format(_currentMonth),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,
+                    fontWeight: FontWeight.w600
+                  ),
                 ),
               ),
               const SizedBox(width: 15,),
@@ -233,6 +236,16 @@ class _CalendarState extends State<_Calendar> with AutomaticKeepAliveClientMixin
                                 : const Color(0xFF292929)
                         ),
                       ),
+
+                      // 일정이나 이벤트가 있는 날짜는 이렇게 표시
+                      if (date.day == 6)
+                        Container(
+                          width: 8, height: 8,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Theme.of(context).colorScheme.onSecondary
+                          ),
+                        ),
                       if (isToday)
                         Text('Today',
                           style: TextStyle(

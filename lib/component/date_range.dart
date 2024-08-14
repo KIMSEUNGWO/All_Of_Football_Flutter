@@ -1,6 +1,8 @@
 
 import 'package:all_of_football/component/calendar_date_helper.dart';
 import 'package:flutter/animation.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/page_view.dart';
 
 class CalendarController {
@@ -39,6 +41,54 @@ class CalendarController {
     if (nextDisabled) return;
     pageController.nextPage(duration: _duration, curve: curves);
   }
+
+  Future<void> selectDate(BuildContext context, {required Function() onPressed}) async {
+    showCupertinoDialog(
+      context: context,
+      barrierDismissible: true, // showCupertinoDialog 영역 외에 눌렀을 때 닫게 해줌
+      builder: (BuildContext context) {
+        return Align(
+          alignment: Alignment
+              .bottomCenter, //특정 위젯이 어디에 정렬을 해야되는지 모르면 height값줘도 최대한에 사이즈를 먹음
+          child: Container(
+            color: Colors.white,
+            height: 300,
+            child: Column(
+              children: [
+                CupertinoButton(
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Text('완료',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w500
+                      ),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                SizedBox(
+                  height: 200,
+                  child: CupertinoDatePicker(
+                    mode: CupertinoDatePickerMode.monthYear, //CupertinoDatePickerMode에서 일시, 시간 등 고름
+                    initialDateTime: DateTime.now(),
+
+                    onDateTimeChanged: (DateTime date) {
+                      print('날짜선택 : $date');
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+
+
 }
 
 class MonthRange {

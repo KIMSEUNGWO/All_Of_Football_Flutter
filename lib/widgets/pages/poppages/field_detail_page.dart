@@ -27,7 +27,7 @@ class FieldDetailWidget extends StatefulWidget {
 class _FieldDetailWidgetState extends State<FieldDetailWidget> {
 
   late Field field;
-  bool _loading = true;
+  bool _loading = false;
 
   fetchField() async {
     field = widget.field ??

@@ -6,6 +6,7 @@ import 'package:all_of_football/widgets/component/custom_container.dart';
 import 'package:all_of_football/widgets/component/match_extra_data.dart';
 import 'package:all_of_football/widgets/form/detail_default_form.dart';
 import 'package:all_of_football/domain/match/match.dart';
+import 'package:all_of_football/widgets/pages/poppages/match_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -41,41 +42,48 @@ class _FieldMatchFormWidgetState extends State<FieldMatchFormWidget> {
         itemCount: matchList.length,
         itemBuilder: (context, index) {
           MatchSimp simp = matchList[index];
-          return CustomContainer(
-            padding: const EdgeInsets.all(15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Text(DateFormat('MM.dd').format(simp.matchDate),
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontWeight: FontWeight.w600,
-                        fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return MatchDetailWidget(matchId: simp.matchId);
+              },));
+            },
+            child: CustomContainer(
+              padding: const EdgeInsets.all(15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Text(DateFormat('MM.dd').format(simp.matchDate),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.w600,
+                          fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 10,),
-                    Text(DateFormat('HH:mm').format(simp.matchDate),
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontWeight: FontWeight.w600,
-                        fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,
+                      const SizedBox(width: 10,),
+                      Text(DateFormat('HH:mm').format(simp.matchDate),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.w600,
+                          fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    MatchExtraDataWidget(matchData: simp.matchData),
-                    const SizedBox(width: 10,),
-                    Icon(Icons.arrow_forward_ios_rounded,
-                      size: 14,
-                      color: Theme.of(context).colorScheme.secondary,
-                    )
-                  ],
-                )
-              ],
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      MatchExtraDataWidget(matchData: simp.matchData),
+                      const SizedBox(width: 10,),
+                      Icon(Icons.arrow_forward_ios_rounded,
+                        size: 14,
+                        color: Theme.of(context).colorScheme.secondary,
+                      )
+                    ],
+                  )
+                ],
+              ),
             ),
           );
         },

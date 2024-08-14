@@ -29,7 +29,20 @@ class _OrderWidgetState extends State<OrderWidget> {
 
   late OrderSimp orderSimp;
   bool _loading = false;
-  
+  bool _policy1 = false;
+  bool _policy2 = false;
+
+  void _policy1Toggle() {
+    setState(() {
+      _policy1 = !_policy1;
+    });
+  }
+  void _policy2Toggle() {
+    setState(() {
+      _policy2 = !_policy2;
+    });
+  }
+
   submit(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
       return OrderCompleteWidget(orderResult: OrderResult(20000, CouponResult('첫결제 이벤트 50% 할인', 10000), 10000, 90000),);
@@ -234,23 +247,23 @@ class _OrderWidgetState extends State<OrderWidget> {
                                 child: Padding(
                                   padding: const EdgeInsets.only(top: 10),
                                   child: Text("""
-        플랩 매치는 10명 이상 모여서 진행해요. 매치 시작 90분 전까지 팀 구성이 어려우면, 취소 안내 드립니다. 
-        
-        출발 전에 카카오톡 알림을 꼭 확인해 주세요.  
-        
-        참여가 어려울 경우, 마이 플랩에서 미리 취소를 해주세요. 무단 불참하거나 매치 시작 90분 이내에 취소하면 패널티를 받을 수 있습니다. 
-        
-        갑작스러운 인원 부족으로 경기 진행에 문제가 생길 수 있기 때문에 플랩에서는 시간 약속을 중요한 매너로 보고 있습니다.  
-        
-        반드시 풋살화(TF) 혹은 운동화를 신어 주세요. 축구화를 착용하면 다른 사람이 크게 다칠 수 있어 참여를 제한하고 있습니다. 
-        
-        매너 점수가 내려가는 점도 유의해 주세요. 레벨 데이터로 팀을 나누면 막상막하로 더 재밌을 거예요. 
-        
-        레벨 차이가 크거나 늦는 친구가 있으면, 서로 다른 팀이 될 수 있습니다.  
-        
-        이용자 부주의로 시설을 파손하면, 손해배상을 청구할 수 있어요. 이 점 주의 부탁 드립니다.  
-        
-        안전상의 이유로 고등학생 이상 (만 16세) 참여 가능하며 만 16세 미만인 경우 현장에서 귀가 조치 될 수 있습니다.
+플랩 매치는 10명 이상 모여서 진행해요. 매치 시작 90분 전까지 팀 구성이 어려우면, 취소 안내 드립니다. 
+
+출발 전에 카카오톡 알림을 꼭 확인해 주세요.  
+
+참여가 어려울 경우, 마이 플랩에서 미리 취소를 해주세요. 무단 불참하거나 매치 시작 90분 이내에 취소하면 패널티를 받을 수 있습니다. 
+
+갑작스러운 인원 부족으로 경기 진행에 문제가 생길 수 있기 때문에 플랩에서는 시간 약속을 중요한 매너로 보고 있습니다.  
+
+반드시 풋살화(TF) 혹은 운동화를 신어 주세요. 축구화를 착용하면 다른 사람이 크게 다칠 수 있어 참여를 제한하고 있습니다. 
+
+매너 점수가 내려가는 점도 유의해 주세요. 레벨 데이터로 팀을 나누면 막상막하로 더 재밌을 거예요. 
+
+레벨 차이가 크거나 늦는 친구가 있으면, 서로 다른 팀이 될 수 있습니다.  
+
+이용자 부주의로 시설을 파손하면, 손해배상을 청구할 수 있어요. 이 점 주의 부탁 드립니다.  
+
+안전상의 이유로 고등학생 이상 (만 16세) 참여 가능하며 만 16세 미만인 경우 현장에서 귀가 조치 될 수 있습니다.
                                 """,
                                     style: TextStyle(
                                       color: Theme.of(context).colorScheme.primary
@@ -265,7 +278,16 @@ class _OrderWidgetState extends State<OrderWidget> {
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.check_box_rounded, size: 23, color: Color(0xFFDDDDDD),),
+                            GestureDetector(
+                              onTap: _policy1Toggle,
+                              child: Icon(
+                                Icons.check_box_rounded,
+                                size: 23,
+                                color: _policy1
+                                  ? Theme.of(context).colorScheme.onPrimary
+                                  : Color(0xFFDDDDDD),
+                              ),
+                            ),
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 8),
                               child: Text('동의합니다',
@@ -297,13 +319,13 @@ class _OrderWidgetState extends State<OrderWidget> {
                                 child: Padding(
                                   padding: const EdgeInsets.only(top: 10),
                                   child: Text("""
-        모두의 풋볼은 상대를 배려하고, 나를 지키는 안전한 플레이를 권장합니다.  
-        
-        거친 플레이를 하는 참가자에게 매너 카드를 발급하여 안전하고 즐거운 매치 문화를 만들어 나갑니다.  
-        
-        다른 사람에게 피해를 끼치는 경우 이용이 정지될 수 있습니다.  
-        
-        축구, 풋살 등 부상의 위험성이 내재된 경기 규칙 안에서 발생한 부상 대부분이 개인에게 책임이 있음을 판단하고 있습니다.
+모두의 풋볼은 상대를 배려하고, 나를 지키는 안전한 플레이를 권장합니다.  
+
+거친 플레이를 하는 참가자에게 매너 카드를 발급하여 안전하고 즐거운 매치 문화를 만들어 나갑니다.  
+
+다른 사람에게 피해를 끼치는 경우 이용이 정지될 수 있습니다.  
+
+축구, 풋살 등 부상의 위험성이 내재된 경기 규칙 안에서 발생한 부상 대부분이 개인에게 책임이 있음을 판단하고 있습니다.
                                 """,
                                     style: TextStyle(
                                         color: Theme.of(context).colorScheme.primary
@@ -318,7 +340,16 @@ class _OrderWidgetState extends State<OrderWidget> {
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.check_box_rounded, size: 23, color: Color(0xFFDDDDDD),),
+                            GestureDetector(
+                              onTap: _policy2Toggle,
+                              child: Icon(
+                                Icons.check_box_rounded,
+                                size: 23,
+                                color: _policy2
+                                    ? Theme.of(context).colorScheme.onPrimary
+                                    : Color(0xFFDDDDDD),
+                              ),
+                            ),
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 8),
                               child: Text('동의합니다',

@@ -2,6 +2,8 @@
 import 'package:all_of_football/component/svg_icon.dart';
 import 'package:all_of_football/widgets/component/custom_container.dart';
 import 'package:all_of_football/widgets/component/user_profile_wiget.dart';
+import 'package:all_of_football/widgets/pages/poppages/cash_receipt_page.dart';
+import 'package:all_of_football/widgets/pages/poppages/coupon_list_page.dart';
 import 'package:all_of_football/widgets/pages/poppages/match_history_page.dart';
 import 'package:flutter/material.dart';
 
@@ -187,9 +189,16 @@ class _MyPageWidgetState extends State<MyPageWidget> with AutomaticKeepAliveClie
                             ),
                           ),
                           const SizedBox(width: 15,),
-                          Text('내역',
-                            style: TextStyle(
-                              fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                return CashReceiptWidget();
+                              },));
+                            },
+                            child: Text('내역',
+                              style: TextStyle(
+                                fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
+                              ),
                             ),
                           ),
                         ],
@@ -240,7 +249,9 @@ class _MyPageWidgetState extends State<MyPageWidget> with AutomaticKeepAliveClie
                         svgIcon: SvgIcon.asset(sIcon: SIcon.coupon),
                         title: '쿠폰',
                         onPressed: (){
-
+                          Navigator.push(context, MaterialPageRoute(builder: (context) {
+                            return CouponListWidget();
+                          },));
                         },
                       ),
                     ],
