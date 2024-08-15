@@ -55,6 +55,7 @@ class _OrderCompleteWidgetState extends State<OrderCompleteWidget> with SingleTi
       child: Scaffold(
         appBar: AppBar(
           title: Text('결제완료'),
+          centerTitle: true,
           // automaticallyImplyLeading: false, // 뒤로가기 숨김
         ),
         body: Padding(
@@ -72,7 +73,7 @@ class _OrderCompleteWidgetState extends State<OrderCompleteWidget> with SingleTi
                       child: const Icon(
                         Icons.check_circle_outline_rounded,
                         color: Color(0xFF52CA3E),
-                        size: 120,
+                        size: 100,
                       ),
                     ),
                   ),
@@ -81,7 +82,7 @@ class _OrderCompleteWidgetState extends State<OrderCompleteWidget> with SingleTi
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.w600,
-                      fontSize: 24
+                      fontSize: Theme.of(context).textTheme.displayLarge!.fontSize
                     ),
                   )
                 ],
@@ -90,8 +91,8 @@ class _OrderCompleteWidgetState extends State<OrderCompleteWidget> with SingleTi
               Column(
                 children: [
                   Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 33),
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(vertical: 15),
                     decoration: BoxDecoration(
                       border: Border.symmetric(horizontal: BorderSide(
                         color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
@@ -105,13 +106,13 @@ class _OrderCompleteWidgetState extends State<OrderCompleteWidget> with SingleTi
                           children: [
                             Text('이용금액',
                               style: TextStyle(
-                                fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,
+                                fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
                                 fontWeight: FontWeight.w500
                               ),
                             ),
                             Text(AccountFormatter.format(widget.orderResult.totalPrice),
                               style: TextStyle(
-                                  fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,
+                                  fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
                                   fontWeight: FontWeight.w500
                               ),
                             ),
@@ -126,7 +127,7 @@ class _OrderCompleteWidgetState extends State<OrderCompleteWidget> with SingleTi
                               Expanded(
                                 child: Text('(쿠폰) ${widget.orderResult.coupon!.title}',
                                   style: TextStyle(
-                                    fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,
+                                    fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
                                     fontWeight: FontWeight.w500
                                   ),
                                   overflow: TextOverflow.fade,
@@ -135,7 +136,7 @@ class _OrderCompleteWidgetState extends State<OrderCompleteWidget> with SingleTi
                               const SizedBox(width: 10,),
                               Text(AccountFormatter.format(-1 * widget.orderResult.coupon!.discount),
                                 style: TextStyle(
-                                    fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,
+                                    fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
                                     fontWeight: FontWeight.w500
                                 ),
                               ),
@@ -145,8 +146,8 @@ class _OrderCompleteWidgetState extends State<OrderCompleteWidget> with SingleTi
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 33),
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(vertical: 15),
                     child: Column(
                       children: [
 
@@ -155,14 +156,14 @@ class _OrderCompleteWidgetState extends State<OrderCompleteWidget> with SingleTi
                           children: [
                             Text('결제금액',
                               style: TextStyle(
-                                fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,
+                                fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
                                 fontWeight: FontWeight.w600,
                                 color: Theme.of(context).colorScheme.primary,
                               ),
                             ),
                             Text(AccountFormatter.format(widget.orderResult.finalPrice),
                               style: TextStyle(
-                                fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,
+                                fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
                                 fontWeight: FontWeight.w600,
                                 color: Theme.of(context).colorScheme.primary,
                               ),
@@ -176,7 +177,7 @@ class _OrderCompleteWidgetState extends State<OrderCompleteWidget> with SingleTi
                             Expanded(
                               child: Text('남은잔액',
                                 style: TextStyle(
-                                    fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,
+                                    fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
                                     fontWeight: FontWeight.w500
                                 ),
                                 overflow: TextOverflow.fade,
@@ -185,7 +186,7 @@ class _OrderCompleteWidgetState extends State<OrderCompleteWidget> with SingleTi
                             const SizedBox(width: 10,),
                             Text(AccountFormatter.format(widget.orderResult.remainCash),
                               style: TextStyle(
-                                  fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,
+                                  fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
                                   fontWeight: FontWeight.w500
                               ),
                             ),

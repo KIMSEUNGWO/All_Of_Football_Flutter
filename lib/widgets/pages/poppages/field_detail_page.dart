@@ -32,7 +32,7 @@ class _FieldDetailWidgetState extends State<FieldDetailWidget> {
   fetchField() async {
     field = widget.field ??
         Field(2, '안양대학교 SKY 풋살파크 C구장',
-          Address('서울 마포구 독막로 2', Region.TAITO, 0, 0),
+          Address('서울 마포구 독막로 2', Region.TAITO, 35.757721, 139.527805),
           FieldData(Parking.FREE, Shower.Y, Toilet.N, 123, 40, 10000),
           '뭐가 없고~ 뭐가 있고~',
           [

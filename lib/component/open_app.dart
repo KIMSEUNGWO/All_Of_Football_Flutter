@@ -1,5 +1,6 @@
 
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class OpenApp {
 
@@ -9,10 +10,12 @@ class OpenApp {
 
   openMaps({required double lat, required double lng}) async {
 
+    String openApp = 'comgooglemaps://';
+    print(await canLaunchUrl(Uri.parse(openApp)));
+    // await launchUrl(Uri.parse(openApp));
     Uri googleMap = _google(lat, lng);
     if (await canLaunchUrl(googleMap)) {
-      launchUrl(googleMap);
-      return;
+      await launchUrl(googleMap);
     }
 
     Uri appleMap = _apple(lat, lng);

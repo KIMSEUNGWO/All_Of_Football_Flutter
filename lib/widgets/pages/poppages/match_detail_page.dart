@@ -58,7 +58,6 @@ class _MatchDetailWidgetState extends State<MatchDetailWidget> {
     super.initState();
   }
   
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
