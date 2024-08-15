@@ -80,6 +80,7 @@ class _OrderWidgetState extends State<OrderWidget> {
       appBar: AppBar(
         scrolledUnderElevation: 0,
         title: const Text('경기신청'),
+        centerTitle: true,
       ),
       body: Skeletonizer(
         enabled: _loading,
@@ -131,7 +132,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                         '${DateFormat('yyyy년 M월 d일 EEEE HH:mm', 'ko_KR').format(orderSimp.dateTime)} ~ ${DateFormat('HH:mm').format(orderSimp.dateTime.add(Duration(hours: orderSimp.matchHour)))}',
                         style: TextStyle(
                             fontWeight: FontWeight.w600,
-                            fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,
+                            fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
                             color: Theme.of(context).colorScheme.primary
                         ),
                       ),
@@ -167,7 +168,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                     Text('쿠폰',
                                       style: TextStyle(
                                           fontWeight: FontWeight.w500,
-                                          fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,
+                                          fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
                                           color: Theme.of(context).colorScheme.primary
                                       ),
                                     ),
@@ -184,7 +185,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                           Text(_coupon == null ? '${orderSimp.couponCount}개 보유' : _coupon!.title,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w500,
-                                                fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,
+                                                fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
                                                 color: Theme.of(context).colorScheme.primary
                                             ),
                                           ),
@@ -206,7 +207,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                     Text('캐시',
                                       style: TextStyle(
                                           fontWeight: FontWeight.w500,
-                                          fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,
+                                          fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
                                           color: Theme.of(context).colorScheme.primary
                                       ),
                                     ),
@@ -215,7 +216,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                         Text(AccountFormatter.format(orderSimp.cash),
                                           style: TextStyle(
                                               fontWeight: FontWeight.w500,
-                                              fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,
+                                              fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
                                               color: Theme.of(context).colorScheme.primary
                                           ),
                                         ),

@@ -85,6 +85,7 @@ class _MatchHistoryWidgetState extends State<MatchHistoryWidget> {
       appBar: AppBar(
         scrolledUnderElevation: 0,
         title: const Text('경기내역'),
+        centerTitle: true,
       ),
       body: Skeletonizer(
         enabled: _loading,

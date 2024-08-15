@@ -46,6 +46,7 @@ class _CouponListWidgetState extends State<CouponListWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text('쿠폰함'),
         scrolledUnderElevation: 0,
         actions: widget.readOnly
@@ -132,7 +133,7 @@ class _CouponListWidgetState extends State<CouponListWidget> {
                       }
                     },
                     child: CouponCard(
-                      height: 120,
+                      height: 110,
                       width: double.infinity,
                       borderRadius: 10,
                       backgroundColor: Colors.white,
@@ -151,16 +152,16 @@ class _CouponListWidgetState extends State<CouponListWidget> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text('${coupon.per}%',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 26,
+                                fontSize: Theme.of(context).textTheme.displayLarge!.fontSize,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
-                            const Text('OFF',
+                            Text('OFF',
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 20,
+                                fontSize: Theme.of(context).textTheme.displayMedium!.fontSize,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -190,7 +191,7 @@ class _CouponListWidgetState extends State<CouponListWidget> {
                                     Text(coupon.title,
                                       style: TextStyle(
                                         color: Theme.of(context).colorScheme.primary,
-                                        fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,
+                                        fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
@@ -199,7 +200,7 @@ class _CouponListWidgetState extends State<CouponListWidget> {
                                 Text('${DateFormat('yyyy-MM-dd HH:mm').format(coupon.expireDate)}까지',
                                   style: TextStyle(
                                     color: Theme.of(context).colorScheme.secondary,
-                                    fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
+                                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 )

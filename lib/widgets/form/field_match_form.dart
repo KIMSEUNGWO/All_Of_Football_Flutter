@@ -59,7 +59,7 @@ class _FieldMatchFormWidgetState extends State<FieldMatchFormWidget> {
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.primary,
                           fontWeight: FontWeight.w600,
-                          fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,
+                          fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
                         ),
                       ),
                       const SizedBox(width: 10,),
@@ -67,7 +67,7 @@ class _FieldMatchFormWidgetState extends State<FieldMatchFormWidget> {
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.primary,
                           fontWeight: FontWeight.w600,
-                          fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,
+                          fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
                         ),
                       ),
                     ],

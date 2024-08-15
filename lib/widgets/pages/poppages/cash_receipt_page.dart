@@ -48,6 +48,7 @@ class _CashReceiptWidgetState extends State<CashReceiptWidget> {
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0,
+        centerTitle: true,
         title: Text('캐시 내역'),
       ),
       body: Padding(

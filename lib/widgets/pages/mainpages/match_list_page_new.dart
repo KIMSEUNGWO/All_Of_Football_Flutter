@@ -4,16 +4,12 @@ import 'package:all_of_football/domain/enums/match_enums.dart';
 import 'package:all_of_football/domain/match/match_search_view.dart';
 import 'package:all_of_football/domain/search_condition.dart';
 import 'package:all_of_football/notifier/region_notifier.dart';
-import 'package:all_of_football/widgets/component/custom_container.dart';
 import 'package:all_of_football/widgets/component/custom_scroll_refresh.dart';
-import 'package:all_of_football/widgets/component/match_extra_data.dart';
 import 'package:all_of_football/widgets/component/match_list.dart';
 import 'package:all_of_football/widgets/component/search_data.dart';
-import 'package:all_of_football/widgets/pages/poppages/match_detail_page.dart';
 import 'package:all_of_football/widgets/pages/poppages/region_select_page.dart';
 import 'package:flutter/material.dart';
 
-import 'package:intl/intl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -85,6 +81,7 @@ class _MatchListPageWidgetState extends ConsumerState<MatchListPageWidget> with 
       appBar: AppBar(
         scrolledUnderElevation: 0,
         backgroundColor: Colors.white,
+        centerTitle: true,
         title: GestureDetector(
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(builder: (context) {
