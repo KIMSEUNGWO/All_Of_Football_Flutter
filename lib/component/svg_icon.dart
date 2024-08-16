@@ -51,6 +51,7 @@ class SIcon {
   static SIcon home = SIcon(picture: 'assets/icons/home.svg');
 
   static SIcon manager = SIcon(picture: 'assets/icons/manager.svg');
+  static SIcon megaphone = SIcon(picture: 'assets/icons/megaphone.svg');
   static SIcon person = SIcon(picture: 'assets/icons/person.svg');
   static SIcon personFill = SIcon(picture: 'assets/icons/person_fill.svg');
   static SIcon search = SIcon(picture: 'assets/icons/search.svg');

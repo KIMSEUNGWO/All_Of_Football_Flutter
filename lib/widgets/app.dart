@@ -48,7 +48,6 @@ class _AppState extends State<App> {
         physics: const NeverScrollableScrollPhysics(),
         children: const [
           HomeWidget(),
-          SearchWidget(),
           MatchListPageWidget(),
           MyPageWidget(),
         ],
@@ -65,23 +64,27 @@ class _AppState extends State<App> {
             ),
             BottomIcon(
               sIcon: SIcon.search,
+              callback: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                  return SearchWidget();
+                },));
+              },
+              isPressed: false,
+            ),
+            BottomIcon(
+              sIcon: SIcon.clipboard,
               callback: () => onChangePage(1),
               isPressed: _currentIndex == 1,
             ),
             BottomIcon(
-              sIcon: SIcon.clipboard,
-              callback: () => onChangePage(2),
-              isPressed: _currentIndex == 2,
-            ),
-            BottomIcon(
               sIcon: SIcon.person,
-              callback: () => onChangePage(3),
+              callback: () => onChangePage(2),
               // callback: () {
               //   Navigator.of(context).push(MaterialPageRoute(builder: (context) {
               //     return LoginWidget();
               //   },fullscreenDialog: true));
               // },
-              isPressed: _currentIndex == 3,
+              isPressed: _currentIndex == 2,
             ),
           ],
         ),

@@ -84,15 +84,15 @@ class _SearchDataState extends ConsumerState<SearchData> {
       height: _containerHeight,
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(32),
-            bottomRight: Radius.circular(32)
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(32),
+          bottomRight: Radius.circular(32),
         ),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(0.04),
-              offset: Offset(0, 2),
-              blurRadius: 4
+            color: Colors.black.withOpacity(0.04),
+            offset: const Offset(0, 2),
+            blurRadius: 4,
           )
         ],
         color: Colors.white,

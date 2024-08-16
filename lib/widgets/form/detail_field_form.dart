@@ -14,16 +14,12 @@ class FieldDetailFormWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return DetailDefaultFormWidget(
       title: '구장정보',
-      child: LayoutBuilder(builder: (context, constraints) {
-        double totalWidth = constraints.maxWidth - 11; // 전체 너비
-        double containerWidth = totalWidth / 2; // 각 Container의 너비
-        return Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CustomContainer(
-                  width: containerWidth,
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: CustomContainer(
                   radius: BorderRadius.circular(10),
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
                   child: Row(
@@ -43,8 +39,10 @@ class FieldDetailFormWidget extends StatelessWidget {
                     ],
                   ),
                 ),
-                CustomContainer(
-                  width: containerWidth,
+              ),
+              const SizedBox(width: 7,),
+              Expanded(
+                child: CustomContainer(
                   radius: BorderRadius.circular(10),
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
                   child: Row(
@@ -64,14 +62,14 @@ class FieldDetailFormWidget extends StatelessWidget {
                     ],
                   ),
                 ),
-              ],
-            ),
-            const SizedBox(height: 7,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CustomContainer(
-                  width: containerWidth,
+              ),
+            ],
+          ),
+          const SizedBox(height: 7,),
+          Row(
+            children: [
+              Expanded(
+                child: CustomContainer(
                   radius: BorderRadius.circular(10),
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
                   child: Row(
@@ -91,8 +89,10 @@ class FieldDetailFormWidget extends StatelessWidget {
                     ],
                   ),
                 ),
-                CustomContainer(
-                  width: containerWidth,
+              ),
+              const SizedBox(width: 7,),
+              Expanded(
+                child: CustomContainer(
                   radius: BorderRadius.circular(10),
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
                   child: Row(
@@ -112,49 +112,49 @@ class FieldDetailFormWidget extends StatelessWidget {
                     ],
                   ),
                 ),
+              ),
 
+            ],
+          ),
+          const SizedBox(height: 7,),
+          CustomContainer(
+            width: double.infinity,
+            radius: BorderRadius.circular(10),
+            constraints: const BoxConstraints(
+                minHeight: 150
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    SvgIcon.asset(sIcon: SIcon.megaphone, style: SvgIconStyle(
+                        color: Theme.of(context).colorScheme.secondary
+                    )),
+                    const SizedBox(width: 10,),
+                    Text('구장 특이사항',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary,
+                        fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 10,),
+                Text(field.description,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                    fontSize: Theme.of(context).textTheme.bodySmall!.fontSize,
+                    fontWeight: FontWeight.w600,
+                  ),
+                )
               ],
             ),
-            const SizedBox(height: 7,),
-            CustomContainer(
-              width: double.infinity,
-              radius: BorderRadius.circular(10),
-              constraints: const BoxConstraints(
-                minHeight: 150
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      SvgIcon.asset(sIcon: SIcon.manager, style: SvgIconStyle(
-                          color: Theme.of(context).colorScheme.secondary
-                      )),
-                      const SizedBox(width: 10,),
-                      Text('구장 특이사항',
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary,
-                          fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      )
-                    ],
-                  ),
-                  const SizedBox(height: 10,),
-                  Text(field.description,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.secondary,
-                      fontSize: Theme.of(context).textTheme.bodySmall!.fontSize,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ],
-        );
-      },),
+          ),
+        ],
+      ),
     );
   }
 }

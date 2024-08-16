@@ -29,7 +29,7 @@ class ActionSheet<T> {
               child: Text(action.title,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
             );

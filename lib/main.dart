@@ -56,7 +56,7 @@ themeData() {
       onTertiary: Color(0xFFE9F1FA), // 메인 컬러 3
 
       primary: Color(0xFF292929), // 폰트 컬러 1
-      secondary: Color(0xFF797979), // 폰트 컬러 2
+      secondary: Color(0xFF767676), // 폰트 컬러 2
       tertiary: Color(0xFF999999), // 폰트 컬러 2
 
       error: Color(0xFFFF5D5D)
