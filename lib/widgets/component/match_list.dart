@@ -33,16 +33,20 @@ class _MatchListWidgetState extends State<MatchListWidget> {
             Row(
               children: [
                 Container(
+                  constraints: const BoxConstraints(
+                    minWidth: 55
+                  ),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).appBarTheme.backgroundColor,
+                    color: _matchStatusColor(context, widget.match.matchStatus),
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
+                  padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 3),
                   child: Text(widget.match.matchStatus.ko,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
-                        fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-                        fontWeight: FontWeight.w600,
-                        color: _matchStatusColor(context, widget.match.matchStatus)
+                      fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white
                     ),
                   ),
                 ),
@@ -83,7 +87,7 @@ class _MatchListWidgetState extends State<MatchListWidget> {
 
   Color _matchStatusColor(BuildContext context, MatchStatus status) {
     return switch (status) {
-      MatchStatus.OPEN => Theme.of(context).colorScheme.primary,
+      MatchStatus.OPEN => Theme.of(context).colorScheme.onPrimary,
       MatchStatus.CLOSING_SOON => const Color(0xFFFF5D5D),
       MatchStatus.CLOSED => Theme.of(context).colorScheme.secondary,
       MatchStatus.FINISHED => Theme.of(context).colorScheme.secondary,

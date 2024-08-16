@@ -1,5 +1,7 @@
 
+import 'package:all_of_football/domain/user/social_result.dart';
 import 'package:all_of_football/widgets/pages/poppages/login_page.dart';
+import 'package:all_of_football/widgets/pages/poppages/register_page.dart';
 import 'package:flutter/material.dart';
 
 class HomeWidget extends StatefulWidget {
@@ -29,7 +31,20 @@ class _HomePageState extends State<HomeWidget> with AutomaticKeepAliveClientMixi
                 color: Colors.black
               ),
             ),
-          )
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return RegisterWidget(social: SocialResult(socialId: 'asdfasdf', provider: Provider.LINE, accessToken: 'accesstokenasdlfkajelfi13'));
+              },));
+            },
+            child: Text('회원가입 페이지 이동',
+              style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.black
+              ),
+            ),
+          ),
         ],
       ),
     );
