@@ -10,8 +10,10 @@ class CustomContainer extends StatelessWidget {
   final BoxConstraints? constraints;
   final EdgeInsets? padding;
   final BorderRadius? radius;
+  final Color? backgroundColor;
+  final BoxBorder? border;
 
-  const CustomContainer({super.key, this.width, this.height, this.margin, this.radius, this.child, this.padding, this.constraints});
+  const CustomContainer({super.key, this.width, this.height, this.margin, this.radius, this.child, this.padding, this.constraints, this.backgroundColor, this.border});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,8 @@ class CustomContainer extends StatelessWidget {
       constraints: constraints,
       decoration: BoxDecoration(
         borderRadius: radius ?? BorderRadius.circular(16),
-        color: Colors.white,
+        color: backgroundColor ?? Colors.white,
+        border: border,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.04),

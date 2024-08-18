@@ -2,6 +2,7 @@
 import 'package:all_of_football/component/svg_icon.dart';
 import 'package:all_of_football/widgets/component/custom_container.dart';
 import 'package:all_of_football/widgets/component/user_profile_wiget.dart';
+import 'package:all_of_football/widgets/pages/poppages/cash_charge_page.dart';
 import 'package:all_of_football/widgets/pages/poppages/cash_receipt_page.dart';
 import 'package:all_of_football/widgets/pages/poppages/coupon_list_page.dart';
 import 'package:all_of_football/widgets/pages/poppages/match_history_page.dart';
@@ -183,9 +184,16 @@ class _MyPageWidgetState extends State<MyPageWidget> with AutomaticKeepAliveClie
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Text('충전',
-                            style: TextStyle(
-                              fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                return CashChargeWidget();
+                              },));
+                            },
+                            child: Text('충전',
+                              style: TextStyle(
+                                fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
+                              ),
                             ),
                           ),
                           const SizedBox(width: 15,),

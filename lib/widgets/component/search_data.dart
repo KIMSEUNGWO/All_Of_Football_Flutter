@@ -62,7 +62,7 @@ class _SearchDataState extends ConsumerState<SearchData> {
   void initState() {
     DateTime now = DateTime.now();
     // 오늘 기준은 현재 시간까지 고려
-    DateTime today = DateTime(now.year, now.month, now.day, now.hour);
+    DateTime today = DateTime(now.year, now.month, now.day, now.hour, now.minute);
     // 다음날부터는 시간 고려 없이 0시 0분 기준
     DateTime notToday = DateTime(now.year, now.month, now.day, 0,0,0);
     dateList = List.generate(widget.dateRange, (index) {

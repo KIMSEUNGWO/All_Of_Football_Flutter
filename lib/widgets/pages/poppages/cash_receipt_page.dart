@@ -59,7 +59,6 @@ class _CashReceiptWidgetState extends State<CashReceiptWidget> {
               const SizedBox(height: 36,),
 
               CustomContainer(
-                width: double.infinity,
                 padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
