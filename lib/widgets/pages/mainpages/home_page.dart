@@ -5,6 +5,7 @@ import 'package:all_of_football/widgets/form/field_image_preview.dart';
 import 'package:all_of_football/widgets/pages/mainDisplayLists/favorite_field_display.dart';
 import 'package:all_of_football/widgets/pages/mainDisplayLists/match_soon_display.dart';
 import 'package:all_of_football/widgets/pages/mainDisplayLists/recently_visit_match_display.dart';
+import 'package:all_of_football/widgets/pages/mainDisplayLists/region_match_display.dart';
 import 'package:all_of_football/widgets/pages/poppages/login_page.dart';
 import 'package:all_of_football/widgets/pages/poppages/register_page.dart';
 import 'package:flutter/material.dart';
@@ -47,6 +48,7 @@ class _HomePageState extends State<HomeWidget> with AutomaticKeepAliveClientMixi
             FavoriteFieldDisplay(),
             const SizedBox(height: 36,),
             RecentlyVisitMatchDisplay(),
+            RegionMatchDisplay(),
             const SizedBox(height: 36,),
             GestureDetector(
               onTap: () {

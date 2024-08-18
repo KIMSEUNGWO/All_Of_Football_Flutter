@@ -30,7 +30,7 @@ class _RecentlyVisitMatchDisplayState extends ConsumerState<RecentlyVisitMatchDi
     List<MatchView> items = ref.watch(recentlyMatchNotifier);
     if (items.isEmpty) return const SizedBox();
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.only(left: 20, right: 20, bottom: 36),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
