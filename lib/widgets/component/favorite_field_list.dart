@@ -21,22 +21,35 @@ class FavoriteFieldListWidget extends StatelessWidget {
         },));
       },
       child: CustomContainer(
-        width: 220,
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        padding: const EdgeInsets.only(left: 15, right: 25, top: 10, bottom: 10,),
         margin: const EdgeInsets.only(right: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
           children: [
-            Text(_fieldSimp.title,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.w600,
-                fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize
-              ),
+            Row(
+              children: [
+                Text(_fieldSimp.title,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.w600,
+                    fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize
+                  ),
+                ),
+                const SizedBox(width: 10,),
+                FavoriteIconButtonWidget(
+                  fieldId: _fieldSimp.fieldId,
+                  on: _fieldSimp.favorite,
+                  size: 15,
+                  onChanged: (favorite) {
+                    print('favorite : $favorite');
+                    onChanged(_fieldSimp);
+                  },
+                ),
+              ],
             ),
             const SizedBox(height: 4,),
             Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Text(_fieldSimp.region.ko,
                   style: TextStyle(
@@ -46,27 +59,14 @@ class FavoriteFieldListWidget extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 5,),
-
-                Expanded(
-                  child: Text(_fieldSimp.address,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.secondary,
-                      fontWeight: FontWeight.w400,
-                      fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-                      decoration: TextDecoration.underline
-                    ),
-                    overflow: TextOverflow.ellipsis,
+                Text(_fieldSimp.address,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                    fontWeight: FontWeight.w400,
+                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                    decoration: TextDecoration.underline
                   ),
-                ),
-                const SizedBox(width: 5,),
-                FavoriteIconButtonWidget(
-                  fieldId: _fieldSimp.fieldId,
-                  on: _fieldSimp.favorite,
-                  size: 15,
-                  onChanged: (favorite) {
-                    print('favorite : $favorite');
-                    onChanged(_fieldSimp);
-                  },
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             )

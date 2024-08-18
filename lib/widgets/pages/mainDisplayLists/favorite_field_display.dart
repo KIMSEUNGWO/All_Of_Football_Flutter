@@ -15,7 +15,7 @@ class FavoriteFieldDisplay extends StatefulWidget {
 class _FavoriteFieldDisplayState extends State<FavoriteFieldDisplay> {
 
   List<FieldSimp> favorites = [
-    FieldSimp(1, '안양대학교 SKY 풋살파크1', '서울 마포구 독막로 2', true, Region.TAITO),
+    FieldSimp(1, '이름 엄청긴에 이름 엄청긴에 풋살파크1', '서울 마포구 독막로 2', true, Region.TAITO),
     FieldSimp(2, '안양대학교 SKY 풋살파크2', '서울 마포구 독막로 2', true, Region.TAITO),
     FieldSimp(3, '안양대학교 SKY 풋살파크3', '서울 마포구 독막로 2', true, Region.TAITO),
     FieldSimp(4, '안양대학교 SKY 풋살파크4', '서울 마포구 독막로 2', true, Region.TAITO),
