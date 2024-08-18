@@ -7,8 +7,8 @@ class SvgIcon extends StatelessWidget {
 
   final Skeleton svgPicture;
 
-  SvgIcon({super.key, required SvgPicture svgPicture}):
-      svgPicture = Skeleton.shade(child: svgPicture);
+  SvgIcon.privateConstructor(SvgPicture svgPicture):
+    svgPicture = Skeleton.shade(child: svgPicture);
 
   static SvgIcon asset({required SIcon sIcon, SvgIconStyle? style,}) {
     return _SvgIconBuilder(sIcon: sIcon).build(style);
@@ -82,7 +82,7 @@ class _SvgIconBuilder {
   _SvgIconBuilder({required this.sIcon});
 
   SvgIcon build(SvgIconStyle? style) {
-    return SvgIcon(svgPicture: SvgPicture.asset(sIcon.picture,
+    return SvgIcon.privateConstructor(SvgPicture.asset(sIcon.picture,
         width: style?.width,
         height: style?.height,
         fit: style?.fit ?? BoxFit.contain,

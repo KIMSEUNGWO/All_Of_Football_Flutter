@@ -10,6 +10,7 @@ class Match {
   final int person;
   final int matchCount;
   final int matchHour;
+  final MatchStatus matchStatus;
   final Field field;
 
   Match.fromJson(Map<String, dynamic> json):
@@ -19,8 +20,9 @@ class Match {
     person = json['person'],
     matchCount = json['matchCount'],
     matchHour = json['matchHour'],
+    matchStatus = MatchStatus.valueOf(json['matchStatus']),
     field = Field.fromJson(json['field']);
 
   Match(this.matchId, this.matchDate, this.sexType, this.person,
-      this.matchCount, this.matchHour, this.field);
+      this.matchCount, this.matchHour, this.matchStatus, this.field);
 }

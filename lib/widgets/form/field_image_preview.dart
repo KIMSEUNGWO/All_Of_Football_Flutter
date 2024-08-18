@@ -1,21 +1,21 @@
 
-import 'package:all_of_football/domain/field/field_data.dart';
-import 'package:all_of_football/widgets/component/image_detail_view.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:skeletonizer/skeletonizer.dart';
 
-class FieldImages extends StatefulWidget {
+class ImageSlider extends StatefulWidget {
 
-  final List<FieldImage> images;
-  const FieldImages({super.key, required this.images});
+  final List<Widget> images;
+  final ImageSliderOption? option;
+
+  const ImageSlider({super.key, required this.images, this.option});
 
   @override
-  State<FieldImages> createState() => _FieldImagesState();
+  State<ImageSlider> createState() => _ImageSliderState();
 }
 
-class _FieldImagesState extends State<FieldImages> {
+class _ImageSliderState extends State<ImageSlider> {
 
   int _currentImageIndex = 1;
 
@@ -25,11 +25,11 @@ class _FieldImagesState extends State<FieldImages> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
+      width: widget.option?.width ?? double.infinity,
       clipBehavior: Clip.hardEdge,
-      height: 280,
+      height: widget.option?.height ?? 280,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: widget.option?.borderRadius ?? BorderRadius.circular(20),
           color: Colors.white
       ),
       child: Stack(
@@ -38,26 +38,15 @@ class _FieldImagesState extends State<FieldImages> {
             options: CarouselOptions(
               viewportFraction: 1, // 각 슬라이드의 크기 조정 (0.8 = 80%)
               height: double.infinity,
-              autoPlay: true,
-              autoPlayInterval: const Duration(seconds: 7),
-              scrollDirection: Axis.horizontal,
+              disableCenter: true,
+              autoPlay: widget.option?.autoplay ?? true,
+              autoPlayInterval: widget.option?.autoPlayInterval ?? const Duration(seconds: 7),
+              scrollDirection: widget.option?.scrollDirection ?? Axis.horizontal,
               onPageChanged: (index, reason) {
                 onImageChanged(index + 1);
               },
             ),
-            items: widget.images
-                .map((e) {
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ImageDetailView(image: e.image)
-                          ,fullscreenDialog: true
-                      ));
-                },
-                child: e.image,
-              );
-            },)
-                .toList(),
+            items: widget.images,
           ),
 
           Positioned(
@@ -96,4 +85,23 @@ class _FieldImagesState extends State<FieldImages> {
       ),
     );
   }
+}
+
+
+class ImageSliderOption {
+
+  double? width;
+  double? height;
+  bool? autoplay;
+  Duration? autoPlayInterval;
+  Axis? scrollDirection;
+  BorderRadiusGeometry? borderRadius;
+
+  ImageSliderOption(
+      {this.width,
+      this.height,
+      this.autoplay,
+      this.autoPlayInterval,
+      this.borderRadius,
+      this.scrollDirection});
 }

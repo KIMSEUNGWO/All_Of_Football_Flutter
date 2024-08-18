@@ -9,6 +9,7 @@ class Field {
   final Address address;
   final FieldData fieldData;
   final String description;
+  final bool favorite;
   final List<FieldImage> images;
 
   Field.fromJson(Map<String, dynamic> json):
@@ -17,10 +18,12 @@ class Field {
     description = json['description'],
     address = Address.fromJson(json['address']),
     fieldData = FieldData.fromJson(json['fieldData']),
+    favorite = json['favorite'],
     images = json['images'] != null
       ? List<FieldImage>.from(json['images'].map((image) => FieldImage.fromJson(image)))
       : [];
 
   Field(this.fieldId, this.title, this.address, this.fieldData,
+      this.favorite,
       this.description, this.images);
 }

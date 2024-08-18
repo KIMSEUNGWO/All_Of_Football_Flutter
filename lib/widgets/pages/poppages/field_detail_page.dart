@@ -6,6 +6,8 @@ import 'package:all_of_football/domain/enums/field_enums.dart';
 import 'package:all_of_football/domain/field/address.dart';
 import 'package:all_of_football/domain/field/field.dart';
 import 'package:all_of_football/domain/field/field_data.dart';
+import 'package:all_of_football/widgets/component/favorite_icon_button.dart';
+import 'package:all_of_football/widgets/component/image_detail_view.dart';
 import 'package:all_of_football/widgets/form/detail_field_form.dart';
 import 'package:all_of_football/widgets/form/field_image_preview.dart';
 import 'package:all_of_football/widgets/form/field_match_form.dart';
@@ -34,6 +36,7 @@ class _FieldDetailWidgetState extends State<FieldDetailWidget> {
         Field(2, '안양대학교 SKY 풋살파크 C구장',
           Address('서울 마포구 독막로 2', Region.TAITO, 35.757721, 139.527805),
           FieldData(Parking.FREE, Shower.Y, Toilet.N, 123, 40, 10000),
+          true,
           '뭐가 없고~ 뭐가 있고~',
           [
             FieldImage(1, 'asdf', Image.asset('assets/구장예제사진1.jpeg', fit: BoxFit.fill,)),
@@ -64,9 +67,7 @@ class _FieldDetailWidgetState extends State<FieldDetailWidget> {
             enabled: _loading,
             child: Padding(
               padding: const EdgeInsets.only(right: 20),
-              child: SvgIcon.asset(
-                sIcon: SIcon.bookmarkFill,
-              ),
+              child: FavoriteIconButtonWidget(fieldId: field.fieldId, on: field.favorite)
             ),
           )
         ],
@@ -79,7 +80,19 @@ class _FieldDetailWidgetState extends State<FieldDetailWidget> {
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  FieldImages(images: field.images),
+                  ImageSlider(
+                    images: field.images.map((image) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => ImageDetailView(image: image.image)
+                                  ,fullscreenDialog: true
+                              ));
+                        },
+                        child: image.image,
+                      );
+                    }).toList(),
+                  ),
                   const SizedBox(height: 19,),
                   Text(field.title,
                     style: TextStyle(

@@ -3,10 +3,12 @@ import 'package:all_of_football/component/account_format.dart';
 import 'package:all_of_football/component/open_app.dart';
 import 'package:all_of_football/component/region_data.dart';
 import 'package:all_of_football/domain/enums/field_enums.dart';
+import 'package:all_of_football/domain/enums/match_enums.dart';
 import 'package:all_of_football/domain/field/address.dart';
 import 'package:all_of_football/domain/field/field.dart';
 import 'package:all_of_football/domain/field/field_data.dart';
 import 'package:all_of_football/widgets/component/bottom_bar_widget.dart';
+import 'package:all_of_football/widgets/component/image_detail_view.dart';
 import 'package:all_of_football/widgets/form/detail_field_form.dart';
 import 'package:all_of_football/widgets/form/detail_match_form.dart';
 import 'package:all_of_football/widgets/form/detail_role_form.dart';
@@ -35,10 +37,11 @@ class _MatchDetailWidgetState extends State<MatchDetailWidget> {
   bool _loading = false;
 
   fetchMatch() async {
-    match = Match(1, DateTime.now(), null, 6, 3, 2,
+    match = Match(1, DateTime.now(), null, 6, 3, 2, MatchStatus.OPEN,
         Field(2, '안양대학교 SKY 풋살파크 C구장',
             Address('서울 마포구 독막로 2', Region.TAITO, 0, 0),
             FieldData(Parking.FREE, Shower.Y, Toilet.N, 123, 40, 10000),
+            false,
             '뭐가 없고~ 뭐가 있고~',
             [
               FieldImage(1, 'asdf', Image.asset('assets/구장예제사진1.jpeg', fit: BoxFit.fill,)),
@@ -77,7 +80,19 @@ class _MatchDetailWidgetState extends State<MatchDetailWidget> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                FieldImages(images: match.field.images),
+                ImageSlider(
+                  images: match.field.images.map((image) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => ImageDetailView(image: image.image)
+                                ,fullscreenDialog: true
+                            ));
+                      },
+                      child: image.image,
+                    );
+                  }).toList(),
+                ),
                 const SizedBox(height: 19,),
                 Text(DateFormat('M월 d일 EEEE HH:mm', 'ko_KR').format(match.matchDate),
                   style: TextStyle(
