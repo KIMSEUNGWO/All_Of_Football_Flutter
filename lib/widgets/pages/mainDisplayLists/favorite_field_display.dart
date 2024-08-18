@@ -30,20 +30,14 @@ class _FavoriteFieldDisplayState extends State<FavoriteFieldDisplay> {
     return DetailDefaultFormWidget(
       title: '즐겨찾는 구장',
       titlePadding: const EdgeInsets.symmetric(horizontal: 25),
-      child: SizedBox(
-        height: 60,
-        child: ListView.separated(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          scrollDirection: Axis.horizontal,
-          separatorBuilder: (context, index) => const SizedBox(width: 10,),
-          itemCount: favorites.length,
-          itemBuilder: (context, index) {
-            FieldSimp field = favorites[index];
-            return FavoriteFieldListWidget(
-              fieldSimp: field,
-              onChanged: onChanged,
-            );
-          },
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            const SizedBox(width: 20,),
+            ... favorites.map((x) => FavoriteFieldListWidget(fieldSimp: x, onChanged: onChanged)).toList(),
+            const SizedBox(width: 10,),
+          ],
         ),
       ),
     );

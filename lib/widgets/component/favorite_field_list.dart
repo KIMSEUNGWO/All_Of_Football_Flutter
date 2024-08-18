@@ -21,16 +21,18 @@ class FavoriteFieldListWidget extends StatelessWidget {
         },));
       },
       child: CustomContainer(
-        width: 215,
+        width: 220,
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        margin: const EdgeInsets.only(right: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(_fieldSimp.title,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.primary,
                 fontWeight: FontWeight.w600,
-                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize
+                fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize
               ),
             ),
             const SizedBox(height: 4,),
@@ -40,7 +42,7 @@ class FavoriteFieldListWidget extends StatelessWidget {
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.secondary,
                     fontWeight: FontWeight.w400,
-                    fontSize: Theme.of(context).textTheme.bodySmall!.fontSize,
+                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   ),
                 ),
                 const SizedBox(width: 5,),
@@ -50,7 +52,7 @@ class FavoriteFieldListWidget extends StatelessWidget {
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                       fontWeight: FontWeight.w400,
-                      fontSize: Theme.of(context).textTheme.bodySmall!.fontSize,
+                      fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                       decoration: TextDecoration.underline
                     ),
                     overflow: TextOverflow.ellipsis,
