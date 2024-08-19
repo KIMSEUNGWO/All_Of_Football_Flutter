@@ -39,9 +39,9 @@ class _FieldDetailWidgetState extends State<FieldDetailWidget> {
           true,
           '뭐가 없고~ 뭐가 있고~',
           [
-            FieldImage(1, 'asdf', Image.asset('assets/구장예제사진1.jpeg', fit: BoxFit.fill,)),
-            FieldImage(2, 'asdf', Image.asset('assets/구장예제사진2.jpg', fit: BoxFit.fill,)),
-            FieldImage(3, 'asdf', Image.asset('assets/구장예제사진3.jpg', fit: BoxFit.fill,))
+            Image.asset('assets/구장예제사진1.jpeg', fit: BoxFit.fill,),
+            Image.asset('assets/구장예제사진2.jpg', fit: BoxFit.fill,),
+            Image.asset('assets/구장예제사진3.jpg', fit: BoxFit.fill,)
           ]
         );
   }
@@ -85,11 +85,11 @@ class _FieldDetailWidgetState extends State<FieldDetailWidget> {
                       return GestureDetector(
                         onTap: () {
                           Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => ImageDetailView(image: image.image)
+                              MaterialPageRoute(builder: (context) => ImageDetailView(image: image)
                                   ,fullscreenDialog: true
                               ));
                         },
-                        child: image.image,
+                        child: image,
                       );
                     }).toList(),
                   ),

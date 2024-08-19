@@ -3,33 +3,39 @@ import 'package:all_of_football/component/alert.dart';
 import 'package:all_of_football/component/select_date_dialog.dart';
 import 'package:all_of_football/domain/enums/match_enums.dart';
 import 'package:all_of_football/domain/user/social_result.dart';
+import 'package:all_of_football/notifier/user_notifier.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class RegisterWidget extends StatefulWidget {
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class RegisterWidget extends ConsumerStatefulWidget {
 
   final SocialResult social;
 
   const RegisterWidget({super.key, required this.social});
 
   @override
-  State<RegisterWidget> createState() => _RegisterWidgetState();
+  ConsumerState<RegisterWidget> createState() => _RegisterWidgetState();
 }
 
-class _RegisterWidgetState extends State<RegisterWidget> {
+class _RegisterWidgetState extends ConsumerState<RegisterWidget> {
 
   DateTime? _birth;
   SexType? _sexType;
 
-  void _submit() {
+  void _trySubmit() {
     Alert.of(context).confirm(
       message: '가입 이후에는 해당 정보를 수정할 수 없습니다. \n가입 하시겠습니까?',
       btnMessage: '가입',
       onPressed: () {
-        print('성공');
+        _submit();
       },
     );
+  }
+  void _submit() async {
+    final result = await ref.watch(loginProvider.notifier).register(sex: _sexType!, birth: _birth!, social: widget.social);
   }
   bool _canSubmit() {
     return _birth != null && _sexType != null;
@@ -179,7 +185,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
       ),
       bottomNavigationBar: SafeArea(
         child: GestureDetector(
-          onTap: _submit,
+          onTap: _trySubmit,
           child: Container(
             width: double.infinity,
             height: 50,

@@ -1,5 +1,4 @@
 
-import 'package:all_of_football/domain/coupon/coupon.dart';
 import 'package:all_of_football/domain/field/address.dart';
 
 class OrderSimp {
@@ -9,7 +8,7 @@ class OrderSimp {
   final int matchHour;
 
   final Address address;
-  final DateTime dateTime;
+  final DateTime matchDate;
 
   final int cash;
   final int couponCount;
@@ -19,11 +18,11 @@ class OrderSimp {
     matchHour = json['matchHour'],
     totalPrice = json['totalPrice'],
     address = Address.fromJson(json['address']),
-    dateTime = DateTime.parse(json['dateTime']),
+    matchDate = DateTime.parse(json['matchDate']),
     cash = json['cash'],
     couponCount = json['couponCount'];
 
-  OrderSimp({required this.title, required this.matchHour, required this.totalPrice, required this.address, required this.dateTime, required this.cash, required this.couponCount});
+  OrderSimp({required this.title, required this.matchHour, required this.totalPrice, required this.address, required this.matchDate, required this.cash, required this.couponCount});
 
 
 }

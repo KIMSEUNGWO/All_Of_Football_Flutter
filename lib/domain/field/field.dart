@@ -1,6 +1,8 @@
 
+import 'package:all_of_football/component/image_helper.dart';
 import 'package:all_of_football/domain/field/address.dart';
 import 'package:all_of_football/domain/field/field_data.dart';
+import 'package:flutter/material.dart';
 
 class Field {
 
@@ -10,7 +12,7 @@ class Field {
   final FieldData fieldData;
   final String description;
   final bool favorite;
-  final List<FieldImage> images;
+  final List<Image> images;
 
   Field.fromJson(Map<String, dynamic> json):
     fieldId = json['fieldId'],
@@ -18,9 +20,9 @@ class Field {
     description = json['description'],
     address = Address.fromJson(json['address']),
     fieldData = FieldData.fromJson(json['fieldData']),
-    favorite = json['favorite'],
+    favorite = json['favorite'] ?? false,
     images = json['images'] != null
-      ? List<FieldImage>.from(json['images'].map((image) => FieldImage.fromJson(image)))
+      ? List<Image>.from(json['images'].map((image) => ImageHelper.parseImage(imagePath: ImagePath.ORIGINAL, imageType: ImageType.FIELD, imageName: image, fit: BoxFit.fitWidth)))
       : [];
 
   Field(this.fieldId, this.title, this.address, this.fieldData,

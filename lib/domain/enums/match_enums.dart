@@ -1,5 +1,6 @@
 
 import 'package:all_of_football/component/region_data.dart';
+import 'package:flutter/material.dart';
 
 class MatchData {
 
@@ -34,6 +35,15 @@ enum MatchStatus {
       if (o.name == data) return o;
     }
     return MatchStatus.FINISHED;
+  }
+
+  Color backgroundColor(BuildContext context) {
+    return switch (this) {
+      MatchStatus.OPEN => Theme.of(context).colorScheme.onPrimary,
+      MatchStatus.CLOSING_SOON => const Color(0xFFFF5D5D),
+      MatchStatus.CLOSED => Theme.of(context).colorScheme.secondary,
+      MatchStatus.FINISHED => Theme.of(context).colorScheme.secondary,
+    };
   }
 }
 

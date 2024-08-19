@@ -1,18 +1,36 @@
 
+import 'package:all_of_football/api/domain/result_code.dart';
 import 'package:all_of_football/component/svg_icon.dart';
+import 'package:all_of_football/notifier/user_notifier.dart';
+import 'package:all_of_football/domain/user/social_result.dart';
+import 'package:all_of_football/widgets/pages/poppages/register_page.dart';
 import 'package:flutter/material.dart';
 
-class LoginWidget extends StatelessWidget {
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class LoginWidget extends ConsumerWidget {
   const LoginWidget({super.key});
 
+  _onTryLogin(BuildContext context, WidgetRef ref, SocialProvider provider) async {
+    final result = await ref.read(loginProvider.notifier).login(context);
+    print('result : ${result.resultCode}');
+    Navigator.pop(context);
+    if (result.resultCode == ResultCode.OK) {
+      print('로그인 성공');
+    } else  if (result.resultCode == ResultCode.REGISTER) {
+      print('회원가입 시도');
+      Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterWidget(social: result.data,)));
+    }
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white
         ),
         padding: EdgeInsets.only(left: 20, right: 20, top: 170, bottom: MediaQuery.of(context).padding.bottom),
@@ -28,7 +46,9 @@ class LoginWidget extends StatelessWidget {
                   fontColor: Colors.white,
                   color: const Color(0xFF08BF5B),
                   sIcon: SIcon.lineLogo,
-                  onPressed: () {},
+                  onPressed: () {
+                    _onTryLogin(context, ref, SocialProvider.LINE);
+                  },
                 ),
                 const SizedBox(height: 12,),
                 _SocialBtn(
@@ -36,7 +56,9 @@ class LoginWidget extends StatelessWidget {
                   fontColor: const Color(0xFF181602),
                   color: const Color(0xFFF3DA01),
                   sIcon: SIcon.kakaoLogo,
-                  onPressed: () {},
+                  onPressed: () {
+                    _onTryLogin(context, ref, SocialProvider.KAKAO);
+                  },
                 ),
 
                 Padding(
@@ -70,9 +92,12 @@ class LoginWidget extends StatelessWidget {
                     ],
                   ),
                 ),
-                const _SmallSocialBtn(
-                  icon: Icon(Icons.apple, color: Colors.white, size: 25,),
-                  color: Color(0xFF434343),
+                _SmallSocialBtn(
+                  icon: const Icon(Icons.apple, color: Colors.white, size: 25,),
+                  color: const Color(0xFF434343),
+                  onPressed: () {
+                    _onTryLogin(context, ref, SocialProvider.APPLE);
+                  },
                 ),
               ],
             ),
@@ -97,30 +122,33 @@ class _SocialBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 50,
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: color,
-      ),
-      child: Row(
-        children: [
-          SvgIcon.asset(sIcon: sIcon, style: SvgIconStyle(
-            width: 20, height: 20, color: fontColor
-          )),
-          Expanded(
-            child: Center(
-              child: Text(title,
-                style: TextStyle(
-                  color: fontColor,
-                  fontWeight: FontWeight.w700,
-                  fontSize: Theme.of(context).textTheme.displaySmall!.fontSize
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        height: 50,
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: color,
+        ),
+        child: Row(
+          children: [
+            SvgIcon.asset(sIcon: sIcon, style: SvgIconStyle(
+              width: 20, height: 20, color: fontColor
+            )),
+            Expanded(
+              child: Center(
+                child: Text(title,
+                  style: TextStyle(
+                    color: fontColor,
+                    fontWeight: FontWeight.w700,
+                    fontSize: Theme.of(context).textTheme.displaySmall!.fontSize
+                  ),
                 ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -130,19 +158,24 @@ class _SmallSocialBtn extends StatelessWidget {
   
   final Icon icon;
   final Color color;
+  final Function() onPressed;
 
-  const _SmallSocialBtn({required this.icon, required this.color});
+  const _SmallSocialBtn({required this.icon, required this.color, required this.onPressed});
+
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 50, height: 50,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(100),
-        color: color,
-      ),
-      child: Center(
-        child: icon,
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        width: 50, height: 50,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100),
+          color: color,
+        ),
+        child: Center(
+          child: icon,
+        ),
       ),
     );
   }

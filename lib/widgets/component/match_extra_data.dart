@@ -31,9 +31,9 @@ class MatchExtraDataWidget extends StatelessWidget {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100),
               color:
-              (sexType == SexType.MALE) ? const Color(0xFF3534A5)
-                  : (sexType == SexType.FEMALE) ? const Color(0xFFFF5D5D)
-                  : const Color(0xFFFFC645)
+                (sexType == SexType.MALE) ? const Color(0xFF3534A5)
+                : (sexType == SexType.FEMALE) ? const Color(0xFFFF5D5D)
+                : const Color(0xFFFFC645)
           ),
         ),
         Text(SexType.getName(sexType),

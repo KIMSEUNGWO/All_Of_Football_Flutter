@@ -2,15 +2,16 @@
 class SocialResult {
 
   final String socialId;
-  final Provider provider;
+  final SocialProvider provider;
   final String accessToken;
 
   SocialResult({required this.socialId, required this.provider, required this.accessToken});
 }
 
-enum Provider {
+enum SocialProvider {
 
   LINE,
   KAKAO,
-  APPLE
+  APPLE;
+
 }

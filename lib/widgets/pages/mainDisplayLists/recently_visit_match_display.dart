@@ -2,7 +2,7 @@
 import 'dart:math';
 
 import 'package:all_of_football/domain/match/match_search_view.dart';
-import 'package:all_of_football/notifier/recentlyMatchNotifier.dart';
+import 'package:all_of_football/notifier/recently_match_notifier.dart';
 import 'package:all_of_football/widgets/component/match_list.dart';
 import 'package:all_of_football/widgets/pages/poppages/recently_visit_match_more_page.dart';
 import 'package:flutter/material.dart';

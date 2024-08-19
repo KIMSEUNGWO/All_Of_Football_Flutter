@@ -100,7 +100,7 @@ class _CashChargeWidgetState extends State<CashChargeWidget> {
                     crossAxisCount: 3,
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,
-                    childAspectRatio: 1.8
+                    childAspectRatio: 2
                   ),
                   itemCount: _amounts.length,
                   itemBuilder: (context, index) {
@@ -134,7 +134,7 @@ class _CashChargeWidgetState extends State<CashChargeWidget> {
                       crossAxisCount: 3,
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 10,
-                      childAspectRatio: 1.8
+                      childAspectRatio: 2
                   ),
                   itemCount: _payments.length,
                   itemBuilder: (context, index) {

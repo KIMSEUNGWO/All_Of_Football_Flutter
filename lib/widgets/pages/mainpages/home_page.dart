@@ -66,7 +66,7 @@ class _HomePageState extends State<HomeWidget> with AutomaticKeepAliveClientMixi
             GestureDetector(
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return RegisterWidget(social: SocialResult(socialId: 'asdfasdf', provider: Provider.LINE, accessToken: 'accesstokenasdlfkajelfi13'));
+                  return RegisterWidget(social: SocialResult(socialId: 'asdfasdf', provider: SocialProvider.LINE, accessToken: 'accesstokenasdlfkajelfi13'));
                 },));
               },
               child: Text('회원가입 페이지 이동',

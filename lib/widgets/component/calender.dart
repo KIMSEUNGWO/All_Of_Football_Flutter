@@ -172,6 +172,15 @@ class _CalendarState extends State<_Calendar> with AutomaticKeepAliveClientMixin
   final List<String> _weeks = ['일', '월', '화', '수', '목', '금', '토'];
   final DateTimeHelper calendarHelper = DateTimeHelper();
 
+  late List<int> exists = [
+    1, 3, 30
+  ];
+
+  @override
+  void initState() {
+    print('_CalendarState.initState , date : ${widget.currentMonth}');
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -238,7 +247,7 @@ class _CalendarState extends State<_Calendar> with AutomaticKeepAliveClientMixin
                       ),
 
                       // 일정이나 이벤트가 있는 날짜는 이렇게 표시
-                      if (date.day == 6 && date.month == 8)
+                      if (date.month == widget.currentMonth.month && exists.contains(date.day))
                         Container(
                           width: 8, height: 8,
                           decoration: BoxDecoration(

@@ -1,33 +1,33 @@
 
 import 'package:all_of_football/component/image_helper.dart';
+import 'package:all_of_football/domain/enums/match_enums.dart';
 import 'package:flutter/material.dart';
 
 class UserProfile {
 
   final int id;
   Image? image;
-  String name;
-  String? intro;
-  final String sex;
-  final String birth;
+  String nickname;
+  final SexType sex;
+  final DateTime birth;
 
-  int groupCount;
-  int inviteCount;
-  int likeCount;
+  int favoriteCount;
+  int couponCount;
+
+  int cash;
 
 
 
   UserProfile.fromJson(Map<String, dynamic> json) :
-        id = json['id'],
-        image = json['image'] == null
-            ? null
-            : ImageHelper.parseImage(imagePath: ImagePath.ORIGINAL, imageType: ImageType.PROFILE, imageName: json['image'], fit: BoxFit.fill),
-        name = json['name'],
-        intro = json['intro'],
-        sex = json['sex'],
-        birth = json['birth'],
-        groupCount = json['groupCount'],
-        inviteCount = json['inviteCount'],
-        likeCount = json['likeCount'];
+    id = json['id'],
+    image = json['image'] == null
+        ? null
+        : ImageHelper.parseImage(imagePath: ImagePath.ORIGINAL, imageType: ImageType.PROFILE, imageName: json['image'], fit: BoxFit.fill),
+    nickname = json['name'],
+    sex = SexType.valueOf(json['sexType'])!,
+    birth = json['birth'],
+    favoriteCount = json['favoriteCount'],
+    couponCount = json['couponCount'],
+    cash = json['cash'];
 
 }

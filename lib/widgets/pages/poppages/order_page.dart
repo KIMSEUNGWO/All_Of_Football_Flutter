@@ -67,7 +67,7 @@ class _OrderWidgetState extends State<OrderWidget> {
       matchHour: 2,
       totalPrice: 20000, 
       address: Address('서울 마포구 독막로 2', Region.BUNKYO, 0, 0),
-      dateTime: DateTime.now(),
+      matchDate: DateTime.now(),
       cash: 100000, 
       couponCount: 2,
     );
@@ -129,7 +129,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                       radius: BorderRadius.circular(10),
                       child: Text(
-                        '${DateFormat('yyyy년 M월 d일 EEEE HH:mm', 'ko_KR').format(orderSimp.dateTime)} ~ ${DateFormat('HH:mm').format(orderSimp.dateTime.add(Duration(hours: orderSimp.matchHour)))}',
+                        '${DateFormat('yyyy년 M월 d일 EEEE HH:mm', 'ko_KR').format(orderSimp.matchDate)} ~ ${DateFormat('HH:mm').format(orderSimp.matchDate.add(Duration(hours: orderSimp.matchHour)))}',
                         style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,

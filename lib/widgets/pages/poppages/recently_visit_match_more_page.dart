@@ -1,6 +1,6 @@
 
 import 'package:all_of_football/domain/match/match_search_view.dart';
-import 'package:all_of_football/notifier/recentlyMatchNotifier.dart';
+import 'package:all_of_football/notifier/recently_match_notifier.dart';
 import 'package:all_of_football/widgets/component/match_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
