@@ -1,23 +1,27 @@
 
 
 import 'package:all_of_football/component/svg_icon.dart';
+import 'package:all_of_football/notifier/user_notifier.dart';
 import 'package:all_of_football/widgets/component/bottom_bar_widget.dart';
 import 'package:all_of_football/widgets/pages/mainpages/home_page.dart';
 import 'package:all_of_football/widgets/pages/mainpages/match_list_page_new.dart';
 import 'package:all_of_football/widgets/pages/mainpages/search_page.dart';
 import 'package:all_of_football/widgets/pages/mainpages/mypage_page.dart';
+import 'package:all_of_football/widgets/pages/poppages/login_page.dart';
 import 'package:flutter/material.dart';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class App extends StatefulWidget {
+
+class App extends ConsumerStatefulWidget {
 
   const App({super.key});
 
   @override
-  State<App> createState() => _AppState();
+  ConsumerState<App> createState() => _AppState();
 }
 
-class _AppState extends State<App> {
+class _AppState extends ConsumerState<App> {
 
   late PageController _pageController;
 
@@ -78,12 +82,16 @@ class _AppState extends State<App> {
             ),
             BottomIcon(
               sIcon: SIcon.person,
-              callback: () => onChangePage(2),
-              // callback: () {
-              //   Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-              //     return LoginWidget();
-              //   },fullscreenDialog: true));
-              // },
+              callback: () {
+                bool hasLogin = ref.read(loginProvider.notifier).has();
+                if (hasLogin) {
+                  onChangePage(2);
+                } else {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                    return const LoginWidget();
+                  },fullscreenDialog: true));
+                }
+              },
               isPressed: _currentIndex == 2,
             ),
           ],

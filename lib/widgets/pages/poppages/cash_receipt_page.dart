@@ -1,31 +1,38 @@
 
 
+import 'package:all_of_football/api/domain/result_code.dart';
+import 'package:all_of_football/api/service/user_service.dart';
 import 'package:all_of_football/component/account_format.dart';
 import 'package:all_of_football/component/action_sheet.dart';
 import 'package:all_of_football/domain/cash/receipt.dart';
 import 'package:all_of_football/domain/enums/receipt_enum.dart';
+import 'package:all_of_football/notifier/user_notifier.dart';
 import 'package:all_of_football/widgets/component/custom_container.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class CashReceiptWidget extends StatefulWidget {
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class CashReceiptWidget extends ConsumerStatefulWidget {
   const CashReceiptWidget({super.key});
 
   @override
-  State<CashReceiptWidget> createState() => _CashReceiptWidgetState();
+  ConsumerState<CashReceiptWidget> createState() => _CashReceiptWidgetState();
 }
 
-class _CashReceiptWidgetState extends State<CashReceiptWidget> {
+class _CashReceiptWidgetState extends ConsumerState<CashReceiptWidget> {
 
   ReceiptType? _receiptType;
 
-  final List<Receipt> _items = [
-    Receipt(title: '카카오페이', type: ReceiptType.CHARGE, date: DateTime.now(), useCash: 20000, remainCash: 20000),
-    Receipt(title: '매치참여', type: ReceiptType.USE, date: DateTime.now(), useCash: -10000, remainCash: 10000),
-    Receipt(title: '[30%] 매치 3일전 취소', type: ReceiptType.CANCEL, date: DateTime.now(), useCash: 3000, remainCash: 13000),
-    Receipt(title: '[100%] 기상악화로 인한 환불', type: ReceiptType.REFUND, date: DateTime.now(), useCash: 10000, remainCash: 23000),
-    Receipt(title: '라인페이', type: ReceiptType.CHARGE, date: DateTime.now(), useCash: 30000, remainCash: 53000),
-  ];
+  late final List<Receipt> _items;
+
+  // late List<Receipt> _items = [
+  //   Receipt(title: '카카오페이', type: ReceiptType.CHARGE, date: DateTime.now(), useCash: 20000, remainCash: 20000),
+  //   Receipt(title: '매치참여', type: ReceiptType.USE, date: DateTime.now(), useCash: -10000, remainCash: 10000),
+  //   Receipt(title: '[30%] 매치 3일전 취소', type: ReceiptType.CANCEL, date: DateTime.now(), useCash: 3000, remainCash: 13000),
+  //   Receipt(title: '[100%] 기상악화로 인한 환불', type: ReceiptType.REFUND, date: DateTime.now(), useCash: 10000, remainCash: 23000),
+  //   Receipt(title: '라인페이', type: ReceiptType.CHARGE, date: DateTime.now(), useCash: 30000, remainCash: 53000),
+  // ];
 
   List<Receipt> _showItems = [];
 
@@ -37,10 +44,19 @@ class _CashReceiptWidgetState extends State<CashReceiptWidget> {
     });
   }
 
+  _fetchReceipt() async {
+    _items = await UserService.getReceipt();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      setState(() {
+        _showItems = _items;
+      });
+    },);
+
+  }
+
   @override
   void initState() {
-    _receiptType = null;
-    _showItems = _items;
+    _fetchReceipt();
     super.initState();
   }
   @override
@@ -73,12 +89,12 @@ class _CashReceiptWidgetState extends State<CashReceiptWidget> {
                     const SizedBox(height: 20,),
                     Align(
                       alignment: Alignment.centerRight,
-                      child: Text(AccountFormatter.format(200000000),
+                      child: Text(AccountFormatter.format(ref.read(loginProvider)?.cash),
                         textAlign: TextAlign.right,
                         style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,
-                            fontWeight: FontWeight.w600
+                          color: Theme.of(context).colorScheme.primary,
+                          fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     )

@@ -1,12 +1,15 @@
 
+import 'package:all_of_football/api/service/user_service.dart';
 import 'package:all_of_football/component/calendar_date_helper.dart';
 import 'package:all_of_football/component/date_range.dart';
+import 'package:all_of_football/domain/match/match_search_view.dart';
 import 'package:all_of_football/widgets/component/custom_container.dart';
+import 'package:all_of_football/widgets/component/space_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class CalenderWidget extends StatefulWidget {
-  final Function(DateTime date) onChanged;
+  final Function(DateTime, List<MatchView>) onChanged;
   final MonthRange monthRange;
 
   CalenderWidget({super.key, MonthRange? monthRange, required this.onChanged}):
@@ -32,8 +35,7 @@ class _CalenderWidgetState extends State<CalenderWidget> {
     _calendarController.nextPage();
   }
 
-  void _select(DateTime date) {
-    if (_selectDate.compareTo(date) == 0) return;
+  void _select(DateTime date, List<MatchView> matches) {
     if (!_calendarController.hasRange(date)) return;
     setState(() {
       _selectDate = date;
@@ -45,7 +47,7 @@ class _CalenderWidgetState extends State<CalenderWidget> {
     } else if (currentMonthCount < nextMonthCount) {
       _nextDate();
     }
-    widget.onChanged(_selectDate);
+    widget.onChanged(date, matches);
   }
 
   void _onPageChanged(int page) {
@@ -104,7 +106,7 @@ class _CalenderWidgetState extends State<CalenderWidget> {
                   ),
                 ),
               ),
-              const SizedBox(width: 15,),
+              const SpaceWidth(15,),
               Row(
                 children: [
                   GestureDetector(
@@ -112,25 +114,25 @@ class _CalenderWidgetState extends State<CalenderWidget> {
                     child: Icon(Icons.arrow_back_ios_new_rounded,
                       size: 15,
                       color: _calendarController.prevDisabled
-                        ? Color(0xFF999999)
-                        : Color(0xFF292929),
+                        ? const Color(0xFF999999)
+                        : const Color(0xFF292929),
                     ),
                   ),
-                  const SizedBox(width: 15,),
+                  const SpaceWidth(15,),
                   GestureDetector(
                     onTap: _nextDate,
                     child: Icon(Icons.arrow_forward_ios_rounded,
                       size: 15,
                       color: _calendarController.nextDisabled
-                        ? Color(0xFF999999)
-                        : Color(0xFF292929),
+                        ? const Color(0xFF999999)
+                        : const Color(0xFF292929),
                     ),
                   ),
                 ],
               ),
             ],
           ),
-          const SizedBox(height: 15,),
+          const SpaceHeight(15),
           ConstrainedBox(
             constraints: BoxConstraints(
               maxHeight: calendarHelper.calculateHeight(context)
@@ -160,7 +162,7 @@ class _Calendar extends StatefulWidget {
   final DateTime today;
   final DateTime currentMonth;
   final DateTime selectDate;
-  final Function(DateTime date) select;
+  final Function(DateTime date, List<MatchView> matches) select;
 
   const _Calendar({required this.today, required this.currentMonth, required this.selectDate, required this.select});
 
@@ -172,13 +174,28 @@ class _CalendarState extends State<_Calendar> with AutomaticKeepAliveClientMixin
   final List<String> _weeks = ['일', '월', '화', '수', '목', '금', '토'];
   final DateTimeHelper calendarHelper = DateTimeHelper();
 
-  late List<int> exists = [
-    1, 3, 30
-  ];
+  late final Map<int, List<MatchView>> _exists;
+  bool _existLoad = true;
+
+  _fetchExistsHistory() async {
+    _exists = await UserService.getHistory(widget.currentMonth);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (mounted) {
+        setState(() {
+          _existLoad = false;
+        });
+      }
+    },);
+
+    if (widget.selectDate == widget.today) {
+      widget.select(widget.today, _exists[widget.today.day] ?? []);
+    }
+  }
 
   @override
   void initState() {
     print('_CalendarState.initState , date : ${widget.currentMonth}');
+    _fetchExistsHistory();
     super.initState();
   }
   @override
@@ -222,7 +239,7 @@ class _CalendarState extends State<_Calendar> with AutomaticKeepAliveClientMixin
 
             return GestureDetector(
               onTap: () {
-                widget.select(date);
+                widget.select(date, _exists[date.day] ?? []);
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -246,15 +263,17 @@ class _CalendarState extends State<_Calendar> with AutomaticKeepAliveClientMixin
                         ),
                       ),
 
-                      // 일정이나 이벤트가 있는 날짜는 이렇게 표시
-                      if (date.month == widget.currentMonth.month && exists.contains(date.day))
-                        Container(
-                          width: 8, height: 8,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Theme.of(context).colorScheme.onSecondary
-                          ),
-                        ),
+                      _existLoad
+                        ? const SizedBox()
+                        : (date.month == widget.currentMonth.month && _exists.containsKey(date.day))
+                          ? Container(
+                            width: 8, height: 8,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Theme.of(context).colorScheme.onSecondary
+                            ),
+                          )
+                          : const SizedBox(),
                       if (isToday)
                         Text('Today',
                           style: TextStyle(

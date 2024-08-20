@@ -2,9 +2,12 @@
 import 'dart:convert';
 
 import 'package:all_of_football/api/api_service.dart';
+import 'package:all_of_football/api/domain/api_result.dart';
 import 'package:all_of_football/api/domain/result_code.dart';
 import 'package:all_of_football/component/secure_strage.dart';
+import 'package:all_of_football/domain/cash/receipt.dart';
 import 'package:all_of_football/domain/enums/match_enums.dart';
+import 'package:all_of_football/domain/match/match_search_view.dart';
 import 'package:all_of_football/domain/user/social_result.dart';
 import 'package:all_of_football/domain/user/user_profile.dart';
 import 'package:intl/intl.dart';
@@ -65,6 +68,56 @@ class UserService {
       print('REGISTER SUCCESS !!!');
     }
     return response.resultCode;
+  }
+
+  static Future<ResponseResult> getCash() async {
+    return await ApiService.get(
+      uri: '/user/cash',
+      authorization: true,
+    );
+  }
+
+  static Future<List<Receipt>> getReceipt() async {
+    final response = await ApiService.get(
+      uri: '/user/receipt',
+      authorization: true,
+    );
+    if (response.resultCode == ResultCode.OK) {
+      return List<Receipt>.from(response.data.map( (x) => Receipt.fromJson(x) ));
+    } else {
+      return [];
+    }
+  }
+
+  static Future<Map<int, List<MatchView>>> getHistory(DateTime date) async {
+    final String formattedDate = DateFormat("yyyy-MM-dd'T'HH:mm:ss").format(date);
+
+    final response = await ApiService.get(
+      uri: '/user/history?date=$formattedDate',
+      authorization: true,
+    );
+    if (response.resultCode == ResultCode.OK) {
+      Map<int, List<MatchView>> result = {};
+
+      response.data.forEach((key, value) {
+        final int intKey = int.parse(key);
+        final List<MatchView> matchList = (value as List)
+            .map((item) => MatchView.fromJson(item))
+            .toList();
+        result[intKey] = matchList;
+      });
+
+      return result;
+    } else {
+      return {};
+    }
+  }
+
+  static void test() async {
+    final response = await ApiService.get(
+      uri: '/test',
+      authorization: true,
+    );
   }
 
 }

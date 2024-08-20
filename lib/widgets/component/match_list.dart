@@ -4,6 +4,7 @@ import 'package:all_of_football/notifier/recently_match_notifier.dart';
 import 'package:all_of_football/widgets/component/custom_container.dart';
 import 'package:all_of_football/widgets/component/match_extra_data.dart';
 import 'package:all_of_football/widgets/component/match_status_box.dart';
+import 'package:all_of_football/widgets/component/space_custom.dart';
 import 'package:all_of_football/widgets/pages/poppages/match_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -38,7 +39,7 @@ class _MatchListWidgetState extends ConsumerState<MatchListWidget> {
             Row(
               children: [
                 MatchStatusWidget(matchStatus: widget.match.matchStatus),
-                const SizedBox(width: 10,),
+                const SpaceWidth(10,),
                 Expanded(
                   child: Text(widget.match.title,
                     overflow: TextOverflow.ellipsis,
@@ -50,7 +51,7 @@ class _MatchListWidgetState extends ConsumerState<MatchListWidget> {
                   ),
                 ),
 
-                const SizedBox(width: 10,),
+                const SpaceWidth(10),
 
                 Text(widget.formatType.format(widget.match.matchDate),
                   style: TextStyle(
@@ -61,7 +62,7 @@ class _MatchListWidgetState extends ConsumerState<MatchListWidget> {
                 )
               ],
             ),
-            const SizedBox(height: 8,),
+            const SpaceHeight(8),
             Skeleton.ignore(
               child: MatchExtraDataWidget(matchData: widget.match.matchData),
             ),

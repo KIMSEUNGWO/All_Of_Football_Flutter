@@ -23,9 +23,9 @@ class UserProfile {
     image = json['image'] == null
         ? null
         : ImageHelper.parseImage(imagePath: ImagePath.ORIGINAL, imageType: ImageType.PROFILE, imageName: json['image'], fit: BoxFit.fill),
-    nickname = json['name'],
-    sex = SexType.valueOf(json['sexType'])!,
-    birth = json['birth'],
+    nickname = json['nickname'],
+    sex = SexType.valueOf(json['sex'])!,
+    birth = DateTime.parse(json['birth']),
     favoriteCount = json['favoriteCount'],
     couponCount = json['couponCount'],
     cash = json['cash'];

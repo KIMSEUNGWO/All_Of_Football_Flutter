@@ -1,29 +1,36 @@
 
+import 'package:all_of_football/component/account_format.dart';
 import 'package:all_of_football/component/svg_icon.dart';
+import 'package:all_of_football/domain/user/user_profile.dart';
+import 'package:all_of_football/notifier/user_notifier.dart';
 import 'package:all_of_football/widgets/component/custom_container.dart';
+import 'package:all_of_football/widgets/component/space_custom.dart';
 import 'package:all_of_football/widgets/component/user_profile_wiget.dart';
 import 'package:all_of_football/widgets/pages/poppages/cash_charge_page.dart';
 import 'package:all_of_football/widgets/pages/poppages/cash_receipt_page.dart';
 import 'package:all_of_football/widgets/pages/poppages/coupon_list_page.dart';
 import 'package:all_of_football/widgets/pages/poppages/match_history_page.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MyPageWidget extends StatefulWidget {
+class MyPageWidget extends ConsumerStatefulWidget{
   const MyPageWidget({super.key});
 
   @override
-  State<MyPageWidget> createState() => _MyPageWidgetState();
+  ConsumerState<MyPageWidget> createState() => _MyPageWidgetState();
 }
 
-class _MyPageWidgetState extends State<MyPageWidget> with AutomaticKeepAliveClientMixin {
+class _MyPageWidgetState extends ConsumerState<MyPageWidget> with AutomaticKeepAliveClientMixin {
 
   bool _loading = false;
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    UserProfile profile = ref.watch(loginProvider)!;
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0,
@@ -56,7 +63,10 @@ class _MyPageWidgetState extends State<MyPageWidget> with AutomaticKeepAliveClie
                             },
                             child: Stack(
                               children: [
-                                const UserProfileWidget(diameter: 60),
+                                UserProfileWidget(
+                                  diameter: 60,
+                                  image: profile.image,
+                                ),
                                 Positioned(
                                   bottom: 0, right: 0,
                                   child: Skeleton.ignore(
@@ -67,17 +77,35 @@ class _MyPageWidgetState extends State<MyPageWidget> with AutomaticKeepAliveClie
                               ]
                             ),
                           ),
-                          const SizedBox(width: 15,),
-                          Text('닉네임닉네임',
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontWeight: FontWeight.w600,
-                              fontSize: Theme.of(context).textTheme.displaySmall!.fontSize
-                            ),
+                          const SpaceWidth(15),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(profile.nickname,
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: Theme.of(context).textTheme.displaySmall!.fontSize
+                                ),
+                              ),
+                              const SpaceHeight(4),
+                              Row(
+                                children: [
+                                  Text(DateFormat('yyyy-MM-dd').format(profile.birth),
+                                    style: TextStyle(
+                                      fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                                      color: Theme.of(context).colorScheme.secondary
+                                    ),
+                                  ),
+                                  const SpaceWidth(4,),
+                                  profile.sex.icon,
+                                ],
+                              )
+                            ],
                           )
                         ],
                       ),
-                      const SizedBox(height: 20,),
+                      const SpaceHeight(20,),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 40),
                         child: LayoutBuilder(
@@ -89,14 +117,14 @@ class _MyPageWidgetState extends State<MyPageWidget> with AutomaticKeepAliveClie
                                   width: containerWidth,
                                   child: Column(
                                     children: [
-                                      Text('5',
+                                      Text('${profile.favoriteCount}',
                                         style: TextStyle(
                                           color: Theme.of(context).colorScheme.primary,
                                           fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
                                           fontWeight: FontWeight.w600
                                         ),
                                       ),
-                                      const SizedBox(height: 4,),
+                                      const SpaceHeight(4,),
                                       const Text('즐겨찾기',
                                         style: TextStyle(
                                             fontWeight: FontWeight.w400
@@ -116,7 +144,7 @@ class _MyPageWidgetState extends State<MyPageWidget> with AutomaticKeepAliveClie
                                             fontWeight: FontWeight.w600
                                         ),
                                       ),
-                                      const SizedBox(height: 4,),
+                                      const SpaceHeight(4,),
                                       const Text('어떤무언가',
                                         style: TextStyle(
                                             fontWeight: FontWeight.w400
@@ -129,14 +157,14 @@ class _MyPageWidgetState extends State<MyPageWidget> with AutomaticKeepAliveClie
                                   width: containerWidth,
                                   child: Column(
                                     children: [
-                                      Text('5',
+                                      Text('${profile.couponCount}',
                                         style: TextStyle(
                                           color: Theme.of(context).colorScheme.primary,
                                           fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
                                           fontWeight: FontWeight.w600
                                         ),
                                       ),
-                                      const SizedBox(height: 4,),
+                                      const SpaceHeight(4,),
                                       const Text('쿠폰',
                                         style: TextStyle(
                                           fontWeight: FontWeight.w400
@@ -153,7 +181,7 @@ class _MyPageWidgetState extends State<MyPageWidget> with AutomaticKeepAliveClie
                     ],
                   ),
                 ),
-                const SizedBox(height: 15,),
+                const SpaceHeight(15,),
 
                 // 캐시
                 CustomContainer(
@@ -169,7 +197,7 @@ class _MyPageWidgetState extends State<MyPageWidget> with AutomaticKeepAliveClie
                             ),
                           ),
                           Expanded(
-                            child: Text('999,999,999원',
+                            child: Text(AccountFormatter.format(profile.cash),
                               textAlign: TextAlign.right,
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.primary,
@@ -180,7 +208,7 @@ class _MyPageWidgetState extends State<MyPageWidget> with AutomaticKeepAliveClie
                           ),
                         ],
                       ),
-                      const SizedBox(height: 15,),
+                      const SpaceHeight(15,),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -196,7 +224,7 @@ class _MyPageWidgetState extends State<MyPageWidget> with AutomaticKeepAliveClie
                               ),
                             ),
                           ),
-                          const SizedBox(width: 15,),
+                          const SpaceWidth(15,),
                           GestureDetector(
                             onTap: () {
                               Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -214,7 +242,7 @@ class _MyPageWidgetState extends State<MyPageWidget> with AutomaticKeepAliveClie
                     ],
                   ),
                 ),
-                const SizedBox(height: 15,),
+                const SpaceHeight(15,),
 
                 Skeleton.keep(
                   child: Container(
@@ -233,14 +261,14 @@ class _MyPageWidgetState extends State<MyPageWidget> with AutomaticKeepAliveClie
                     ),
                   ),
                 ),
-                const SizedBox(height: 15,),
+                const SpaceHeight(15,),
 
                 CustomContainer(
                   padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
                   child: Column(
                     children: [
                       _Menu(
-                        svgIcon: SvgIcon.asset(sIcon: SIcon.clipboard,
+                        icon: SvgIcon.asset(sIcon: SIcon.clipboard,
                           style: SvgIconStyle(
                             width: 20, height: 20, color: Theme.of(context).colorScheme.primary
                           )
@@ -252,9 +280,9 @@ class _MyPageWidgetState extends State<MyPageWidget> with AutomaticKeepAliveClie
                           },));
                         },
                       ),
-                      const SizedBox(height: 10,),
+                      const SpaceHeight(10,),
                       _Menu(
-                        svgIcon: SvgIcon.asset(sIcon: SIcon.coupon),
+                        icon: SvgIcon.asset(sIcon: SIcon.coupon),
                         title: '쿠폰',
                         onPressed: (){
                           Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -262,10 +290,18 @@ class _MyPageWidgetState extends State<MyPageWidget> with AutomaticKeepAliveClie
                           },));
                         },
                       ),
+                      const SpaceHeight(10,),
+                      _Menu(
+                        icon: Icon(Icons.logout_outlined, size: 20,),
+                        title: '로그아웃',
+                        onPressed: (){
+                          ref.read(loginProvider.notifier).logout();
+                        },
+                      ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 15,),
+                const SpaceHeight(15,),
               ],
             ),
           ),
@@ -280,11 +316,11 @@ class _MyPageWidgetState extends State<MyPageWidget> with AutomaticKeepAliveClie
 
 class _Menu extends StatelessWidget {
 
-  final SvgIcon svgIcon;
+  final Widget icon;
   final String title;
   final Function() onPressed;
 
-  const _Menu({super.key, required this.svgIcon, required this.title, required this.onPressed});
+  const _Menu({required this.icon, required this.title, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -296,10 +332,10 @@ class _Menu extends StatelessWidget {
           Skeleton.ignore(
             child: SizedBox(
               width: 30,
-              child: svgIcon,
+              child: icon,
             ),
           ),
-          const SizedBox(width: 10,),
+          const SpaceWidth(10,),
           Expanded(
             child: Text(title,
               style: TextStyle(

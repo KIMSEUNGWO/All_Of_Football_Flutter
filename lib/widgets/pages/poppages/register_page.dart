@@ -24,21 +24,41 @@ class _RegisterWidgetState extends ConsumerState<RegisterWidget> {
 
   DateTime? _birth;
   SexType? _sexType;
+  bool _disabled = true;
 
   void _trySubmit() {
+    if (_disabled) return;
+    setState(() {
+      _disabled = true;
+    });
     Alert.of(context).confirm(
       message: '가입 이후에는 해당 정보를 수정할 수 없습니다. \n가입 하시겠습니까?',
       btnMessage: '가입',
       onPressed: () {
         _submit();
       },
+      onCanceled: () {
+        setState(() {
+          _disabled = false;
+        });
+      }
     );
   }
   void _submit() async {
-    final result = await ref.watch(loginProvider.notifier).register(sex: _sexType!, birth: _birth!, social: widget.social);
+    bool result = await ref.watch(loginProvider.notifier).register(sex: _sexType!, birth: _birth!, social: widget.social);
+    if (result) {
+      Navigator.pop(context);
+    } else {
+      setState(() {
+        _disabled = false;
+      });
+    }
   }
-  bool _canSubmit() {
-    return _birth != null && _sexType != null;
+  _canSubmit() {
+    bool canSubmit = _birth != null && _sexType != null;
+    setState(() {
+      _disabled = !canSubmit;
+    });
   }
 
   void _selectBirth() {
@@ -52,11 +72,13 @@ class _RegisterWidgetState extends ConsumerState<RegisterWidget> {
             });
         },
     );
+    _canSubmit();
   }
   void _selectSex(SexType sexType) {
     setState(() {
       _sexType = sexType;
     });
+    _canSubmit();
   }
 
   @override
@@ -191,9 +213,9 @@ class _RegisterWidgetState extends ConsumerState<RegisterWidget> {
             height: 50,
             margin: const EdgeInsets.symmetric(horizontal: 20),
             decoration: BoxDecoration(
-              color: _canSubmit()
-                ? Theme.of(context).colorScheme.onPrimary
-                : const Color(0xFFD9D9D9),
+              color: _disabled
+                ? const Color(0xFFD9D9D9)
+                : Theme.of(context).colorScheme.onPrimary,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Center(

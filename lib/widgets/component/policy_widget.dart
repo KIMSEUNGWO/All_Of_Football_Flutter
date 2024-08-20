@@ -1,5 +1,6 @@
 
 
+import 'package:all_of_football/widgets/component/space_custom.dart';
 import 'package:flutter/material.dart';
 
 class PolicyWidget extends StatefulWidget {
@@ -77,7 +78,7 @@ class _PolicyWidgetState extends State<PolicyWidget> {
             )
           ],
         ),
-        const SizedBox(height: 10,),
+        const SpaceHeight( 10,),
         Row(
           children: [
             GestureDetector(
@@ -114,7 +115,7 @@ class _PolicyWidgetState extends State<PolicyWidget> {
             )
           ],
         ),
-        const SizedBox(height: 10,),
+        const SpaceHeight( 10,),
         Row(
           children: [
             GestureDetector(

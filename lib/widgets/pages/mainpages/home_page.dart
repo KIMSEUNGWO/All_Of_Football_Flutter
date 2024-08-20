@@ -1,4 +1,5 @@
 
+import 'package:all_of_football/api/service/user_service.dart';
 import 'package:all_of_football/component/svg_icon.dart';
 import 'package:all_of_football/domain/user/social_result.dart';
 import 'package:all_of_football/widgets/form/field_image_preview.dart';
@@ -70,6 +71,17 @@ class _HomePageState extends State<HomeWidget> with AutomaticKeepAliveClientMixi
                 },));
               },
               child: Text('회원가입 페이지 이동',
+                style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.black
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                UserService.test();
+              },
+              child: Text('테스트 데이터 로드',
                 style: TextStyle(
                     fontSize: 20,
                     color: Colors.black

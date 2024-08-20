@@ -10,7 +10,7 @@ class MatchData {
   final int matchCount;
 
   MatchData.fromJson(Map<String, dynamic> json):
-    sexType = SexType.valueOf(json['sexType']),
+    sexType = SexType.valueOf(json['sex']),
     region = Region.valueOf(json['region']),
     person = json['person'],
     matchCount = json['matchCount'];
@@ -50,8 +50,12 @@ enum MatchStatus {
 
 enum SexType {
 
-  MALE,
-  FEMALE;
+  MALE(Icon(Icons.male, color: Color(0xFF5278FF), size: 16,)),
+  FEMALE(Icon(Icons.female, color: Color(0xFFFF6666), size: 16,));
+
+  final Icon icon;
+
+  const SexType(this.icon);
 
   static SexType? valueOf(String? data) {
     List<SexType> values = SexType.values;

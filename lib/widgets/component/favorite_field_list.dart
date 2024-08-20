@@ -2,6 +2,7 @@
 import 'package:all_of_football/domain/field/field_simp.dart';
 import 'package:all_of_football/widgets/component/custom_container.dart';
 import 'package:all_of_football/widgets/component/favorite_icon_button.dart';
+import 'package:all_of_football/widgets/component/space_custom.dart';
 import 'package:all_of_football/widgets/pages/poppages/field_detail_page.dart';
 import 'package:flutter/material.dart';
 
@@ -35,7 +36,7 @@ class FavoriteFieldListWidget extends StatelessWidget {
                     fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize
                   ),
                 ),
-                const SizedBox(width: 10,),
+                const SpaceWidth(10,),
                 FavoriteIconButtonWidget(
                   fieldId: _fieldSimp.fieldId,
                   on: _fieldSimp.favorite,
@@ -47,7 +48,7 @@ class FavoriteFieldListWidget extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 4,),
+            const SpaceHeight( 4,),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -58,7 +59,7 @@ class FavoriteFieldListWidget extends StatelessWidget {
                     fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   ),
                 ),
-                const SizedBox(width: 5,),
+                const SpaceWidth(5),
                 Text(_fieldSimp.address,
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.secondary,

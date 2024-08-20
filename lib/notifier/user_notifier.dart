@@ -7,10 +7,8 @@ import 'package:all_of_football/api/social/line_api.dart';
 import 'package:all_of_football/domain/enums/match_enums.dart';
 import 'package:all_of_football/domain/user/social_result.dart';
 import 'package:all_of_football/domain/user/user_profile.dart';
-import 'package:all_of_football/widgets/pages/poppages/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 class UserNotifier extends StateNotifier<UserProfile?> {
   UserNotifier() : super(null);
@@ -64,26 +62,14 @@ class UserNotifier extends StateNotifier<UserProfile?> {
     }
   }
 
-
-  int? getId() {
-    return state?.id;
+  refreshCash() async {
+    final result = await UserService.getCash();
+    if (result.resultCode == ResultCode.OK) {
+      state?.cash = result.data;
+      state = state;
+    }
   }
 
-  Image? getImage() {
-    return state?.image;
-  }
-
-  String? getName() {
-    return state?.nickname;
-  }
-
-  SexType? getSex() {
-    return state?.sex;
-  }
-
-  DateTime? getBirth() {
-    return state?.birth;
-  }
 
 }
 

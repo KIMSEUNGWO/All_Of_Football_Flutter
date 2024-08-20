@@ -3,6 +3,7 @@ import 'package:all_of_football/component/svg_icon.dart';
 import 'package:all_of_football/domain/enums/match_enums.dart';
 import 'package:all_of_football/domain/search_condition.dart';
 import 'package:all_of_football/notifier/region_notifier.dart';
+import 'package:all_of_football/widgets/component/space_custom.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -180,7 +181,7 @@ class _SelectDate extends StatelessWidget {
                               fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize
                           ),
                         ),
-                        const SizedBox(height: 8,),
+                        const SpaceHeight(8),
                         Text(i == 0 || dateList[i - 1].month != dateList[i].month
                             ? '${dateList[i].month}.${dateList[i].day}'
                             : '${dateList[i].day}',

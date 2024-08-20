@@ -20,7 +20,7 @@ class _AlertBuilder {
 
   _AlertBuilder(this.context);
 
-  void confirm({required String message, required String btnMessage, required Function() onPressed,}) {
+  void confirm({required String message, required String btnMessage, required Function() onPressed, Function()? onCanceled}) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -59,6 +59,9 @@ class _AlertBuilder {
                           Expanded(
                             child: InkWell(
                               onTap: () {
+                                if (onCanceled != null) {
+                                  onCanceled();
+                                }
                                 Navigator.of(context).pop(false);
                               },
                               splashColor: Colors.transparent, // 기본 InkWell 효과 삭제
