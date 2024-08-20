@@ -12,6 +12,7 @@ class Match {
   final int matchHour;
   final MatchStatus matchStatus;
   final Field field;
+  final bool alreadyJoin;
 
   Match.fromJson(Map<String, dynamic> json):
     matchId = json['matchId'],
@@ -21,8 +22,9 @@ class Match {
     matchCount = json['matchCount'],
     matchHour = json['matchHour'],
     matchStatus = MatchStatus.valueOf(json['matchStatus']),
+    alreadyJoin = json['alreadyJoin'],
     field = Field.fromJson(json['field']);
 
   Match(this.matchId, this.matchDate, this.sexType, this.person,
-      this.matchCount, this.matchHour, this.matchStatus, this.field);
+      this.matchCount, this.matchHour, this.matchStatus, this.field, this.alreadyJoin);
 }

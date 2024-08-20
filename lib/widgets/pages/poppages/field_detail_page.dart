@@ -1,11 +1,9 @@
 
+import 'package:all_of_football/api/domain/result_code.dart';
+import 'package:all_of_football/api/service/field_service.dart';
+import 'package:all_of_football/component/alert.dart';
 import 'package:all_of_football/component/open_app.dart';
-import 'package:all_of_football/component/region_data.dart';
-import 'package:all_of_football/component/svg_icon.dart';
-import 'package:all_of_football/domain/enums/field_enums.dart';
-import 'package:all_of_football/domain/field/address.dart';
 import 'package:all_of_football/domain/field/field.dart';
-import 'package:all_of_football/domain/field/field_data.dart';
 import 'package:all_of_football/widgets/component/favorite_icon_button.dart';
 import 'package:all_of_football/widgets/component/image_detail_view.dart';
 import 'package:all_of_football/widgets/form/detail_field_form.dart';
@@ -28,22 +26,32 @@ class FieldDetailWidget extends StatefulWidget {
 
 class _FieldDetailWidgetState extends State<FieldDetailWidget> {
 
-  late Field field;
-  bool _loading = false;
+  late Field? field;
+  bool _loading = true;
 
   fetchField() async {
-    field = widget.field ??
-        Field(2, '안양대학교 SKY 풋살파크 C구장',
-          Address('서울 마포구 독막로 2', Region.TAITO, 35.757721, 139.527805),
-          FieldData(Parking.FREE, Shower.Y, Toilet.N, 123, 40, 10000),
-          true,
-          '뭐가 없고~ 뭐가 있고~',
-          [
-            Image.asset('assets/구장예제사진1.jpeg', fit: BoxFit.fill,),
-            Image.asset('assets/구장예제사진2.jpg', fit: BoxFit.fill,),
-            Image.asset('assets/구장예제사진3.jpg', fit: BoxFit.fill,)
-          ]
+    if (widget.field != null) {
+      field = widget.field!;
+      setState(() {
+        _loading = false;
+      });
+    } else {
+      final response = await FieldService.getField(fieldId: widget.fieldId);
+      ResultCode result = response.resultCode;
+      if (result == ResultCode.OK) {
+        setState(() {
+          field = Field.fromJson(response.data);
+          _loading = false;
+        });
+      } else if (result == ResultCode.FIELD_NOT_EXISTS) {
+        Alert.of(context).message(
+          message: '존재하지 않는 구장입니다..',
+          onPressed: () {
+            Navigator.pop(context);
+          },
         );
+      }
+    }
   }
 
   @override
@@ -60,16 +68,18 @@ class _FieldDetailWidgetState extends State<FieldDetailWidget> {
         centerTitle: false,
         title: Skeletonizer(
           enabled: _loading,
-          child: Text(field.title),
+          child: Text(_loading ? '' : field!.title),
         ),
         actions: [
           Skeletonizer(
             enabled: _loading,
             child: Padding(
               padding: const EdgeInsets.only(right: 20),
-              child: FavoriteIconButtonWidget(fieldId: field.fieldId, on: field.favorite)
+              child: _loading
+                ? null
+                : FavoriteIconButtonWidget(fieldId: field!.fieldId, on: field!.favorite)
             ),
-          )
+          ),
         ],
       ),
       body: Skeletonizer(
@@ -81,7 +91,7 @@ class _FieldDetailWidgetState extends State<FieldDetailWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ImageSlider(
-                    images: field.images.map((image) {
+                    images: _loading ? [] : field!.images.map((image) {
                       return GestureDetector(
                         onTap: () {
                           Navigator.push(context,
@@ -94,7 +104,7 @@ class _FieldDetailWidgetState extends State<FieldDetailWidget> {
                     }).toList(),
                   ),
                   const SizedBox(height: 19,),
-                  Text(field.title,
+                  Text(_loading ? '' : field!.title,
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.primary,
                         fontWeight: FontWeight.w600,
@@ -103,9 +113,11 @@ class _FieldDetailWidgetState extends State<FieldDetailWidget> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      OpenApp().openMaps(lat: field.address.lat, lng: field.address.lng);
+                      if (!_loading) {
+                        OpenApp().openMaps(lat: field!.address.lat, lng: field!.address.lng);
+                      }
                     },
-                    child: Text(field.address.address,
+                    child: Text(_loading ? '' : field!.address.address,
                       style: TextStyle(
                           color: const Color(0xFF686868),
                           fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
@@ -117,9 +129,10 @@ class _FieldDetailWidgetState extends State<FieldDetailWidget> {
 
 
                   const SizedBox(height: 35,),
-                  FieldDetailFormWidget(field: field),
+                  FieldDetailFormWidget(field: _loading ? null : field),
                   const SizedBox(height: 30,),
-                  FieldMatchFormWidget(fieldId: field.fieldId),
+                  if (!_loading)
+                    FieldMatchFormWidget(fieldId: field!.fieldId),
                   const SizedBox(height: 40,),
 
 

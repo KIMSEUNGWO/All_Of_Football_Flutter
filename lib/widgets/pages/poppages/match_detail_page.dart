@@ -1,5 +1,8 @@
 
+import 'package:all_of_football/api/domain/result_code.dart';
+import 'package:all_of_football/api/service/match_service.dart';
 import 'package:all_of_football/component/account_format.dart';
+import 'package:all_of_football/component/alert.dart';
 import 'package:all_of_football/component/open_app.dart';
 import 'package:all_of_football/component/region_data.dart';
 import 'package:all_of_football/domain/enums/field_enums.dart';
@@ -33,23 +36,42 @@ class MatchDetailWidget extends StatefulWidget {
 
 class _MatchDetailWidgetState extends State<MatchDetailWidget> {
   
-  late Match match;
-  bool _loading = false;
+  Match? match;
+  bool _loading = true;
+  bool _disabled = false;
 
-  fetchMatch() async {
-    match = Match(1, DateTime.now(), null, 6, 3, 2, MatchStatus.OPEN,
-        Field(2, '안양대학교 SKY 풋살파크 C구장',
-            Address('서울 마포구 독막로 2', Region.TAITO, 0, 0),
-            FieldData(Parking.FREE, Shower.Y, Toilet.N, 123, 40, 10000),
-            false,
-            '뭐가 없고~ 뭐가 있고~',
-            [
-              Image.asset('assets/구장예제사진1.jpeg', fit: BoxFit.fill,),
-              Image.asset('assets/구장예제사진2.jpg', fit: BoxFit.fill,),
-              Image.asset('assets/구장예제사진3.jpg', fit: BoxFit.fill,)
-            ])
-    );
+  _fetchMatch() async {
+    final response = await MatchService.getMatch(matchId: widget.matchId);
+    ResultCode result = response.resultCode;
+    if (result == ResultCode.OK) {
+      setState(() {
+        match = Match.fromJson(response.data);
+        _disabled = match!.alreadyJoin;
+        _loading = false;
+      });
+    } else if (result == ResultCode.MATCH_NOT_EXISTS) {
+      Alert.of(context).message(
+        message: '존재하지 않는 경기입니다..',
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      );
+    }
   }
+  // _fetchMatch() async {
+  //   match = Match(1, DateTime.now(), null, 6, 3, 2, MatchStatus.OPEN,
+  //       Field(2, '안양대학교 SKY 풋살파크 C구장',
+  //           Address('서울 마포구 독막로 2', Region.TAITO, 0, 0),
+  //           FieldData(Parking.FREE, Shower.Y, Toilet.N, 123, 40, 10000),
+  //           false,
+  //           '뭐가 없고~ 뭐가 있고~',
+  //           [
+  //             Image.asset('assets/구장예제사진1.jpeg', fit: BoxFit.fill,),
+  //             Image.asset('assets/구장예제사진2.jpg', fit: BoxFit.fill,),
+  //             Image.asset('assets/구장예제사진3.jpg', fit: BoxFit.fill,)
+  //           ])
+  //   );
+  // }
 
   submit() async {
 
@@ -57,7 +79,7 @@ class _MatchDetailWidgetState extends State<MatchDetailWidget> {
   
   @override
   void initState() {
-    fetchMatch();
+    _fetchMatch();
     super.initState();
   }
   
@@ -69,7 +91,7 @@ class _MatchDetailWidgetState extends State<MatchDetailWidget> {
         centerTitle: false,
         title: Skeletonizer(
           enabled: _loading,
-          child: Text(match.field.title),
+          child: _loading ? const Text('') : Text(match!.field.title),
         ),
       ),
       body: Skeletonizer(
@@ -81,7 +103,7 @@ class _MatchDetailWidgetState extends State<MatchDetailWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ImageSlider(
-                  images: match.field.images.map((image) {
+                  images: _loading ? [] : match!.field.images.map((image) {
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(context,
@@ -94,7 +116,7 @@ class _MatchDetailWidgetState extends State<MatchDetailWidget> {
                   }).toList(),
                 ),
                 const SizedBox(height: 19,),
-                Text(DateFormat('M월 d일 EEEE HH:mm', 'ko_KR').format(match.matchDate),
+                Text(_loading ? '' :  DateFormat('M월 d일 EEEE HH:mm', 'ko_KR').format(match!.matchDate),
                   style: TextStyle(
                     color: const Color(0xFF686868),
                     fontSize: Theme.of(context).textTheme.displaySmall!.fontSize,
@@ -102,7 +124,7 @@ class _MatchDetailWidgetState extends State<MatchDetailWidget> {
                   ),
                 ),
                 const SizedBox(height: 5,),
-                Text(match.field.title,
+                Text(_loading ? '' : match!.field.title,
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.primary,
                     fontWeight: FontWeight.w600,
@@ -111,9 +133,11 @@ class _MatchDetailWidgetState extends State<MatchDetailWidget> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    OpenApp().openMaps(lat: match.field.address.lat, lng: match.field.address.lng);
+                    if (!_loading) {
+                      OpenApp().openMaps(lat: match!.field.address.lat, lng: match!.field.address.lng);
+                    }
                   },
-                  child: Text(match.field.address.address,
+                  child: Text(_loading ? '' : match!.field.address.address,
                     style: TextStyle(
                       color: const Color(0xFF686868),
                       fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
@@ -127,7 +151,7 @@ class _MatchDetailWidgetState extends State<MatchDetailWidget> {
                 const SizedBox(height: 35,),
                 MatchDetailFormWidget(match: match),
                 const SizedBox(height: 30,),
-                FieldDetailFormWidget(field: match.field),
+                FieldDetailFormWidget(field: match?.field),
                 const SizedBox(height: 30,),
                 const Skeleton.ignore(
                   child: DetailRoleFormWidget(),
@@ -147,11 +171,13 @@ class _MatchDetailWidgetState extends State<MatchDetailWidget> {
                     const SizedBox(width: 5,),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                            return FieldDetailWidget(fieldId: match.field.fieldId, field: match.field,);
-                          },)
-                        );
+                        if (!_loading) {
+                          Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                              return FieldDetailWidget(fieldId: match!.field.fieldId, field: match!.field,);
+                            },)
+                          );
+                        }
                       },
                       child: Row(
                         children: [
@@ -201,7 +227,7 @@ class _MatchDetailWidgetState extends State<MatchDetailWidget> {
                   const SizedBox(height: 5,),
                   Row(
                     children: [
-                      Text(AccountFormatter.format(match.matchHour * match.field.fieldData.hourPrice),
+                      Text(_loading ? '' : AccountFormatter.format(match!.matchHour * match!.field.fieldData.hourPrice),
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.primary,
                           fontWeight: FontWeight.w600,
@@ -209,7 +235,7 @@ class _MatchDetailWidgetState extends State<MatchDetailWidget> {
                         ),
                       ),
                       Skeleton.ignore(
-                        child: Text(' / ${match.matchHour}시간',
+                        child: Text(_loading ? '' : ' / ${match!.matchHour}시간',
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.secondary,
                             fontWeight: FontWeight.w600,
@@ -225,20 +251,25 @@ class _MatchDetailWidgetState extends State<MatchDetailWidget> {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
+                    if (_disabled) return;
                     submit();
-                    Navigator.push(context, MaterialPageRoute(builder: (context) {
-                      return OrderWidget(matchId: match.matchId);
-                    },));
+                    if (!_loading) {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) {
+                        return OrderWidget(matchId: match!.matchId);
+                      },));
+                    }
                   },
                   child: Container(
                     height: double.infinity,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Theme.of(context).colorScheme.onPrimary,
+                      color: _disabled
+                        ? const Color(0xFFD9D9D9)
+                        : Theme.of(context).colorScheme.onPrimary,
                     ),
                     child: Center(
                       child: Skeleton.ignore(
-                        child: Text('신청하기',
+                        child: Text(!_loading && match!.alreadyJoin ? '신청완료' :'신청하기',
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w600,

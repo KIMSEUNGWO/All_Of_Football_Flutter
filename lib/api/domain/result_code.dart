@@ -2,6 +2,9 @@
 enum ResultCode {
   OK,
 
+  MATCH_NOT_EXISTS,
+  FIELD_NOT_EXISTS,
+
   UNKOWN, SOCIAL_LOGIN_FAILD, REGISTER;
 
   static ResultCode valueOf(String errorCode) {

@@ -1,9 +1,12 @@
 
 
 import 'package:all_of_football/component/svg_icon.dart';
+import 'package:all_of_football/notifier/user_notifier.dart';
 import 'package:flutter/material.dart';
 
-class FavoriteIconButtonWidget extends StatefulWidget {
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class FavoriteIconButtonWidget extends ConsumerStatefulWidget {
 
   final int fieldId;
   final bool on;
@@ -14,10 +17,10 @@ class FavoriteIconButtonWidget extends StatefulWidget {
 
 
   @override
-  State<FavoriteIconButtonWidget> createState() => _FavoriteIconButtonWidgetState();
+  ConsumerState<FavoriteIconButtonWidget> createState() => _FavoriteIconButtonWidgetState();
 }
 
-class _FavoriteIconButtonWidgetState extends State<FavoriteIconButtonWidget> {
+class _FavoriteIconButtonWidgetState extends ConsumerState<FavoriteIconButtonWidget> {
 
   bool _isOn = false;
 
@@ -44,6 +47,8 @@ class _FavoriteIconButtonWidgetState extends State<FavoriteIconButtonWidget> {
   }
   @override
   Widget build(BuildContext context) {
+    bool hasLogin = ref.read(loginProvider.notifier).has();
+    if (!hasLogin) return const SizedBox();
     return GestureDetector(
       onTap: _toggle,
       child: SvgIcon.asset(

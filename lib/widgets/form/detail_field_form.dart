@@ -7,7 +7,7 @@ import 'package:all_of_football/widgets/form/detail_default_form.dart';
 import 'package:flutter/material.dart';
 
 class FieldDetailFormWidget extends StatelessWidget {
-  final Field field;
+  final Field? field;
   const FieldDetailFormWidget({super.key, required this.field});
 
   @override
@@ -28,7 +28,7 @@ class FieldDetailFormWidget extends StatelessWidget {
                           color: Theme.of(context).colorScheme.secondary
                       )),
                       const SizedBox(width: 10,),
-                      Text('${field.fieldData.sizeX}m x ${field.fieldData.sizeY}m',
+                      Text(field == null ? '' : '${field!.fieldData.sizeX}m x ${field!.fieldData.sizeY}m',
                         style: TextStyle(
                           overflow: TextOverflow.ellipsis,
                           color: Theme.of(context).colorScheme.secondary,
@@ -51,7 +51,7 @@ class FieldDetailFormWidget extends StatelessWidget {
                           color: Theme.of(context).colorScheme.secondary
                       )),
                       const SizedBox(width: 10,),
-                      Text(Parking.getName(field.fieldData.parking),
+                      Text(field == null ? '' : Parking.getName(field!.fieldData.parking),
                         style: TextStyle(
                           overflow: TextOverflow.ellipsis,
                           color: Theme.of(context).colorScheme.secondary,
@@ -78,7 +78,7 @@ class FieldDetailFormWidget extends StatelessWidget {
                           color: Theme.of(context).colorScheme.secondary
                       )),
                       const SizedBox(width: 10,),
-                      Text(Shower.getName(field.fieldData.shower),
+                      Text(field == null ? '' : Shower.getName(field!.fieldData.shower),
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.secondary,
@@ -101,7 +101,7 @@ class FieldDetailFormWidget extends StatelessWidget {
                           color: Theme.of(context).colorScheme.secondary
                       )),
                       const SizedBox(width: 10,),
-                      Text(Toilet.getName(field.fieldData.toilet),
+                      Text(field == null ? '' : Toilet.getName(field!.fieldData.toilet),
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.secondary,
@@ -143,7 +143,7 @@ class FieldDetailFormWidget extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 10,),
-                Text(field.description,
+                Text(field == null ? '' : field!.description,
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.secondary,
                     fontSize: Theme.of(context).textTheme.bodySmall!.fontSize,

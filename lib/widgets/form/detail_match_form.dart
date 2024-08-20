@@ -8,7 +8,7 @@ import 'package:all_of_football/domain/match/match.dart';
 
 class MatchDetailFormWidget extends StatelessWidget {
 
-  final Match match;
+  final Match? match;
 
   const MatchDetailFormWidget({super.key, required this.match});
 
@@ -51,7 +51,7 @@ class MatchDetailFormWidget extends StatelessWidget {
                           color: Theme.of(context).colorScheme.secondary
                       )),
                       const SizedBox(width: 10,),
-                      Text(SexType.getName(match.sexType),
+                      Text(match == null ? '' : SexType.getName(match!.sexType),
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.secondary,
                           fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
@@ -75,7 +75,7 @@ class MatchDetailFormWidget extends StatelessWidget {
                       )),
                       const SizedBox(width: 10,),
                       Expanded(
-                        child: Text('${match.person} vs ${match.person} ${match.matchCount}파전',
+                        child: Text(match == null ? '' : '${match!.person} vs ${match!.person} ${match!.matchCount}파전',
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.secondary,

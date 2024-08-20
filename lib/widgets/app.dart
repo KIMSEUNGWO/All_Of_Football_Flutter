@@ -50,10 +50,10 @@ class _AppState extends ConsumerState<App> {
       body: PageView(
         controller: _pageController,
         physics: const NeverScrollableScrollPhysics(),
-        children: const [
-          HomeWidget(),
-          MatchListPageWidget(),
-          MyPageWidget(),
+        children: [
+          const HomeWidget(),
+          const MatchListPageWidget(),
+          MyPageWidget(onChangePage: onChangePage),
         ],
       ),
       bottomNavigationBar: CustomBottomBar(

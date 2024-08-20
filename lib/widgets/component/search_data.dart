@@ -34,7 +34,7 @@ class _SearchDataState extends ConsumerState<SearchData> {
 
   _search() async {
     SearchCondition condition = SearchCondition(
-      dateTime: dateList[_selectedDateIndex],
+      date: dateList[_selectedDateIndex],
       sexType: _selectedSexType,
       region: await ref.read(regionProvider.notifier).get(),
     );
