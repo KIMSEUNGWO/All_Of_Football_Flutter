@@ -33,7 +33,6 @@ class _MatchSoonDisplayState extends ConsumerState<MatchSoonDisplay> {
   @override
   void initState() {
     _fetch();
-
     super.initState();
   }
 
@@ -41,8 +40,7 @@ class _MatchSoonDisplayState extends ConsumerState<MatchSoonDisplay> {
   Widget build(BuildContext context) {
     print('MatchSoonDisplay.build');
     final state = ref.watch(loginProvider);
-    if (state == null) return const SizedBox();
-    if (_result.isEmpty) return const SizedBox();
+    if (state == null || _result.isEmpty) return const SizedBox();
 
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20, bottom: 36),
