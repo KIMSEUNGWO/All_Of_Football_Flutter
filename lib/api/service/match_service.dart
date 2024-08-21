@@ -36,6 +36,18 @@ class MatchService {
     );
   }
 
+  static Future<List<MatchView>> getMatchesSoon() async {
+    final response = await ApiService.get(
+        uri: '/user/matches',
+        authorization: true
+    );
+    if (response.resultCode == ResultCode.OK) {
+      return List<MatchView>.from(response.data.map((x) => MatchView.fromJson(x)));
+    } else {
+      return [];
+    }
+  }
+
 
 
 }

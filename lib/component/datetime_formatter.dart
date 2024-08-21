@@ -2,7 +2,7 @@ class DateTimeFormatter {
 
   static String remainDate(DateTime date) {
     final now = DateTime.now();
-    final difference = now.difference(date);
+    final difference = date.difference(now);
 
     if (difference.inSeconds < 60) {
       return '잠시 후';
