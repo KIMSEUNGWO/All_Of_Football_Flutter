@@ -7,6 +7,7 @@ import 'package:all_of_football/api/domain/result_code.dart';
 import 'package:all_of_football/component/secure_strage.dart';
 import 'package:all_of_football/domain/cash/receipt.dart';
 import 'package:all_of_football/domain/enums/match_enums.dart';
+import 'package:all_of_football/domain/field/field_simp.dart';
 import 'package:all_of_football/domain/match/match_search_view.dart';
 import 'package:all_of_football/domain/user/social_result.dart';
 import 'package:all_of_football/domain/user/user_profile.dart';
@@ -113,11 +114,36 @@ class UserService {
     }
   }
 
+  static Future<List<FieldSimp>> getFavorites() async {
+    final response = await ApiService.get(
+      uri: '/user/favorite',
+      authorization: true,
+    );
+    if (response.resultCode == ResultCode.OK) {
+      return List<FieldSimp>.from(response.data.map((x) => FieldSimp.fromJson(x)));
+    } else {
+      return [];
+    }
+  }
+
   static void test() async {
     final response = await ApiService.get(
       uri: '/test',
       authorization: true,
     );
+  }
+
+  static editFavorite(int fieldId, bool toggle) async {
+    final response = await ApiService.post(
+        uri: '/user/favorite',
+        authorization: true,
+        header: ApiService.contentTypeJson,
+        body: jsonEncode({
+          "fieldId" : fieldId,
+          "toggle" : toggle,
+        })
+    );
+    return response.resultCode;
   }
 
 }

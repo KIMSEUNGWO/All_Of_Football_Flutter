@@ -77,7 +77,7 @@ class _FieldDetailWidgetState extends State<FieldDetailWidget> {
               padding: const EdgeInsets.only(right: 20),
               child: _loading
                 ? null
-                : FavoriteIconButtonWidget(fieldId: field!.fieldId, on: field!.favorite)
+                : FavoriteIconButtonWidget(fieldSimp: field!.toFieldSimp())
             ),
           ),
         ],

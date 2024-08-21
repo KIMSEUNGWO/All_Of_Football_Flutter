@@ -239,7 +239,11 @@ class _CalendarState extends State<_Calendar> with AutomaticKeepAliveClientMixin
 
             return GestureDetector(
               onTap: () {
-                widget.select(date, _exists[date.day] ?? []);
+                List<MatchView> matches = [];
+                if (date.year == widget.currentMonth.year && date.month == widget.currentMonth.month) {
+                  matches = _exists[date.day] ?? [];
+                }
+                widget.select(date, matches);
               },
               child: Container(
                 decoration: BoxDecoration(

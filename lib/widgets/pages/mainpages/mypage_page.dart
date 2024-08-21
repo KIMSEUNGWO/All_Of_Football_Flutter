@@ -305,7 +305,7 @@ class _MyPageWidgetState extends ConsumerState<MyPageWidget> {
                       icon: Icon(Icons.logout_outlined, size: 20,),
                       title: '로그아웃',
                       onPressed: (){
-                        ref.read(loginProvider.notifier).logout();
+                        ref.read(loginProvider.notifier).logout(ref);
                       },
                     ),
                   ],

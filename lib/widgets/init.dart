@@ -17,7 +17,7 @@ class InitApp extends ConsumerStatefulWidget {
 class _InitAppState extends ConsumerState<InitApp> {
 
   init() async {
-    await ref.read(loginProvider.notifier).readUser();
+    await ref.read(loginProvider.notifier).readUser(ref);
     await ref.read(regionProvider.notifier).init();
   }
 

@@ -45,7 +45,7 @@ class _RegisterWidgetState extends ConsumerState<RegisterWidget> {
     );
   }
   void _submit() async {
-    bool result = await ref.watch(loginProvider.notifier).register(sex: _sexType!, birth: _birth!, social: widget.social);
+    bool result = await ref.watch(loginProvider.notifier).register(ref, sex: _sexType!, birth: _birth!, social: widget.social);
     if (result) {
       Navigator.pop(context);
     } else {

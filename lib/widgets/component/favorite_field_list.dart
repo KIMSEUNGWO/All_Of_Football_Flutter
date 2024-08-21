@@ -9,9 +9,8 @@ import 'package:flutter/material.dart';
 class FavoriteFieldListWidget extends StatelessWidget {
 
   final FieldSimp _fieldSimp;
-  final Function(FieldSimp) onChanged;
 
-  const FavoriteFieldListWidget({super.key, required FieldSimp fieldSimp, required this.onChanged}): _fieldSimp = fieldSimp;
+  const FavoriteFieldListWidget({super.key, required FieldSimp fieldSimp}): _fieldSimp = fieldSimp;
 
   @override
   Widget build(BuildContext context) {
@@ -38,13 +37,8 @@ class FavoriteFieldListWidget extends StatelessWidget {
                 ),
                 const SpaceWidth(10,),
                 FavoriteIconButtonWidget(
-                  fieldId: _fieldSimp.fieldId,
-                  on: _fieldSimp.favorite,
+                  fieldSimp: _fieldSimp,
                   size: 15,
-                  onChanged: (favorite) {
-                    print('favorite : $favorite');
-                    onChanged(_fieldSimp);
-                  },
                 ),
               ],
             ),

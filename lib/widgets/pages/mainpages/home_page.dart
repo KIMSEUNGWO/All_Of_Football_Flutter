@@ -47,7 +47,6 @@ class _HomePageState extends State<HomeWidget> with AutomaticKeepAliveClientMixi
             MatchSoonDisplay(),
             const SizedBox(height: 36,),
             FavoriteFieldDisplay(),
-            const SizedBox(height: 36,),
             RecentlyVisitMatchDisplay(),
             RegionMatchDisplay(),
             const SizedBox(height: 36,),

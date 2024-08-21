@@ -7,6 +7,7 @@ import 'package:all_of_football/api/social/line_api.dart';
 import 'package:all_of_football/domain/enums/match_enums.dart';
 import 'package:all_of_football/domain/user/social_result.dart';
 import 'package:all_of_football/domain/user/user_profile.dart';
+import 'package:all_of_football/notifier/favorite_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -17,7 +18,7 @@ class UserNotifier extends StateNotifier<UserProfile?> {
     state = newProfile;
   }
 
-  Future<ResponseResult> login(BuildContext context) async {
+  Future<ResponseResult> login(BuildContext context, WidgetRef ref) async {
     final socialResult = await LineAPI.login();
     if (socialResult == null) {
       state = null;
@@ -27,38 +28,40 @@ class UserNotifier extends StateNotifier<UserProfile?> {
     if (result == ResultCode.REGISTER) {
       return ResponseResult(result, socialResult);
     }
-    readUser();
+    readUser(ref);
     return ResponseResult(result, null);
   }
 
-  Future<bool> register({required SexType sex, required DateTime birth, required SocialResult social}) async {
+  Future<bool> register(WidgetRef ref, {required SexType sex, required DateTime birth, required SocialResult social}) async {
     final response = await UserService.register(
       sex: sex,
       birth: birth,
       social: social,
     );
     if (response == ResultCode.OK) {
-      readUser();
+      readUser(ref);
       return true;
     }
     return false;
   }
 
-  void logout() async {
+  void logout(WidgetRef ref) async {
     LineAPI.logout();
     state = null;
+    ref.read(favoriteNotifier.notifier).logout();
   }
 
   bool has() {
     return state != null;
   }
 
-  readUser() async {
+  readUser(WidgetRef ref) async {
     final result = await TokenService.readUser();
     if (result) {
       state = await UserService.getProfile();
+      ref.read(favoriteNotifier.notifier).init();
     } else {
-      logout();
+      logout(ref);
     }
   }
 
