@@ -86,58 +86,58 @@ class _FieldDetailWidgetState extends State<FieldDetailWidget> {
         enabled: _loading,
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: SingleChildScrollView(
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ImageSlider(
-                    images: _loading ? [] : field!.images.map((image) {
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => ImageDetailView(image: image)
-                                  ,fullscreenDialog: true
-                              ));
-                        },
-                        child: image,
-                      );
-                    }).toList(),
+          child: CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: ImageSlider(
+                  images: _loading ? [] : field!.images.map((image) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => ImageDetailView(image: image)
+                                ,fullscreenDialog: true
+                            ));
+                      },
+                      child: image,
+                    );
+                  }).toList(),
+                ),
+              ),
+              const SliverToBoxAdapter(child: SizedBox(height: 19,)),
+              SliverToBoxAdapter(
+                child: Text(_loading ? '' : field!.title,
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontWeight: FontWeight.w600,
+                      fontSize: Theme.of(context).textTheme.displayMedium!.fontSize
                   ),
-                  const SizedBox(height: 19,),
-                  Text(_loading ? '' : field!.title,
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: GestureDetector(
+                  onTap: () {
+                    if (!_loading) {
+                      OpenApp().openMaps(lat: field!.address.lat, lng: field!.address.lng);
+                    }
+                  },
+                  child: Text(_loading ? '' : field!.address.address,
                     style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
+                        color: const Color(0xFF686868),
+                        fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
                         fontWeight: FontWeight.w600,
-                        fontSize: Theme.of(context).textTheme.displayMedium!.fontSize
+                        decoration: TextDecoration.underline
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      if (!_loading) {
-                        OpenApp().openMaps(lat: field!.address.lat, lng: field!.address.lng);
-                      }
-                    },
-                    child: Text(_loading ? '' : field!.address.address,
-                      style: TextStyle(
-                          color: const Color(0xFF686868),
-                          fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
-                          fontWeight: FontWeight.w600,
-                          decoration: TextDecoration.underline
-                      ),
-                    ),
-                  ),
+                ),
+              ),
 
-
-                  const SizedBox(height: 35,),
-                  FieldDetailFormWidget(field: _loading ? null : field),
-                  const SizedBox(height: 30,),
-                  if (!_loading)
-                    FieldMatchFormWidget(fieldId: field!.fieldId),
-                  const SizedBox(height: 40,),
-
-
-                ]
-            ),
+              const SliverToBoxAdapter(child: SizedBox(height: 35,)),
+              SliverToBoxAdapter(child: FieldDetailFormWidget(field: _loading ? null : field)),
+              const SliverToBoxAdapter(child: SizedBox(height: 30,)),
+              if (!_loading)
+                FieldMatchFormWidget(fieldId: field!.fieldId),
+              const SliverToBoxAdapter(child: SizedBox(height: 40,)),
+            ],
           ),
         ),
       ),

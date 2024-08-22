@@ -32,148 +32,74 @@ class _FieldMatchFormWidgetState extends State<FieldMatchFormWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return DetailDefaultFormWidget(
-      title: '일정',
-      child: PageableListView(
-        separatorBuilder: (context, index) => const SizedBox(height: 10,),
-        size: 10,
-        future: _fetch,
-        builder: (simp) {
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return MatchDetailWidget(matchId: simp.matchId);
-              },));
-            },
-            child: CustomContainer(
-              padding: const EdgeInsets.all(15),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Text(DateFormat('MM.dd').format(simp.matchDate),
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontWeight: FontWeight.w600,
-                              fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
-                            ),
+    return PageableListView.sliver(
+      separatorBuilder: (context, index) => const SizedBox(height: 10,),
+      size: 10,
+      future: _fetch,
+      builder: (simp) {
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return MatchDetailWidget(matchId: simp.matchId);
+            },));
+          },
+          child: CustomContainer(
+            padding: const EdgeInsets.all(15),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Text(DateFormat('MM.dd').format(simp.matchDate),
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.w600,
+                            fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
                           ),
-                          const SizedBox(width: 10,),
-                          Text(DateFormat('HH:mm').format(simp.matchDate),
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontWeight: FontWeight.w600,
-                              fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          MatchStatusWidget(matchStatus: simp.matchStatus),
-                          const SizedBox(width: 5,),
-                          Icon(Icons.arrow_forward_ios_rounded,
-                            size: 14,
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4,),
-                  Row(
-                    children: [
-                      _sexTypeColor(context, simp.matchData.sexType),
-                      Text('${SexType.getName(simp.matchData.sexType)} · ${simp.matchData.person} vs ${simp.matchData.person} ${simp.matchData.matchCount}파전',
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary,
-                            fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-                            fontWeight: FontWeight.w400,
-                            overflow: TextOverflow.ellipsis
                         ),
+                        const SizedBox(width: 10,),
+                        Text(DateFormat('HH:mm').format(simp.matchDate),
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.w600,
+                            fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        MatchStatusWidget(matchStatus: simp.matchStatus),
+                        const SizedBox(width: 5,),
+                        Icon(Icons.arrow_forward_ios_rounded,
+                          size: 14,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4,),
+                Row(
+                  children: [
+                    _sexTypeColor(context, simp.matchData.sexType),
+                    Text('${SexType.getName(simp.matchData.sexType)} · ${simp.matchData.person} vs ${simp.matchData.person} ${simp.matchData.matchCount}파전',
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary,
+                          fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                          fontWeight: FontWeight.w400,
+                          overflow: TextOverflow.ellipsis
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          );
-        },
-      ),
-      // child: ListView.separated(
-      //   physics: const NeverScrollableScrollPhysics(),
-      //   shrinkWrap: true,
-      //   separatorBuilder: (context, index) => const SizedBox(height: 10,),
-      //   itemCount: matchList.length,
-      //   itemBuilder: (context, index) {
-      //     MatchSimp simp = matchList[index];
-      //     return GestureDetector(
-      //       onTap: () {
-      //         Navigator.push(context, MaterialPageRoute(builder: (context) {
-      //           return MatchDetailWidget(matchId: simp.matchId);
-      //         },));
-      //       },
-      //       child: CustomContainer(
-      //         padding: const EdgeInsets.all(15),
-      //         child: Column(
-      //           children: [
-      //             Row(
-      //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //               children: [
-      //                 Row(
-      //                   children: [
-      //                     Text(DateFormat('MM.dd').format(simp.matchDate),
-      //                       style: TextStyle(
-      //                         color: Theme.of(context).colorScheme.primary,
-      //                         fontWeight: FontWeight.w600,
-      //                         fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
-      //                       ),
-      //                     ),
-      //                     const SizedBox(width: 10,),
-      //                     Text(DateFormat('HH:mm').format(simp.matchDate),
-      //                       style: TextStyle(
-      //                         color: Theme.of(context).colorScheme.primary,
-      //                         fontWeight: FontWeight.w600,
-      //                         fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
-      //                       ),
-      //                     ),
-      //                   ],
-      //                 ),
-      //                 Row(
-      //                   children: [
-      //                     MatchStatusWidget(matchStatus: simp.matchStatus),
-      //                     const SizedBox(width: 5,),
-      //                     Icon(Icons.arrow_forward_ios_rounded,
-      //                       size: 14,
-      //                       color: Theme.of(context).colorScheme.secondary,
-      //                     ),
-      //                   ],
-      //                 ),
-      //               ],
-      //             ),
-      //             const SizedBox(height: 4,),
-      //             Row(
-      //               children: [
-      //                 _sexTypeColor(context, simp.matchData.sexType),
-      //                 Text('${SexType.getName(simp.matchData.sexType)} · ${simp.matchData.person} vs ${simp.matchData.person} ${simp.matchData.matchCount}파전',
-      //                   style: TextStyle(
-      //                       color: Theme.of(context).colorScheme.secondary,
-      //                       fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-      //                       fontWeight: FontWeight.w400,
-      //                       overflow: TextOverflow.ellipsis
-      //                   ),
-      //                 ),
-      //               ],
-      //             ),
-      //           ],
-      //         ),
-      //       ),
-      //     );
-      //   },
-      // ),
+          ),
+        );
+      },
     );
   }
   Widget _sexTypeColor(BuildContext context, SexType? sexType) {
