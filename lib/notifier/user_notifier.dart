@@ -73,6 +73,14 @@ class UserNotifier extends StateNotifier<UserProfile?> {
     }
   }
 
+  Image? getImage() {
+    return state?.image;
+  }
+
+  UserProfile? get() {
+    return state;
+  }
+
 
 }
 

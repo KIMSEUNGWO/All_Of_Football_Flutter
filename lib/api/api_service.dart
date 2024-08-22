@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:all_of_football/api/domain/api_result.dart';
+import 'package:all_of_football/api/domain/method_type.dart';
 import 'package:all_of_football/api/utils/header_helper.dart';
 import 'package:all_of_football/component/alert.dart';
 import 'package:all_of_football/exception/server/server_exception.dart';
@@ -45,6 +46,26 @@ class ApiService {
 
     final response = await _execute(http.get(Uri.parse('$server$uri'), headers: requestHeader));
     return _decode(response);
+  }
+
+  static Future<ResponseResult> multipart(String uri, {required MethodType method, required String? multipartFilePath, required Map<String, dynamic> data}) async {
+    var request = http.MultipartRequest(method.name, Uri.parse('$server$uri'));
+    request.headers.addAll({"Content-Type": "application/json; charset=UTF-8"});
+    await getHeaders(request.headers, true, null);
+
+    if (multipartFilePath != null) {
+      request.files.add(await http.MultipartFile.fromPath('image', multipartFilePath));
+    }
+
+    for (String key in data.keys) {
+      if (data[key] == null) continue;
+      request.fields[key] = data[key];
+    }
+
+    final response = await _execute(request.send());
+    final responseBody = await response.stream.bytesToString();
+    final json = jsonDecode(responseBody);
+    return ResponseResult.fromJson(json);
   }
 
   static Future<T> _execute<T> (Future<T> method) async {

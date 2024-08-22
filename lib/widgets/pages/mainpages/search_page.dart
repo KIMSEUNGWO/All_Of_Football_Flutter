@@ -97,7 +97,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                   onChanged: (value) => onChange(value),
                   decoration: const InputDecoration(
                     border: InputBorder.none,
-                    hintText: '지역을 입력해주세요.',
+                    hintText: '구장을 입력해주세요.',
                     hintStyle: TextStyle(
                       color: Color(0xFF908E9B),
                     ),

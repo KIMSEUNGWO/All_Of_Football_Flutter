@@ -32,7 +32,6 @@ class _HomePageState extends ConsumerState<HomeWidget> with AutomaticKeepAliveCl
   }
   @override
   Widget build(BuildContext context) {
-    print('_HomePageState.build');
     final state = ref.watch(loginProvider);
     if (state != null) _refreshMatchSoon = UniqueKey();
     super.build(context);

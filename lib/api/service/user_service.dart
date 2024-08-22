@@ -160,4 +160,17 @@ class UserService {
     }
   }
 
+  static Future<bool> distinctNickname(String nickname) async {
+    String encodedNickname = Uri.encodeComponent(nickname);
+    final response = await ApiService.get(
+      uri: '/user/distinct/nickname?nickname=$encodedNickname',
+      authorization: true,
+    );
+    if (response.resultCode == ResultCode.OK) {
+      return response.data;
+    } else {
+      return true;
+    }
+  }
+
 }

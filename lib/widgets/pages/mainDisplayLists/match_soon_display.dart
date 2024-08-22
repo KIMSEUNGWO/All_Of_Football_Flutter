@@ -55,7 +55,6 @@ class _MatchSoonDisplayState extends ConsumerState<MatchSoonDisplay> {
 
   @override
   Widget build(BuildContext context) {
-    print('MatchSoonDisplay.build');
     final state = ref.watch(loginProvider);
     if (state == null || _result.isEmpty) return const SizedBox();
 

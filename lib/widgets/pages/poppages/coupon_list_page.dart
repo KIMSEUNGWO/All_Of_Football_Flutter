@@ -149,7 +149,7 @@ class _CouponListWidgetState extends State<CouponListWidget> {
                     ],
                   ),
                 ),
-              _items.isEmpty ? const Center(child: Text('쿠폰이 없습니다.'),) :
+              _items.isEmpty ? Center(child: Text('쿠폰이 없습니다.')) :
               ListView.separated(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,

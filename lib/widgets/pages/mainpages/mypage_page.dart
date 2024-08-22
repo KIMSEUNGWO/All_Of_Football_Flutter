@@ -11,6 +11,7 @@ import 'package:all_of_football/widgets/pages/poppages/cash_charge_page.dart';
 import 'package:all_of_football/widgets/pages/poppages/cash_receipt_page.dart';
 import 'package:all_of_football/widgets/pages/poppages/coupon_list_page.dart';
 import 'package:all_of_football/widgets/pages/poppages/match_history_page.dart';
+import 'package:all_of_football/widgets/pages/poppages/profile_edit_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -75,7 +76,9 @@ class _MyPageWidgetState extends ConsumerState<MyPageWidget> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                // NavigatorHelper.push(context, const ProfileEditPage());
+                                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                  return ProfileEditPage();
+                                }, fullscreenDialog: true));
                               },
                               child: Stack(
                                 children: [
