@@ -2,6 +2,7 @@
 import 'package:all_of_football/component/account_format.dart';
 import 'package:all_of_football/component/svg_icon.dart';
 import 'package:all_of_football/domain/user/user_profile.dart';
+import 'package:all_of_football/notifier/favorite_notifier.dart';
 import 'package:all_of_football/notifier/user_notifier.dart';
 import 'package:all_of_football/widgets/component/custom_container.dart';
 import 'package:all_of_football/widgets/component/space_custom.dart';
@@ -29,6 +30,7 @@ class _MyPageWidgetState extends ConsumerState<MyPageWidget> {
   @override
   Widget build(BuildContext context) {
     UserProfile? profile = ref.watch(loginProvider);
+    int favoriteCount = ref.watch(favoriteNotifier).length;
     if (profile == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         widget.onChangePage(0);
@@ -128,7 +130,7 @@ class _MyPageWidgetState extends ConsumerState<MyPageWidget> {
                                     width: containerWidth,
                                     child: Column(
                                       children: [
-                                        Text('${profile.favoriteCount}',
+                                        Text('$favoriteCount',
                                           style: TextStyle(
                                             color: Theme.of(context).colorScheme.primary,
                                             fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,

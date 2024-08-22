@@ -11,7 +11,6 @@ class UserProfile {
   final SexType sex;
   final DateTime birth;
 
-  int favoriteCount;
   int couponCount;
 
   int cash;
@@ -26,7 +25,6 @@ class UserProfile {
     nickname = json['nickname'],
     sex = SexType.valueOf(json['sex'])!,
     birth = DateTime.parse(json['birth']),
-    favoriteCount = json['favoriteCount'],
     couponCount = json['couponCount'],
     cash = json['cash'];
 

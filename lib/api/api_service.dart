@@ -1,13 +1,17 @@
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:all_of_football/api/domain/api_result.dart';
 import 'package:all_of_football/api/utils/header_helper.dart';
+import 'package:all_of_football/exception/server/server_exception.dart';
+import 'package:all_of_football/exception/server/timeout_exception.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
 
   static const String server = "http://localhost:8080";
+  static const Duration _delay = Duration(seconds: 1);
   static const Map<String, String> contentTypeJson = {
     "Content-Type" : "application/json; charset=utf-8",
   };
@@ -26,16 +30,27 @@ class ApiService {
     Map<String, String> requestHeader = {};
     await getHeaders(requestHeader, authorization, header);
 
-    final response = await http.post(Uri.parse('$server$uri'), headers: requestHeader, body: body);
+    final response = await _execute(http.post(Uri.parse('$server$uri'), headers: requestHeader, body: body));
     return _decode(response);
   }
 
   static Future<ResponseResult> get({required String uri, required bool authorization, Map<String, String>? header}) async {
+
     Map<String, String> requestHeader = {"Content-Type" : "application/json; charset=utf-8",};
     await getHeaders(requestHeader, authorization, header);
 
-    final response = await http.get(Uri.parse('$server$uri'), headers: requestHeader);
+    final response = await _execute(http.get(Uri.parse('$server$uri'), headers: requestHeader));
     return _decode(response);
+  }
+
+  static Future<T> _execute<T> (Future<T> method) async {
+    try {
+      return await method.timeout(_delay);
+    } on TimeoutException catch (_) {
+      throw TimeOutException("서버 응답이 지연되고 있습니다. 나중에 다시 시도해주세요.");
+    } catch (e) {
+      throw ServerException("정보를 불러오는데 실패했습니다");
+    }
   }
 
 

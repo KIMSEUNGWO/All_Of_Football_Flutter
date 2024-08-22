@@ -1,6 +1,11 @@
 
+import 'package:all_of_football/api/service/user_service.dart';
+import 'package:all_of_football/component/alert.dart';
 import 'package:all_of_football/domain/coupon/coupon.dart';
+import 'package:all_of_football/exception/server/server_exception.dart';
+import 'package:all_of_football/exception/server/timeout_exception.dart';
 import 'package:all_of_football/widgets/component/coupon/coupon_card.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -20,18 +25,8 @@ class CouponListWidget extends StatefulWidget {
 
 class _CouponListWidgetState extends State<CouponListWidget> {
 
-  List<Coupon> _items = [
-    Coupon(1, '신규회원 50% 쿠폰', 50, DateTime(2024, 08, 31, 23, 55)),
-    Coupon(2, '첫 결제 30% 쿠폰', 30, DateTime(2024, 08, 31, 23, 55)),
-    Coupon(3, '첫 결제 30% 쿠폰', 30, DateTime(2024, 08, 31, 23, 55)),
-    Coupon(4, '첫 결제 30% 쿠폰', 30, DateTime(2024, 08, 31, 23, 55)),
-    Coupon(5, '첫 결제 30% 쿠폰', 30, DateTime(2024, 08, 31, 23, 55)),
-    Coupon(6, '첫 결제 30% 쿠폰', 30, DateTime(2024, 08, 31, 23, 55)),
-    Coupon(7, '첫 결제 30% 쿠폰', 30, DateTime(2024, 08, 31, 23, 55)),
-    Coupon(8, '첫 결제 30% 쿠폰', 30, DateTime(2024, 08, 31, 23, 55)),
-    Coupon(9, '첫 결제 30% 쿠폰', 30, DateTime(2024, 08, 31, 23, 55)),
-    Coupon(10, '첫 결제 30% 쿠폰', 30, DateTime(2024, 08, 31, 23, 55)),
-  ];
+  late List<Coupon> _items;
+  bool _loading = true;
 
   Coupon? _selectCoupon;
 
@@ -40,6 +35,32 @@ class _CouponListWidgetState extends State<CouponListWidget> {
     setState(() {
       _selectCoupon = coupon;
     });
+  }
+
+  _fetch() async {
+    try {
+      List<Coupon> result = await UserService.getCoupons();
+      setState(() {
+        _loading = false;
+        _items = result;
+      });
+    } on TimeOutException catch (e) {
+      Alert.of(context).message(
+        message: e.message,
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      );
+    } on ServerException catch (e) {
+      print('Server Exception : ${e.message}');
+    }
+
+  }
+
+  @override
+  void initState() {
+    _fetch();
+    super.initState();
   }
 
   @override
@@ -72,7 +93,8 @@ class _CouponListWidgetState extends State<CouponListWidget> {
             )
         ],
       ),
-      body: Padding(
+      body: _loading ? const Center(child: CupertinoActivityIndicator(radius: 13,),) :
+      Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: SingleChildScrollView(
           child: Column(
@@ -119,6 +141,7 @@ class _CouponListWidgetState extends State<CouponListWidget> {
                     ],
                   ),
                 ),
+              _items.isEmpty ? const Center(child: Text('쿠폰이 없습니다.'),) :
               ListView.separated(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,

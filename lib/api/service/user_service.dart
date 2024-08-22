@@ -1,11 +1,13 @@
 
 import 'dart:convert';
+import 'dart:async';
 
 import 'package:all_of_football/api/api_service.dart';
 import 'package:all_of_football/api/domain/api_result.dart';
 import 'package:all_of_football/api/domain/result_code.dart';
 import 'package:all_of_football/component/secure_strage.dart';
 import 'package:all_of_football/domain/cash/receipt.dart';
+import 'package:all_of_football/domain/coupon/coupon.dart';
 import 'package:all_of_football/domain/enums/match_enums.dart';
 import 'package:all_of_football/domain/field/field_simp.dart';
 import 'package:all_of_football/domain/match/match_search_view.dart';
@@ -144,6 +146,18 @@ class UserService {
         })
     );
     return response.resultCode;
+  }
+
+  static Future<List<Coupon>> getCoupons() async {
+    final response = await ApiService.get(
+      uri: '/user/coupon',
+      authorization: true,
+    );
+    if (response.resultCode == ResultCode.OK) {
+      return List<Coupon>.from(response.data.map((x) => Coupon.fromJson(x)));
+    } else {
+      return [];
+    }
   }
 
 }

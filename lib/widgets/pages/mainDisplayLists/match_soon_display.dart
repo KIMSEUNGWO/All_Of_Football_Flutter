@@ -24,9 +24,11 @@ class _MatchSoonDisplayState extends ConsumerState<MatchSoonDisplay> {
     print('_MatchSoonDisplayState._fetch');
     List<MatchView> data = await MatchService.getMatchesSoon();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      setState(() {
-        _result = data;
-      });
+      if (mounted) {
+        setState(() {
+          _result = data;
+        });
+      }
     },);
   }
 
