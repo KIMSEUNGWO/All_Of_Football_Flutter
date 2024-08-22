@@ -128,7 +128,7 @@ enum Region {
 
   const Region(this.ko, this.en, this.jp, this.parent);
 
-  static Region? valueOf(String data) {
+  static Region? valueOf(String? data) {
     List<Region> values = Region.values;
     for (var o in values) {
       if (o.name == data) return o;

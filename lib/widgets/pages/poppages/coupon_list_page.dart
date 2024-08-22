@@ -3,6 +3,7 @@ import 'package:all_of_football/api/service/user_service.dart';
 import 'package:all_of_football/component/alert.dart';
 import 'package:all_of_football/domain/coupon/coupon.dart';
 import 'package:all_of_football/exception/server/server_exception.dart';
+import 'package:all_of_football/exception/server/socket_exception.dart';
 import 'package:all_of_football/exception/server/timeout_exception.dart';
 import 'package:all_of_football/widgets/component/coupon/coupon_card.dart';
 import 'package:flutter/cupertino.dart';
@@ -45,6 +46,13 @@ class _CouponListWidgetState extends State<CouponListWidget> {
         _items = result;
       });
     } on TimeOutException catch (e) {
+      Alert.of(context).message(
+        message: e.message,
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      );
+    } on InternalSocketException catch (e) {
       Alert.of(context).message(
         message: e.message,
         onPressed: () {

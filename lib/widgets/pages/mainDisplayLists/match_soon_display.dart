@@ -1,8 +1,12 @@
 
 import 'package:all_of_football/api/service/match_service.dart';
+import 'package:all_of_football/component/alert.dart';
 import 'package:all_of_football/component/region_data.dart';
 import 'package:all_of_football/domain/enums/match_enums.dart';
 import 'package:all_of_football/domain/match/match_search_view.dart';
+import 'package:all_of_football/exception/server/server_exception.dart';
+import 'package:all_of_football/exception/server/socket_exception.dart';
+import 'package:all_of_football/exception/server/timeout_exception.dart';
 import 'package:all_of_football/notifier/user_notifier.dart';
 import 'package:all_of_football/widgets/component/match_list.dart';
 import 'package:all_of_football/widgets/form/detail_default_form.dart';
@@ -21,15 +25,26 @@ class _MatchSoonDisplayState extends ConsumerState<MatchSoonDisplay> {
   late List<MatchView> _result = [];
 
   _fetch() async {
-    print('_MatchSoonDisplayState._fetch');
-    List<MatchView> data = await MatchService.getMatchesSoon();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if (mounted) {
-        setState(() {
-          _result = data;
-        });
-      }
-    },);
+    try {
+      List<MatchView> data = await MatchService.getMatchesSoon();
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        if (mounted) {
+          setState(() {
+            _result = data;
+          });
+        }
+      },);
+    } on TimeOutException catch (e) {
+      Alert.of(context).message(
+        message: e.message,
+      );
+    } on InternalSocketException catch (e) {
+      Alert.of(context).message(
+        message: e.message,
+      );
+    } on ServerException catch (e) {
+      print('Server Exception : ${e.message}');
+    }
   }
 
   @override

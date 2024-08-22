@@ -1,11 +1,15 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:all_of_football/api/domain/api_result.dart';
 import 'package:all_of_football/api/utils/header_helper.dart';
+import 'package:all_of_football/component/alert.dart';
 import 'package:all_of_football/exception/server/server_exception.dart';
+import 'package:all_of_football/exception/server/socket_exception.dart';
 import 'package:all_of_football/exception/server/timeout_exception.dart';
+import 'package:all_of_football/exception/socket_exception_os_code.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
@@ -48,7 +52,12 @@ class ApiService {
       return await method.timeout(_delay);
     } on TimeoutException catch (_) {
       throw TimeOutException("서버 응답이 지연되고 있습니다. 나중에 다시 시도해주세요.");
+    } on SocketException catch (_) {
+      print(_);
+      SocketOSCode error = SocketOSCode.convert(_.osError?.errorCode);
+      throw InternalSocketException(error);
     } catch (e) {
+      print(e);
       throw ServerException("정보를 불러오는데 실패했습니다");
     }
   }

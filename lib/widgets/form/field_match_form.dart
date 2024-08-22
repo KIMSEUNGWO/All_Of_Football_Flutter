@@ -1,12 +1,12 @@
 
-import 'package:all_of_football/component/region_data.dart';
+import 'package:all_of_football/api/service/field_service.dart';
+import 'package:all_of_football/component/pageable.dart';
 import 'package:all_of_football/domain/enums/match_enums.dart';
 import 'package:all_of_football/domain/match/match_simp.dart';
 import 'package:all_of_football/widgets/component/custom_container.dart';
-import 'package:all_of_football/widgets/component/match_extra_data.dart';
 import 'package:all_of_football/widgets/component/match_status_box.dart';
+import 'package:all_of_football/widgets/component/pageable_listview.dart';
 import 'package:all_of_football/widgets/form/detail_default_form.dart';
-import 'package:all_of_football/domain/match/match.dart';
 import 'package:all_of_football/widgets/pages/poppages/match_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -24,26 +24,21 @@ class FieldMatchFormWidget extends StatefulWidget {
 
 class _FieldMatchFormWidgetState extends State<FieldMatchFormWidget> {
 
-  final List<MatchSimp> matchList = [];
+  late final List<MatchSimp> matchList;
 
-  @override
-  void initState() {
-    matchList.add(MatchSimp(1, DateTime.now(), MatchData(null, Region.TAITO, 5, 3), MatchStatus.OPEN));
-    matchList.add(MatchSimp(1, DateTime.now(), MatchData(SexType.FEMALE, Region.TAITO, 6, 3),MatchStatus.OPEN));
-    matchList.add(MatchSimp(1, DateTime.now(), MatchData(SexType.MALE, Region.TAITO, 6, 2),MatchStatus.OPEN));
-    super.initState();
+  Future<List<MatchSimp>> _fetch(Pageable pageable) async {
+    return await FieldService.getSchedule(widget.fieldId, pageable);
   }
+
   @override
   Widget build(BuildContext context) {
     return DetailDefaultFormWidget(
       title: '일정',
-      child: ListView.separated(
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
+      child: PageableListView(
         separatorBuilder: (context, index) => const SizedBox(height: 10,),
-        itemCount: matchList.length,
-        itemBuilder: (context, index) {
-          MatchSimp simp = matchList[index];
+        size: 10,
+        future: _fetch,
+        builder: (simp) {
           return GestureDetector(
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -108,6 +103,77 @@ class _FieldMatchFormWidgetState extends State<FieldMatchFormWidget> {
           );
         },
       ),
+      // child: ListView.separated(
+      //   physics: const NeverScrollableScrollPhysics(),
+      //   shrinkWrap: true,
+      //   separatorBuilder: (context, index) => const SizedBox(height: 10,),
+      //   itemCount: matchList.length,
+      //   itemBuilder: (context, index) {
+      //     MatchSimp simp = matchList[index];
+      //     return GestureDetector(
+      //       onTap: () {
+      //         Navigator.push(context, MaterialPageRoute(builder: (context) {
+      //           return MatchDetailWidget(matchId: simp.matchId);
+      //         },));
+      //       },
+      //       child: CustomContainer(
+      //         padding: const EdgeInsets.all(15),
+      //         child: Column(
+      //           children: [
+      //             Row(
+      //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //               children: [
+      //                 Row(
+      //                   children: [
+      //                     Text(DateFormat('MM.dd').format(simp.matchDate),
+      //                       style: TextStyle(
+      //                         color: Theme.of(context).colorScheme.primary,
+      //                         fontWeight: FontWeight.w600,
+      //                         fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
+      //                       ),
+      //                     ),
+      //                     const SizedBox(width: 10,),
+      //                     Text(DateFormat('HH:mm').format(simp.matchDate),
+      //                       style: TextStyle(
+      //                         color: Theme.of(context).colorScheme.primary,
+      //                         fontWeight: FontWeight.w600,
+      //                         fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
+      //                       ),
+      //                     ),
+      //                   ],
+      //                 ),
+      //                 Row(
+      //                   children: [
+      //                     MatchStatusWidget(matchStatus: simp.matchStatus),
+      //                     const SizedBox(width: 5,),
+      //                     Icon(Icons.arrow_forward_ios_rounded,
+      //                       size: 14,
+      //                       color: Theme.of(context).colorScheme.secondary,
+      //                     ),
+      //                   ],
+      //                 ),
+      //               ],
+      //             ),
+      //             const SizedBox(height: 4,),
+      //             Row(
+      //               children: [
+      //                 _sexTypeColor(context, simp.matchData.sexType),
+      //                 Text('${SexType.getName(simp.matchData.sexType)} · ${simp.matchData.person} vs ${simp.matchData.person} ${simp.matchData.matchCount}파전',
+      //                   style: TextStyle(
+      //                       color: Theme.of(context).colorScheme.secondary,
+      //                       fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+      //                       fontWeight: FontWeight.w400,
+      //                       overflow: TextOverflow.ellipsis
+      //                   ),
+      //                 ),
+      //               ],
+      //             ),
+      //           ],
+      //         ),
+      //       ),
+      //     );
+      //   },
+      // ),
     );
   }
   Widget _sexTypeColor(BuildContext context, SexType? sexType) {
