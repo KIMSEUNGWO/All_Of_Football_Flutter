@@ -9,6 +9,7 @@ import 'package:all_of_football/api/service/user_service.dart';
 import 'package:all_of_football/component/alert.dart';
 import 'package:all_of_football/component/image.dart';
 import 'package:all_of_football/domain/enums/match_enums.dart';
+import 'package:all_of_football/domain/invalid_data.dart';
 import 'package:all_of_football/domain/user/user_profile.dart';
 import 'package:all_of_football/notifier/user_notifier.dart';
 import 'package:all_of_football/widgets/component/space_custom.dart';
@@ -44,16 +45,42 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage> {
   late TextEditingController _textNicknameController;
   late FocusNode _focusNode;
 
+  bool _sending = false;
+
   editProfile() async {
+    if (_sending) return;
+    setState(() {
+      _sending = true;
+    });
+    FocusManager.instance.primaryFocus?.unfocus();
     Map<String, dynamic> data = {};
     String nickname = _textNicknameController.text;
     if (nickname.isNotEmpty) {
       data.addAll({'nickname' : nickname});
     }
 
-    ResponseResult responseResult = await ApiService.multipart('/user/edit', method: MethodType.POST, multipartFilePath: editProfileImagePath, data: data);
+    final result = await ApiService.multipart('/user/edit', method: MethodType.POST, multipartFilePath: editProfileImagePath, data: data);
+    if (result.resultCode == ResultCode.OK) {
+      ref.read(loginProvider.notifier).readUser(ref);
+      Alert.of(context).message(
+        message: '프로필이 수정되었습니다.',
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      );
+    } else if (result.resultCode == ResultCode.INVALID_DATA) {
+      _bindingError(InvalidData.fromJson(result.data));
+    }
 
+    setState(() {
+      _sending = false;
+    });
+  }
 
+  _bindingError(InvalidData data) {
+    if (data.field == 'nickname') {
+      _setError(data.message);
+    }
   }
 
   selectImage() async {
@@ -72,7 +99,7 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage> {
     if (!valid) return;
     bool distinct = await UserService.distinctNickname(_textNicknameController.text);
     if (distinct) {
-      _setError('중복된 닉네임입니다.');
+      _setError('이미 사용중인 닉네임 입니다.');
     } else {
       setState(() {
         _nickname = '사용 가능한 닉네임 입니다.';

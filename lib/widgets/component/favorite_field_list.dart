@@ -39,6 +39,7 @@ class FavoriteFieldListWidget extends StatelessWidget {
                 FavoriteIconButtonWidget(
                   fieldSimp: _fieldSimp,
                   size: 15,
+                  disabled: true,
                 ),
               ],
             ),

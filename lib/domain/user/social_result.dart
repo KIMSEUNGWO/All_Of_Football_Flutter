@@ -14,4 +14,11 @@ enum SocialProvider {
   KAKAO,
   APPLE;
 
+  static SocialProvider? fromJson(String data) {
+    for (var o in SocialProvider.values) {
+      if (o.name == data.toUpperCase()) return o;
+    }
+    return null;
+  }
+
 }

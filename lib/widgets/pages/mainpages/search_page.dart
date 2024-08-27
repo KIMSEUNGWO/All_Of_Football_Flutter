@@ -1,9 +1,15 @@
 
 import 'dart:math';
 
+import 'package:all_of_football/api/service/field_service.dart';
+import 'package:all_of_football/component/alert.dart';
 import 'package:all_of_football/component/local_storage.dart';
 import 'package:all_of_football/component/svg_icon.dart';
+import 'package:all_of_football/domain/field/field_simp.dart';
 import 'package:all_of_football/widgets/component/custom_container.dart';
+import 'package:all_of_football/widgets/component/favorite_field_list.dart';
+import 'package:all_of_football/widgets/component/space_custom.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SearchWidget extends StatefulWidget {
@@ -16,6 +22,8 @@ class SearchWidget extends StatefulWidget {
 class _SearchWidgetState extends State<SearchWidget> {
 
   final TextEditingController _textController = TextEditingController();
+  List<FieldSimp> _fields = [];
+  bool _loading = false;
 
   Set<String> recentlySearchWord = {};
   bool recentlySearchIsDisable = false;
@@ -56,9 +64,27 @@ class _SearchWidgetState extends State<SearchWidget> {
   }
 
   onSubmit(String word) {
-    if (word.isEmpty) return;
+    if (word.isEmpty || word.length < 2) {
+      Alert.of(context).message(
+        message: '2자 이상 입력해주세요.',
+      );
+      return;
+    }
     addWord(word); // 최근
+
     print('onSubmit $word' );// 검색어 추가
+    _fetch(word);
+  }
+  _fetch(String word) async {
+    if (_loading) return;
+    setState(() {
+      _loading = true;
+    });
+    List<FieldSimp> result = await FieldService.searchFields(word);
+    setState(() {
+      _fields = result;
+      _loading = false;
+    });
   }
 
   onChange(String word) {
@@ -136,26 +162,28 @@ class _SearchWidgetState extends State<SearchWidget> {
             left: 20, right: 20,
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                if (!recentlySearchIsDisable && recentlySearchWord.isNotEmpty)
-                  RecentlySearchWord(
-                    words : recentlySearchWord.toList(),
-                    addWord : addWord,
-                    deleteWord : deleteWord,
-                    deleteAllWord : deleteAllWord,
-                    onTap : onTapRecentlyWord,
-                  ),
-                ListView(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: [
-
-                  ],
+          child: Column(
+            children: [
+              const SpaceHeight(30),
+              if (!recentlySearchIsDisable && recentlySearchWord.isNotEmpty)
+                RecentlySearchWord(
+                  words : recentlySearchWord.toList(),
+                  addWord : addWord,
+                  deleteWord : deleteWord,
+                  deleteAllWord : deleteAllWord,
+                  onTap : onTapRecentlyWord,
                 ),
-              ],
-            ),
+              _loading ? const Center(child: CupertinoActivityIndicator(),) :
+              ListView.separated(
+                shrinkWrap: true,
+                separatorBuilder: (context, index) => const SpaceHeight(16),
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: _fields.length,
+                itemBuilder: (context, index) {
+                  return FavoriteFieldListWidget(fieldSimp: _fields[index]);
+                },
+              ),
+            ],
           ),
         ),
       ),
@@ -183,7 +211,7 @@ class _RecentlySearchWordState extends State<RecentlySearchWord> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 30, bottom: 16),
+      padding: const EdgeInsets.only(bottom: 16),
       child: Column(
         children: [
           Padding(

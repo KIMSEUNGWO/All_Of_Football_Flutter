@@ -1,11 +1,13 @@
 
 import 'package:all_of_football/component/image_helper.dart';
 import 'package:all_of_football/domain/enums/match_enums.dart';
+import 'package:all_of_football/domain/user/social_result.dart';
 import 'package:flutter/material.dart';
 
 class UserProfile {
 
   final int id;
+  final SocialProvider provider;
   Image? image;
   String nickname;
   final SexType sex;
@@ -19,9 +21,10 @@ class UserProfile {
 
   UserProfile.fromJson(Map<String, dynamic> json) :
     id = json['id'],
+    provider = SocialProvider.fromJson(json['provider'])!,
     image = json['image'] == null
         ? null
-        : ImageHelper.parseImage(imagePath: ImagePath.ORIGINAL, imageType: ImageType.PROFILE, imageName: json['image'], fit: BoxFit.fill),
+        : ImageHelper.parseImage(imagePath: ImagePath.THUMBNAIL, imageType: ImageType.PROFILE, imageName: json['image'], fit: BoxFit.fill),
     nickname = json['nickname'],
     sex = SexType.valueOf(json['sex'])!,
     birth = DateTime.parse(json['birth']),

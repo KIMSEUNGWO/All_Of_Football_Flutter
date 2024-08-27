@@ -16,7 +16,7 @@ import 'package:http/http.dart' as http;
 class ApiService {
 
   static const String server = "http://localhost:8080";
-  static const Duration _delay = Duration(seconds: 1);
+  static const Duration _delay = Duration(seconds: 20);
   static const Map<String, String> contentTypeJson = {
     "Content-Type" : "application/json; charset=utf-8",
   };

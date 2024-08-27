@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:all_of_football/component/search_word_helper.dart';
 import 'package:all_of_football/domain/enums/language_enum.dart';
 
 enum RegionParent {
@@ -93,6 +94,16 @@ enum RegionParent {
     return _getRegion(langType).compareTo(o2._getRegion(langType));
   }
 
+  static RegionParent? searchLanguage(String word) {
+    word = word.toLowerCase();
+    for (var region in RegionParent.values) {
+      if (region.name.toLowerCase() == word || region.jp == word || region.ko == word || region.en == word) {
+        return region;
+      }
+    }
+    return null;
+  }
+
 }
 
 
@@ -178,6 +189,38 @@ enum Region {
     return (this == Region.ALL)
         ? '(${getLocaleName(locale)})'
         : '(${parent._getRegion(langType)} ${getLocaleName(locale)})';
+  }
+
+  static SearchWordData searchLanguage(String word) {
+    word = word.toLowerCase();
+    for (var region in Region.values) {
+      
+      SearchWordData? name = _search(word, region.name.toLowerCase(), region);
+      if (name != null) return name;
+      SearchWordData? jp = _search(word, region.jp, region);
+      if (jp != null) return jp;
+      SearchWordData? ko = _search(word, region.ko, region);
+      if (ko != null) return ko;
+      SearchWordData? en = _search(word, region.en.toLowerCase(), region);
+      if (en != null) return en;
+
+      RegionParent? regionParent = RegionParent.searchLanguage(word);
+      if (regionParent != null) {
+
+      }
+    }
+
+    return SearchWordData(word, null);
+  }
+  
+  static SearchWordData? _search(String word, String compare, Region compareRegion) {
+    int index = word.indexOf(compare);
+    if (index != -1) {
+      String replace = word.replaceRange(index, index + compare.length, '');
+      return SearchWordData(replace, compareRegion);
+    } else {
+      return null;
+    }
   }
   
 }

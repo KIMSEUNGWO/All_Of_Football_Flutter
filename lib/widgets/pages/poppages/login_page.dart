@@ -12,7 +12,7 @@ class LoginWidget extends ConsumerWidget {
   const LoginWidget({super.key});
 
   _onTryLogin(BuildContext context, WidgetRef ref, SocialProvider provider) async {
-    final result = await ref.read(loginProvider.notifier).login(context, ref);
+    final result = await ref.read(loginProvider.notifier).login(context, ref, provider);
     print('result : ${result.resultCode}');
     Navigator.pop(context);
     if (result.resultCode == ResultCode.OK) {

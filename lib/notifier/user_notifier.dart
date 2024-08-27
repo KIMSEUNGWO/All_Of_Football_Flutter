@@ -3,6 +3,8 @@ import 'package:all_of_football/api/domain/api_result.dart';
 import 'package:all_of_football/api/domain/result_code.dart';
 import 'package:all_of_football/api/service/token_service.dart';
 import 'package:all_of_football/api/service/user_service.dart';
+import 'package:all_of_football/api/social/abstract_social_api.dart';
+import 'package:all_of_football/api/social/kakao_api.dart';
 import 'package:all_of_football/api/social/line_api.dart';
 import 'package:all_of_football/domain/enums/match_enums.dart';
 import 'package:all_of_football/domain/user/social_result.dart';
@@ -14,12 +16,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class UserNotifier extends StateNotifier<UserProfile?> {
   UserNotifier() : super(null);
 
+  SocialAPI? socialAPI;
+
   void setProfile(UserProfile newProfile) {
     state = newProfile;
   }
 
-  Future<ResponseResult> login(BuildContext context, WidgetRef ref) async {
-    final socialResult = await LineAPI.login();
+  Future<ResponseResult> login(BuildContext context, WidgetRef ref, SocialProvider provider) async {
+    socialAPI = getSocialType(provider);
+    final socialResult = await socialAPI!.login();
     if (socialResult == null) {
       state = null;
       return ResponseResult(ResultCode.SOCIAL_LOGIN_FAILD, null);
@@ -46,9 +51,11 @@ class UserNotifier extends StateNotifier<UserProfile?> {
   }
 
   void logout(WidgetRef ref) async {
-    LineAPI.logout();
-    state = null;
     ref.read(favoriteNotifier.notifier).logout();
+    if (socialAPI == null) return;
+    socialAPI = socialAPI ?? getSocialType(state!.provider);
+    socialAPI!.logout();
+    state = null;
   }
 
   bool has() {
@@ -79,6 +86,15 @@ class UserNotifier extends StateNotifier<UserProfile?> {
 
   UserProfile? get() {
     return state;
+  }
+
+  SocialAPI getSocialType(SocialProvider provider) {
+    return switch (provider) {
+      SocialProvider.LINE => LineAPI(),
+      SocialProvider.KAKAO => KakaoApi(),
+      // TODO: Handle this case.
+      SocialProvider.APPLE => throw UnimplementedError(),
+    };
   }
 
 

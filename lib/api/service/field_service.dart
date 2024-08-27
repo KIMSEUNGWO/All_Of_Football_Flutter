@@ -4,6 +4,7 @@ import 'package:all_of_football/api/api_service.dart';
 import 'package:all_of_football/api/domain/api_result.dart';
 import 'package:all_of_football/api/domain/result_code.dart';
 import 'package:all_of_football/component/pageable.dart';
+import 'package:all_of_football/domain/field/field_simp.dart';
 import 'package:all_of_football/domain/match/match_simp.dart';
 
 class FieldService {
@@ -22,6 +23,18 @@ class FieldService {
 
     if (response.resultCode == ResultCode.OK) {
       return List<MatchSimp>.from(response.data.map((x) => MatchSimp.fromJson(x)));
+    } else {
+      return [];
+    }
+  }
+
+  static Future<List<FieldSimp>> searchFields(String word) async {
+    final response = await ApiService.get(
+        uri: '/search/field?word=$word',
+        authorization: false
+    );
+    if (response.resultCode == ResultCode.OK) {
+      return List<FieldSimp>.from(response.data.map((x) => FieldSimp.fromJson(x)));
     } else {
       return [];
     }

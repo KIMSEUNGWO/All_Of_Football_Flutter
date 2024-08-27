@@ -1,12 +1,14 @@
+import 'package:all_of_football/api/social/abstract_social_api.dart';
 import 'package:all_of_football/component/secure_strage.dart';
 import 'package:all_of_football/domain/user/social_result.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_line_sdk/flutter_line_sdk.dart';
 
 
-class LineAPI {
+class LineAPI implements SocialAPI {
 
-  static Future<SocialResult?> login() async {
+  @override
+  Future<SocialResult?> login() async {
     try {
       final result = await LineSDK.instance.login();
       return SocialResult(
@@ -23,7 +25,8 @@ class LineAPI {
 
   }
 
-  static void logout() async {
+  @override
+  Future<void> logout() async {
     try {
       await LineSDK.instance.logout();
       SecureStorage.removeAllByToken();
@@ -32,7 +35,8 @@ class LineAPI {
     }
   }
 
-  static void verifyAccessToken() async {
+  @override
+  Future<void> verifyAccessToken() async {
     try {
       final result = await LineSDK.instance.verifyAccessToken();
     } on PlatformException catch (e) {
@@ -41,7 +45,8 @@ class LineAPI {
     }
   }
 
-  static void refreshToken() async {
+  @override
+  Future<void> refreshToken() async {
     try {
       final result = await LineSDK.instance.refreshToken();
       print(result.value);

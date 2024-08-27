@@ -8,8 +8,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class FavoriteIconButtonWidget extends ConsumerWidget {
   final FieldSimp fieldSimp;
   final double? size;
+  final bool disabled;
 
-  const FavoriteIconButtonWidget({super.key, required this.fieldSimp, this.size});
+  const FavoriteIconButtonWidget({super.key, required this.fieldSimp, this.size, this.disabled = false});
 
   bool _has(List<FieldSimp> state, int fieldId) {
     for (var fieldSimp in state) {
@@ -25,17 +26,19 @@ class FavoriteIconButtonWidget extends ConsumerWidget {
     List<FieldSimp> state = ref.watch(favoriteNotifier);
     bool isOn = _has(state, fieldSimp.fieldId);
 
-    return GestureDetector(
-      onTap: () async {
-        await ref.read(favoriteNotifier.notifier).toggle(fieldSimp);
-      },
-      child: SvgIcon.asset(
-        sIcon: isOn ? SIcon.bookmarkFill : SIcon.bookmark,
-        style: SvgIconStyle(
-          height: size,
-          width: size,
-        ),
-      ),
-    );
+    return (!isOn && disabled)
+      ? const SizedBox()
+      : GestureDetector(
+          onTap: () async {
+            await ref.read(favoriteNotifier.notifier).toggle(fieldSimp);
+          },
+          child: SvgIcon.asset(
+            sIcon: isOn ? SIcon.bookmarkFill : SIcon.bookmark,
+            style: SvgIconStyle(
+              height: size,
+              width: size,
+            ),
+          ),
+        );
   }
 }

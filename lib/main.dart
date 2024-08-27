@@ -5,13 +5,17 @@ import 'package:flutter_line_sdk/flutter_line_sdk.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
 void main() async {
   const String channelId = '2005763087';
   WidgetsFlutterBinding.ensureInitialized();
   // LINE Login API 연동
   LineSDK.instance.setup(channelId).then((_) => print('LineSDK Prepared'));
-
+  KakaoSdk.init(
+    nativeAppKey: '846cc1cb59dc2342563d230f78e577cd',
+    javaScriptAppKey: '037e9d8910b3cbec6a1e2e16b22dfb29',
+  );
   // 로케일 데이터 를 초기화 합니다.
   await initializeDateFormatting();
 
