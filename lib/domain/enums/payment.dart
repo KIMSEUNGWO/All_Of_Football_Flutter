@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 
 enum Payment {
 
-  LINE(Color(0xFF08BF5B)),
-  KAKAO(Color(0xFFF3DA01)),
-  APPLE(Colors.black);
+  LINE(Color(0xFF08BF5B), 'line'),
+  KAKAO(Color(0xFFF3DA01), 'kakao'),
+  APPLE(Colors.black, 'apple');
 
   final Color backgroundColor;
+  final String url;
 
-  const Payment(this.backgroundColor);
+  const Payment(this.backgroundColor, this.url);
 
   SIcon getLogo() {
     return switch (this) {

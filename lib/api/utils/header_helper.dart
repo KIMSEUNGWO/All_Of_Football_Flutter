@@ -15,5 +15,4 @@ class HeaderHelper {
     if (authorization) requestHeader.addAll(await _getAuthorization());
     if (header != null) requestHeader.addAll(header);
   }
-
 }

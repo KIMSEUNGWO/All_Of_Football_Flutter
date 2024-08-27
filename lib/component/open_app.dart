@@ -1,6 +1,8 @@
 
+import 'dart:io';
+
+import 'package:all_of_football/domain/cash/kakao_ready_response.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class OpenApp {
 
@@ -24,6 +26,18 @@ class OpenApp {
       return;
     }
 
+  }
+
+  kakaoOpenUrl(KakaoReady kakao) async {
+    await launchUrl(Uri.parse(kakao.next_redirect_app_url));
+    closeInAppWebView();
+    // if (Platform.isAndroid && await canLaunchUrl(Uri.parse(kakao.android_app_scheme))) {
+    //   await launchUrl(Uri.parse(kakao.android_app_scheme));
+    //   return;
+    // } else if (Platform.isIOS && await canLaunchUrl(Uri.parse(kakao.ios_app_scheme))) {
+    //   await launchUrl(Uri.parse(kakao.ios_app_scheme), mode: LaunchMode.externalApplication);
+    //   return;
+    // }
   }
 
   _google(double lat, double lng) {

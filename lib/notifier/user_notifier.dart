@@ -52,7 +52,6 @@ class UserNotifier extends StateNotifier<UserProfile?> {
 
   void logout(WidgetRef ref) async {
     ref.read(favoriteNotifier.notifier).logout();
-    if (socialAPI == null) return;
     socialAPI = socialAPI ?? getSocialType(state!.provider);
     socialAPI!.logout();
     state = null;
@@ -60,6 +59,14 @@ class UserNotifier extends StateNotifier<UserProfile?> {
 
   bool has() {
     return state != null;
+  }
+
+  init(WidgetRef ref) async {
+    final result = await TokenService.readUser();
+    if (result) {
+      state = await UserService.getProfile();
+      ref.read(favoriteNotifier.notifier).init();
+    }
   }
 
   readUser(WidgetRef ref) async {
@@ -76,7 +83,7 @@ class UserNotifier extends StateNotifier<UserProfile?> {
     final result = await UserService.getCash();
     if (result.resultCode == ResultCode.OK) {
       state?.cash = result.data;
-      state = state;
+      state = UserProfile.clone(state!);
     }
   }
 
@@ -95,6 +102,14 @@ class UserNotifier extends StateNotifier<UserProfile?> {
       // TODO: Handle this case.
       SocialProvider.APPLE => throw UnimplementedError(),
     };
+  }
+
+  int getId() {
+    return state!.id;
+  }
+
+  int getCash() {
+    return state!.cash;
   }
 
 

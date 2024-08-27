@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:all_of_football/api/service/field_service.dart';
 import 'package:all_of_football/component/alert.dart';
 import 'package:all_of_football/component/local_storage.dart';
+import 'package:all_of_football/component/recently_search_word.dart';
 import 'package:all_of_football/component/svg_icon.dart';
 import 'package:all_of_football/domain/field/field_simp.dart';
 import 'package:all_of_football/widgets/component/custom_container.dart';
@@ -25,22 +26,21 @@ class _SearchWidgetState extends State<SearchWidget> {
   List<FieldSimp> _fields = [];
   bool _loading = false;
 
-  Set<String> recentlySearchWord = {};
+  final RecentlySearchWord _recentlySearchWord = RecentlySearchWord();
+
   bool recentlySearchIsDisable = false;
 
   addWord(String word) {
-    setState(() {
-      recentlySearchWord = {word, ...recentlySearchWord};
-    });
+    _recentlySearchWord.addWord(word);
+    setState(() {});
   }
   deleteWord(String word) {
-    setState(() {
-      recentlySearchWord.remove(word);
-    });
+    _recentlySearchWord.deleteWord(word);
+    setState(() {});
   }
   deleteAllWord() {
+    _recentlySearchWord.deleteAllWord();
     setState(() {
-      recentlySearchWord = {};
       recentlySearchIsDisable = true;
     });
   }
@@ -50,11 +50,6 @@ class _SearchWidgetState extends State<SearchWidget> {
     setState(() {
       recentlySearchIsDisable = false;
     });
-  }
-
-  initRecentlySearchWord() async {
-    Set<String> words = Set.of(await LocalStorage.getRecentlySearchWords());
-    setState(() => recentlySearchWord = words);
   }
 
   onTapRecentlyWord(String word) {
@@ -91,16 +86,21 @@ class _SearchWidgetState extends State<SearchWidget> {
     setState(() => recentlySearchIsDisable = word.isNotEmpty);
   }
 
+  _init() async {
+    await _recentlySearchWord.init();
+    setState(() {});
+  }
+
   @override
   void initState() {
-    initRecentlySearchWord();
+    _init();
     super.initState();
   }
 
   @override
   void dispose() {
     _textController.dispose();
-    LocalStorage.saveByRecentlySearchWord(recentlySearchWord.toList());
+    LocalStorage.saveByRecentlySearchWord(_recentlySearchWord.toList());
     super.dispose();
   }
 
@@ -165,9 +165,9 @@ class _SearchWidgetState extends State<SearchWidget> {
           child: Column(
             children: [
               const SpaceHeight(30),
-              if (!recentlySearchIsDisable && recentlySearchWord.isNotEmpty)
-                RecentlySearchWord(
-                  words : recentlySearchWord.toList(),
+              if (!recentlySearchIsDisable && _recentlySearchWord.isNotEmpty())
+                RecentlySearchWordWidget(
+                  words : _recentlySearchWord.toList(),
                   addWord : addWord,
                   deleteWord : deleteWord,
                   deleteAllWord : deleteAllWord,
@@ -191,7 +191,7 @@ class _SearchWidgetState extends State<SearchWidget> {
   }
 }
 
-class RecentlySearchWord extends StatefulWidget {
+class RecentlySearchWordWidget extends StatefulWidget {
 
   final List<String> words;
   final Function(String word) addWord;
@@ -199,15 +199,15 @@ class RecentlySearchWord extends StatefulWidget {
   final Function() deleteAllWord;
   final Function(String word) onTap;
 
-  const RecentlySearchWord({super.key, required this.words, required this.addWord, required this.deleteWord, required this.deleteAllWord, required this.onTap});
+  const RecentlySearchWordWidget({super.key, required this.words, required this.addWord, required this.deleteWord, required this.deleteAllWord, required this.onTap});
 
 
 
   @override
-  State<RecentlySearchWord> createState() => _RecentlySearchWordState();
+  State<RecentlySearchWordWidget> createState() => _RecentlySearchWordWidgetState();
 }
 
-class _RecentlySearchWordState extends State<RecentlySearchWord> {
+class _RecentlySearchWordWidgetState extends State<RecentlySearchWordWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(

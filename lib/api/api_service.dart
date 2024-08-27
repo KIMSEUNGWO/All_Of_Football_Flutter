@@ -15,7 +15,8 @@ import 'package:http/http.dart' as http;
 
 class ApiService {
 
-  static const String server = "http://localhost:8080";
+  static const String server = "https://$domain";
+  static const String domain = 'presentations-cedar-ethics-headers.trycloudflare.com';
   static const Duration _delay = Duration(seconds: 20);
   static const Map<String, String> contentTypeJson = {
     "Content-Type" : "application/json; charset=utf-8",

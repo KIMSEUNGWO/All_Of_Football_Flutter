@@ -31,4 +31,15 @@ class UserProfile {
     couponCount = json['couponCount'],
     cash = json['cash'];
 
+  UserProfile.clone(UserProfile state):
+    id = state.id,
+    provider = state.provider,
+    image = state.image,
+    nickname = state.nickname,
+    sex = state.sex,
+    birth = state.birth,
+    couponCount = state.couponCount,
+    cash = state.cash;
+
+
 }
